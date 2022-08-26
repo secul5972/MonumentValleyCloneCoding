@@ -44,7 +44,6 @@ bool prepare_slope()
 		slope_line_ver[i * 3] = ret.x;
 		slope_line_ver[i * 3 + 1] = ret.y;
 		slope_line_ver[i * 3 + 2] = ret.z;
-		printf("%f %f %f\n", ret.x, ret.y, ret.z);
 	}
 
 	//triangle

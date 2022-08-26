@@ -28,7 +28,7 @@ const unsigned int SCR_WIDTH = 1280;
 const unsigned int SCR_HEIGHT = 720;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(3.025261f, 3.367383f, 1.579483f), glm::vec3(0.0f, 0.1f, 0.0f), -135.199924f, -35.399974f);
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -117,9 +117,12 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// view/projection transformations
-		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		//projection = glm::ortho();
+		//projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::ortho(-2.0f,2.0f, -2.0f, 2.0f, 0.0f, 100.0f);
 		view = camera.GetViewMatrix();
+		printf("%f %f %f\n", camera.Front.x, camera.Front.y, camera.Front.z);
+		printf("%f %f %f\n", camera.Up.x, camera.Up.y, camera.Up.z);
+		printf("%f %f\n", camera.Yaw, camera.Pitch);
 
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
