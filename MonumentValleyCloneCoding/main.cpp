@@ -120,9 +120,6 @@ int main()
 		//projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		projection = glm::ortho(-2.0f,2.0f, -2.0f, 2.0f, 0.0f, 100.0f);
 		view = camera.GetViewMatrix();
-		printf("%f %f %f\n", camera.Front.x, camera.Front.y, camera.Front.z);
-		printf("%f %f %f\n", camera.Up.x, camera.Up.y, camera.Up.z);
-		printf("%f %f\n", camera.Yaw, camera.Pitch);
 
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
