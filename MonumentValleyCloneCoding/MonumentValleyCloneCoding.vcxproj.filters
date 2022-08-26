@@ -33,6 +33,15 @@
     <ClCompile Include="shape\Slope.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="shape\Goal.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="level\level1.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="shape\axes.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag">
@@ -56,6 +65,9 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="headerFIle\shader.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="headerFIle\level.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

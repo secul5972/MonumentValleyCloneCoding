@@ -6,6 +6,7 @@
 #include "headerFIle/model.h"
 //shape
 #include "headerFIle/Shape.h"
+#include "headerFIle/level.h"
 
 //#include <stb/stb_image.h>
 //#include <glad/glad.h>
@@ -93,6 +94,8 @@ int main()
 	prepare_cube();
 	prepare_L_shape();
 	prepare_slope();
+	prepare_goal();
+	prepare_axes();
 
 	// render loop
 	// -----------
@@ -115,15 +118,18 @@ int main()
 
 		// view/projection transformations
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		//projection = glm::ortho();
 		view = camera.GetViewMatrix();
 
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
 		//worldModel = glm::rotate(worldModel, glm::radians(currentFrame * 30), glm::vec3(0.0f, 1.0f, 0.0f));
 		//draw_L_shape(defaultShader);
-		draw_slope(defaultShader);
+		//draw_slope(defaultShader);
 		//draw_cuboid(defaultShader);
-		
+		//draw_goal(defaultShader);
+		draw_axes(defaultShader);
+		draw_level1(defaultShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

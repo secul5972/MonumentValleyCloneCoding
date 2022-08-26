@@ -140,8 +140,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\OpenGL_GLFW_Example\glad.c" />
+    <ClCompile Include="level\level1.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="shape\axes.cpp" />
     <ClCompile Include="shape\Cuboid.cpp" />
+    <ClCompile Include="shape\Goal.cpp" />
     <ClCompile Include="shape\L_Shape.cpp" />
     <ClCompile Include="shape\Cube.cpp" />
     <ClCompile Include="shape\Slope.cpp" />
@@ -152,6 +155,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headerFIle\camera.h" />
+    <ClInclude Include="headerFIle\level.h" />
     <ClInclude Include="headerFIle\Shape.h" />
     <ClInclude Include="headerFIle\mesh.h" />
     <ClInclude Include="headerFIle\model.h" />

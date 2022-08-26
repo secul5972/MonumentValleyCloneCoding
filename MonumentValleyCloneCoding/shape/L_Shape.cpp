@@ -21,6 +21,7 @@ void draw_L_shape(Shader sh)
 {
 	//cube
 	glm::mat4 shapeModel;
+
 	sh.use();
 	sh.setMat4("projection", projection);
 	sh.setMat4("view", view);

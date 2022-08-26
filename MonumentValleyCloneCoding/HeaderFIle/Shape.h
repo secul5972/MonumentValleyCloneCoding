@@ -23,4 +23,10 @@ void draw_L_shape(Shader sh);
 bool prepare_slope();
 void draw_slope(Shader sh);
 
+bool prepare_goal();
+void draw_goal(Shader sh);
+
+void prepare_axes();
+void draw_axes(Shader sh);
+
 #endif
