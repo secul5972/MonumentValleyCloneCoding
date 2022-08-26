@@ -7,7 +7,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-void prepare_cuboid();
+#include <iostream>
+using namespace std;
+
+bool prepare_cuboid();
 void draw_cuboid(Shader sh);
 
 void prepare_cube();

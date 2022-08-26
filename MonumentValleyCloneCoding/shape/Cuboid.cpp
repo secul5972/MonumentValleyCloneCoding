@@ -1,83 +1,53 @@
 #include "../headerFIle/Shape.h"
 
-float cuboid_tri_ver[] = {
-	-0.4f, -0.1f, -0.1f,
-	 0.4f, -0.1f, -0.1f,
-	 0.4f,  0.1f, -0.1f,
-	 0.4f,  0.1f, -0.1f,
-	-0.4f,  0.1f, -0.1f,
-	-0.4f, -0.1f, -0.1f,
-
-	-0.4f, -0.1f,  0.1f,
-	 0.4f, -0.1f,  0.1f,
-	 0.4f,  0.1f,  0.1f,
-	 0.4f,  0.1f,  0.1f,
-	-0.4f,  0.1f,  0.1f,
-	-0.4f, -0.1f,  0.1f,
-
-	-0.4f,  0.1f,  0.1f,
-	-0.4f,  0.1f, -0.1f,
-	-0.4f, -0.1f, -0.1f,
-	-0.4f, -0.1f, -0.1f,
-	-0.4f, -0.1f,  0.1f,
-	-0.4f,  0.1f,  0.1f,
-
-	 0.4f,  0.1f,  0.1f,
-	 0.4f,  0.1f, -0.1f,
-	 0.4f, -0.1f, -0.1f,
-	 0.4f, -0.1f, -0.1f,
-	 0.4f, -0.1f,  0.1f,
-	 0.4f,  0.1f,  0.1f,
-
-	-0.4f, -0.1f, -0.1f,
-	 0.4f, -0.1f, -0.1f,
-	 0.4f, -0.1f,  0.1f,
-	 0.4f, -0.1f,  0.1f,
-	-0.4f, -0.1f,  0.1f,
-	-0.4f, -0.1f, -0.1f,
-
-	-0.4f,  0.1f, -0.1f,
-	 0.4f,  0.1f, -0.1f,
-	 0.4f,  0.1f,  0.1f,
-	 0.4f,  0.1f,  0.1f,
-	-0.4f,  0.1f,  0.1f,
-	-0.4f,  0.1f, -0.1f
-};
-
-float cuboid_line_ver[] = {
-	-0.4f,	-0.1f,	-0.1f,
-	-0.4f,	 0.1f,	-0.1f,
-	-0.4f,	 0.1f,	 0.1f,
-	-0.4f,	-0.1f,	 0.1f,
-
-	 0.4f,	 0.1f,	 0.1f,
-	 0.4f,	-0.1f,	 0.1f,
-	 0.4f,	-0.1f,	-0.1f,
-	 0.4f,	 0.1f,	-0.1f,
-
-	 0.4f,	-0.1f,	-0.1f,
-	-0.4f,	-0.1f,	-0.1f,
-	-0.4f,	-0.1f,	 0.1f,
-	 0.4f,	-0.1f,	 0.1f,
-
-	-0.4f,	 0.1f,	 0.1f,
-	 0.4f,	 0.1f,	 0.1f,
-	 0.4f,	 0.1f,	-0.1f,
-	-0.4f,	 0.1f,	-0.1f,
-};
-
 unsigned int cuboid_tri_VAO, cuboid_tri_VBO, cuboid_line_VAO, cuboid_line_VBO;
 extern glm::mat4 projection, view, worldModel;
+extern float cube_tri_ver[], cube_line_ver[];
 
-void prepare_cuboid()
+
+bool prepare_cuboid()
 {
 #ifndef P_CUBOID
 #define P_CUBOID
 #endif
+	float* cuboid_tri_ver, * cuboid_line_ver;
+
+	if ((cuboid_tri_ver = (float *)malloc(sizeof(float) * 108)) == NULL)
+		return (1);
+	if ((cuboid_line_ver = (float *)malloc(sizeof(float) * 48)) == NULL)
+		return (1);
+
+	glm::mat4 shearing = glm::scale(glm::mat4(1.0f), glm::vec3(4.0f, 1.0f, 1.0f));
+	int cnt = 36;
+	for (int i = 0; i < cnt; i++)
+	{
+		glm::vec3 tmp, ret;
+		tmp.x = cube_tri_ver[i * 3];
+		tmp.y = cube_tri_ver[i * 3 + 1];
+		tmp.z = cube_tri_ver[i * 3 + 2];
+		ret = glm::vec3(shearing * glm::vec4(tmp, 1.0f));
+		cuboid_tri_ver[i * 3] = ret.x;
+		cuboid_tri_ver[i * 3 + 1] = ret.y;
+		cuboid_tri_ver[i * 3 + 2] = ret.z;
+	}
+
+	cnt = 16;
+	for (int i = 0; i < cnt; i++)
+	{
+		glm::vec3 tmp, ret;
+		tmp.x = cube_line_ver[i * 3];
+		tmp.y = cube_line_ver[i * 3 + 1];
+		tmp.z = cube_line_ver[i * 3 + 2];
+		ret = glm::vec3(shearing * glm::vec4(tmp, 1.0f));
+		cuboid_line_ver[i * 3] = ret.x;
+		cuboid_line_ver[i * 3 + 1] = ret.y;
+		cuboid_line_ver[i * 3 + 2] = ret.z;
+	}
+
 	//triangle
 	glGenBuffers(1, &cuboid_tri_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, cuboid_tri_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cuboid_tri_ver), cuboid_tri_ver, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 108, cuboid_tri_ver, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &cuboid_tri_VAO);
 	glBindVertexArray(cuboid_tri_VAO);
@@ -88,7 +58,7 @@ void prepare_cuboid()
 	//line
 	glGenBuffers(1, &cuboid_line_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, cuboid_line_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cuboid_line_ver), cuboid_line_ver, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 48, cuboid_line_ver, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &cuboid_line_VAO);
 	glBindVertexArray(cuboid_line_VAO);
@@ -96,6 +66,11 @@ void prepare_cuboid()
 	// position atlinebute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
+
+	free(cuboid_tri_ver);
+	free(cuboid_line_ver);
+
+	return (0);
 }
 
 void draw_cuboid(Shader sh)

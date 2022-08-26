@@ -67,7 +67,7 @@ float cube_line_ver[] = {
 };
 
 unsigned int cube_tri_VAO, cube_tri_VBO, cube_line_VAO, cube_line_VBO;
-extern glm::mat4 projection, view, model;
+extern glm::mat4 projection, view, worldModel;
 
 void prepare_cube()
 {
