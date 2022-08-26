@@ -1,11 +1,11 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define GLFW_INCLUDE_NONE
 
-#include "HeaderFIle/shader.h"
-#include "HeaderFIle/camera.h"
-#include "HeaderFIle/model.h"
-//prepare
-#include "HeaderFIle/PrepareObjects.h"
+#include "headerFIle/shader.h"
+#include "headerFIle/camera.h"
+#include "headerFIle/model.h"
+//shape
+#include "headerFIle/Shape.h"
 
 //#include <stb/stb_image.h>
 //#include <glad/glad.h>
@@ -87,9 +87,11 @@ int main()
 	// -----------
 	//Model ourModel("objects/backpack/backpack.obj");
 
-	// prepare_objects
+	// prepare_shapes
 	// ---------------
 	prepare_cuboid();
+	prepare_cube();
+	prepare_L_shape();
 
 	// render loop
 	// -----------
@@ -114,15 +116,10 @@ int main()
 		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		view = camera.GetViewMatrix();
 
-
-		draw_cuboid(defaultShader);
-		//// render the loaded model
-		//model = glm::mat4(1.0f);
-		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-		//defaultShader.setMat4("model", model);
-		//ourModel.Draw(defaultShader);
-
+		//draw_shapes
+		model = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(currentFrame * 30), glm::vec3(0.0f, 1.0f, 0.0f));
+		draw_L_shape(defaultShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

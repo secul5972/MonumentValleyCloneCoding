@@ -1,4 +1,4 @@
-#include "HeaderFIle/PrepareObjects.h"
+#include "../headerFIle/Shape.h"
 
 float cuboid_tri_ver[] = {
 	-0.4f, -0.1f, -0.1f,
@@ -71,6 +71,9 @@ extern glm::mat4 projection, view, model;
 
 void prepare_cuboid()
 {
+#ifndef P_CUBOID
+#define P_CUBOID
+#endif
 	//triangle
 	glGenBuffers(1, &cuboid_tri_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, cuboid_tri_VBO);
@@ -97,10 +100,12 @@ void prepare_cuboid()
 
 void draw_cuboid(Shader sh)
 {
+	glm::mat4 shapeModel;
+
 	sh.use();
-	model = glm::mat4(1.0f);
-	model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-	sh.setMat4("model", model);
+	shapeModel = model;
+	shapeModel = glm::scale(shapeModel, glm::vec3(1.0f, 1.0f, 1.0f));
+	sh.setMat4("model", shapeModel);
 	sh.setMat4("projection", projection);
 	sh.setMat4("view", view);
 	sh.setVec3("ObjectColor", glm::vec3(1.0f, 0.5f, 0.2f));

@@ -141,18 +141,20 @@
   <ItemGroup>
     <ClCompile Include="..\..\OpenGL_GLFW_Example\glad.c" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="PrepareObjects.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="HeaderFIle\camera.h" />
-    <ClInclude Include="HeaderFIle\mesh.h" />
-    <ClInclude Include="HeaderFIle\model.h" />
-    <ClInclude Include="HeaderFIle\PrepareObjects.h" />
-    <ClInclude Include="HeaderFIle\shader.h" />
+    <ClCompile Include="shape\Cuboid.cpp" />
+    <ClCompile Include="shape\L_Shape.cpp" />
+    <ClCompile Include="shape\Cube.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />
     <None Include="shader\default.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="headerFIle\camera.h" />
+    <ClInclude Include="headerFIle\Shape.h" />
+    <ClInclude Include="headerFIle\mesh.h" />
+    <ClInclude Include="headerFIle\model.h" />
+    <ClInclude Include="headerFIle\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
