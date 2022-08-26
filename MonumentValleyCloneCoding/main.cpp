@@ -36,7 +36,7 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-glm::mat4 projection, view, model;
+glm::mat4 projection, view, worldModel;
 
 int main()
 {
@@ -117,8 +117,8 @@ int main()
 		view = camera.GetViewMatrix();
 
 		//draw_shapes
-		model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(currentFrame * 30), glm::vec3(0.0f, 1.0f, 0.0f));
+		worldModel = glm::mat4(1.0f);
+		worldModel = glm::rotate(worldModel, glm::radians(currentFrame * 30), glm::vec3(0.0f, 1.0f, 0.0f));
 		draw_L_shape(defaultShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)

@@ -1,7 +1,7 @@
 #include "../headerFIle/Shape.h"
 
 extern unsigned int cuboid_tri_VAO, cuboid_line_VAO, cube_tri_VAO, cube_line_VAO;
-extern glm::mat4 projection, view, model;
+extern glm::mat4 projection, view, worldModel;
 
 void prepare_L_shape()
 {
@@ -21,7 +21,7 @@ void draw_L_shape(Shader sh)
 	sh.setMat4("projection", projection);
 	sh.setMat4("view", view);
 
-	shapeModel = model;
+	shapeModel = worldModel;
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.0f, 1.0f, 1.0f));
 	sh.setMat4("model", shapeModel);
 
@@ -37,7 +37,7 @@ void draw_L_shape(Shader sh)
 	glDrawArrays(GL_LINE_STRIP, 12, 4);
 
 	//cuboid
-	shapeModel = model;
+	shapeModel = worldModel;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.5f, 0.0f, 0.0f));
 	sh.setMat4("model", shapeModel);
 
@@ -52,7 +52,7 @@ void draw_L_shape(Shader sh)
 	glDrawArrays(GL_LINE_STRIP, 8, 4);
 	glDrawArrays(GL_LINE_STRIP, 12, 4);
 
-	shapeModel = model;
+	shapeModel = worldModel;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.0f, 0.0f, 0.5f));
 	shapeModel = glm::rotate(shapeModel, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
 	sh.setMat4("model", shapeModel);

@@ -67,7 +67,7 @@ float cuboid_line_ver[] = {
 };
 
 unsigned int cuboid_tri_VAO, cuboid_tri_VBO, cuboid_line_VAO, cuboid_line_VBO;
-extern glm::mat4 projection, view, model;
+extern glm::mat4 projection, view, worldModel;
 
 void prepare_cuboid()
 {
@@ -103,7 +103,7 @@ void draw_cuboid(Shader sh)
 	glm::mat4 shapeModel;
 
 	sh.use();
-	shapeModel = model;
+	shapeModel = worldModel;
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.0f, 1.0f, 1.0f));
 	sh.setMat4("model", shapeModel);
 	sh.setMat4("projection", projection);

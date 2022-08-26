@@ -103,7 +103,7 @@ void draw_cube(Shader sh)
 	glm::mat4 shapeModel;
 
 	sh.use();
-	shapeModel = model;
+	shapeModel = worldModel;
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.0f, 1.0f, 1.0f));
 	sh.setMat4("model", shapeModel);
 	sh.setMat4("projection", projection);
