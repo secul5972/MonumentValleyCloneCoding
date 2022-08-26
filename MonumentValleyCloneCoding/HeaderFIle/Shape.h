@@ -6,6 +6,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtx/transform2.hpp>
 
 #include <iostream>
 using namespace std;
@@ -18,5 +19,8 @@ void draw_cube(Shader sh);
 
 void prepare_L_shape();
 void draw_L_shape(Shader sh);
+
+bool prepare_slope();
+void draw_slope(Shader sh);
 
 #endif

@@ -92,6 +92,7 @@ int main()
 	prepare_cuboid();
 	prepare_cube();
 	prepare_L_shape();
+	prepare_slope();
 
 	// render loop
 	// -----------
@@ -118,9 +119,11 @@ int main()
 
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
-		worldModel = glm::rotate(worldModel, glm::radians(currentFrame * 30), glm::vec3(0.0f, 1.0f, 0.0f));
-		draw_L_shape(defaultShader);
+		//worldModel = glm::rotate(worldModel, glm::radians(currentFrame * 30), glm::vec3(0.0f, 1.0f, 0.0f));
+		//draw_L_shape(defaultShader);
+		draw_slope(defaultShader);
 		//draw_cuboid(defaultShader);
+		
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

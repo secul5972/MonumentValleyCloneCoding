@@ -11,6 +11,10 @@ void prepare_L_shape()
 #ifndef P_CUBOID
 	prepare_cuboid();
 #endif
+#ifndef P_L_SHAPE
+#define P_L_SHAPE
+#endif
+
 }
 
 void draw_L_shape(Shader sh)

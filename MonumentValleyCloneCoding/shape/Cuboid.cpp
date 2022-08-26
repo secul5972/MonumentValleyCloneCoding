@@ -17,7 +17,8 @@ bool prepare_cuboid()
 	if ((cuboid_line_ver = (float *)malloc(sizeof(float) * 48)) == NULL)
 		return (1);
 
-	glm::mat4 shearing = glm::scale(glm::mat4(1.0f), glm::vec3(4.0f, 1.0f, 1.0f));
+	glm::mat4 shearing(1.0f);
+	shearing = glm::scale(shearing, glm::vec3(4.0f, 1.0f, 1.0f));
 	int cnt = 36;
 	for (int i = 0; i < cnt; i++)
 	{
