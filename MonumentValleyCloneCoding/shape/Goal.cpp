@@ -43,6 +43,7 @@ bool prepare_goal()
 		goal_line_ver[i * 3] = ret.x;
 		goal_line_ver[i * 3 + 1] = ret.y;
 		goal_line_ver[i * 3 + 2] = ret.z;
+		printf("%f %f %f\n", ret.x, ret.y, ret.z);
 	}
 
 	//triangle

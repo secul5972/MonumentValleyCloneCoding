@@ -52,7 +52,7 @@ int main()
 #endif
 
 	// glfw window creation
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "MonumentVallyCloneCoding", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -123,12 +123,8 @@ int main()
 
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
-		//worldModel = glm::rotate(worldModel, glm::radians(currentFrame * 30), glm::vec3(0.0f, 1.0f, 0.0f));
-		//draw_L_shape(defaultShader);
-		//draw_slope(defaultShader);
-		//draw_cuboid(defaultShader);
-		//draw_goal(defaultShader);
 		draw_axes(defaultShader);
+
 		draw_level1(defaultShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
