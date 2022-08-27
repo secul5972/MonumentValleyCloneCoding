@@ -11,22 +11,88 @@
 #include <iostream>
 using namespace std;
 
-bool prepare_cuboid();
-void draw_cuboid(Shader sh);
+static float cube_tri_ver[] = {
+	-0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f,
+	-0.1f,  0.1f, -0.1f,
+	-0.1f, -0.1f, -0.1f,
 
-void prepare_cube();
-void draw_cube(Shader sh);
+	-0.1f, -0.1f,  0.1f,
+	 0.1f, -0.1f,  0.1f,
+	 0.1f,  0.1f,  0.1f,
+	 0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f,  0.1f,
+	-0.1f, -0.1f,  0.1f,
 
-void prepare_L_shape();
-void draw_L_shape(Shader sh);
+	-0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f, -0.1f,
+	-0.1f, -0.1f, -0.1f,
+	-0.1f, -0.1f, -0.1f,
+	-0.1f, -0.1f,  0.1f,
+	-0.1f,  0.1f,  0.1f,
 
-bool prepare_slope();
-void draw_slope(Shader sh);
+	 0.1f,  0.1f,  0.1f,
+	 0.1f,  0.1f, -0.1f,
+	 0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f,  0.1f,
+	 0.1f,  0.1f,  0.1f,
 
-bool prepare_goal();
-void draw_goal(Shader sh);
+	-0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f,  0.1f,
+	 0.1f, -0.1f,  0.1f,
+	-0.1f, -0.1f,  0.1f,
+	-0.1f, -0.1f, -0.1f,
 
-void prepare_axes();
-void draw_axes(Shader sh);
+	-0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f,  0.1f,
+	 0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f, -0.1f
+};
+
+static float cube_line_ver[] = {
+	-0.1f,	-0.1f,	-0.1f,
+	-0.1f,	 0.1f,	-0.1f,
+	-0.1f,	 0.1f,	 0.1f,
+	-0.1f,	-0.1f,	 0.1f,
+
+	 0.1f,	 0.1f,	 0.1f,
+	 0.1f,	-0.1f,	 0.1f,
+	 0.1f,	-0.1f,	-0.1f,
+	 0.1f,	 0.1f,	-0.1f,
+
+	 0.1f,	-0.1f,	-0.1f,
+	-0.1f,	-0.1f,	-0.1f,
+	-0.1f,	-0.1f,	 0.1f,
+	 0.1f,	-0.1f,	 0.1f,
+
+	-0.1f,	 0.1f,	 0.1f,
+	 0.1f,	 0.1f,	 0.1f,
+	 0.1f,	 0.1f,	-0.1f,
+	-0.1f,	 0.1f,	-0.1f,
+};
+
+class Shape
+{
+protected:
+	unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
+public:
+	virtual void prepare_cube() = 0;
+	virtual void draw_cube(Shader sh) = 0;
+};
+
+class Cube:Shape
+{
+public:
+	virtual void prepare_cube();
+	virtual void draw_cube(Shader sh);
+};
+
+extern glm::mat4 projection, view, worldModel;
 
 #endif

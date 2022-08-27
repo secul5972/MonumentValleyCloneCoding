@@ -6,7 +6,7 @@
 #include "headerFIle/model.h"
 //shape
 #include "headerFIle/Shape.h"
-#include "headerFIle/level.h"
+//#include "headerFIle/level.h"
 
 //#include <stb/stb_image.h>
 //#include <glad/glad.h>
@@ -88,14 +88,15 @@ int main()
 	// -----------
 	//Model ourModel("objects/backpack/backpack.obj");
 
+	Cube a;
 	// prepare_shapes
 	// ---------------
-	prepare_cuboid();
-	prepare_cube();
-	prepare_L_shape();
-	prepare_slope();
-	prepare_goal();
-	prepare_axes();
+	//prepare_cuboid();
+	a.prepare_cube();
+	//prepare_L_shape();
+	//prepare_slope();
+	//prepare_goal();
+	//prepare_axes();
 
 	// render loop
 	// -----------
@@ -123,9 +124,10 @@ int main()
 
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
-		draw_axes(defaultShader);
+		a.draw_cube(defaultShader);
+		//draw_axes(defaultShader);
 
-		draw_level1(defaultShader);
+		//draw_level1(defaultShader);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
