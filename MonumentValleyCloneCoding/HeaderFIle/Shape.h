@@ -82,15 +82,20 @@ class Shape
 protected:
 	unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
-	virtual void prepare_cube() = 0;
-	virtual void draw_cube(Shader sh) = 0;
+	virtual bool prepare() = 0;
+	virtual void draw(Shader sh) = 0;
+};
+
+class axes :Shape
+{
+
 };
 
 class Cube:Shape
 {
 public:
-	virtual void prepare_cube();
-	virtual void draw_cube(Shader sh);
+	virtual bool prepare();
+	virtual void draw(Shader sh);
 };
 
 extern glm::mat4 projection, view, worldModel;

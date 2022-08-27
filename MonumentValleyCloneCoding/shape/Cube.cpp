@@ -1,6 +1,6 @@
 #include "../headerFIle/Shape.h"
 
-void Cube::prepare_cube()
+bool Cube::prepare()
 {
 #ifndef P_CUBE
 #define P_CUBE
@@ -27,9 +27,10 @@ void Cube::prepare_cube()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 #endif
+	return (0);
 }
 
-void Cube::draw_cube(Shader sh)
+void Cube::draw(Shader sh)
 {
 	glm::mat4 shapeModel;
 

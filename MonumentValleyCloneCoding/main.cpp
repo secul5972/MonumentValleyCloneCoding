@@ -92,7 +92,7 @@ int main()
 	// prepare_shapes
 	// ---------------
 	//prepare_cuboid();
-	a.prepare_cube();
+	a.prepare();
 	//prepare_L_shape();
 	//prepare_slope();
 	//prepare_goal();
@@ -124,7 +124,7 @@ int main()
 
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
-		a.draw_cube(defaultShader);
+		a.draw(defaultShader);
 		//draw_axes(defaultShader);
 
 		//draw_level1(defaultShader);
