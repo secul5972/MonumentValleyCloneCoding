@@ -6,7 +6,7 @@
 #include "headerFIle/model.h"
 //shape
 #include "headerFIle/Shape.h"
-//#include "headerFIle/level.h"
+#include "headerFIle/level.h"
 
 //#include <stb/stb_image.h>
 //#include <glad/glad.h>
@@ -91,7 +91,7 @@ int main()
 	// prepare_shapes
 	// ---------------
 	prepare_axes();
-	Slope a;
+	Level1 l;
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
@@ -119,8 +119,7 @@ int main()
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
 		draw_axes(defaultShader);
-		a.draw(defaultShader, worldModel);
-
+		l.draw(defaultShader);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);

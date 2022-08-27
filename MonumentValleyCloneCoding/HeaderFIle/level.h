@@ -8,8 +8,23 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "../headerFIle/Shape.h"
-#include "../headerFIle/shader.h"
 
-void draw_level1(Shader sh);
+class Level
+{
+public:
+	virtual void draw() = 0;
+};
+
+class Level1
+{
+private:
+	L_shape	l_shape[4];
+	Cuboid	cuboid;
+	Slope	slope;
+	Goal	goal;
+public:
+	Level1();
+	virtual void draw(Shader sh);
+};
 
 #endif

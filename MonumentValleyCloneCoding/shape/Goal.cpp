@@ -13,8 +13,7 @@ Goal::Goal()
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.5f, 0.2f, 1.5f));
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.1f, -0.1f, 0.0f));
 
-	int cnt = 36;
-	for (int i = 0; i < cnt; i++)
+	for (int i = 0; i < 36; i++)
 	{
 		glm::vec3 tmp, ret;
 		tmp.x = cube_tri_ver[i * 3];
@@ -26,8 +25,7 @@ Goal::Goal()
 		goal_tri_ver[i * 3 + 2] = ret.z;
 	}
 
-	cnt = 16;
-	for (int i = 0; i < cnt; i++)
+	for (int i = 0; i < 16; i++)
 	{
 		glm::vec3 tmp, ret;
 		tmp.x = cube_line_ver[i * 3];
@@ -37,7 +35,6 @@ Goal::Goal()
 		goal_line_ver[i * 3] = ret.x;
 		goal_line_ver[i * 3 + 1] = ret.y;
 		goal_line_ver[i * 3 + 2] = ret.z;
-		printf("%f %f %f\n", ret.x, ret.y, ret.z);
 	}
 
 	//triangle

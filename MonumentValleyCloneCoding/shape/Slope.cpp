@@ -14,8 +14,7 @@ Slope::Slope()
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.2f, 0.1f, 0.0f));
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.0f, 2.0f, 1.0f));
 
-	int cnt = 36;
-	for (int i = 0; i < cnt; i++)
+	for (int i = 0; i < 36; i++)
 	{
 		glm::vec3 tmp, ret;
 		tmp.x = cube_tri_ver[i * 3];
@@ -27,8 +26,7 @@ Slope::Slope()
 		slope_tri_ver[i * 3 + 2] = ret.z;
 	}
 
-	cnt = 16;
-	for (int i = 0; i < cnt; i++)
+	for (int i = 0; i < 16; i++)
 	{
 		glm::vec3 tmp, ret;
 		tmp.x = cube_line_ver[i * 3];

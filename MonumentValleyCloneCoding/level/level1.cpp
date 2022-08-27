@@ -1,43 +1,48 @@
 #include "../headerFIle/level.h"
 
-extern glm::mat4 worldModel;
-
-void draw_level1(Shader sh)
+Level1::Level1()
 {
-	worldModel = glm::mat4(1.0f);
-	worldModel = glm::rotate(worldModel, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	draw_L_shape(sh);
 
-	worldModel = glm::mat4(1.0f);
-	worldModel = glm::translate(worldModel, glm::vec3(1.8f, 0.0f, 0.0f));
-	worldModel = glm::rotate(worldModel, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
-	worldModel = glm::rotate(worldModel, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
-	draw_L_shape(sh);
+}
 
-	worldModel = glm::mat4(1.0f);
-	worldModel = glm::translate(worldModel, glm::vec3(1.8f, 1.8f, 0.0f));
-	worldModel = glm::rotate(worldModel, glm::radians(float(-90)), glm::vec3(1.0f, 0.0f, 0.0f));
-	worldModel = glm::rotate(worldModel, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
-	draw_L_shape(sh);
+void Level1::draw(Shader sh)
+{
+	glm::mat4 model;
 
-	worldModel = glm::mat4(1.0f);
-	worldModel = glm::translate(worldModel, glm::vec3(1.8f, 1.8f, 0.0f));
-	worldModel = glm::rotate(worldModel, glm::radians(float(-180)), glm::vec3(1.0f, 0.0f, 0.0f));
-	worldModel = glm::rotate(worldModel, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
-	draw_L_shape(sh);
+	model = glm::mat4(1.0f);
+	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
+	l_shape[0].draw(sh, model);
 
-	worldModel = glm::mat4(1.0f);
-	worldModel = glm::translate(worldModel, glm::vec3(0.4f, 1.8f, 0.0f));
-	worldModel = glm::scale(worldModel, glm::vec3(1.25f, 1.0f, 1.0f));
-	draw_cuboid(sh);
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(1.8f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
+	l_shape[1].draw(sh, model);
 
-	worldModel = glm::mat4(1.0f);
-	worldModel = glm::translate(worldModel, glm::vec3(0.0f, 2.0f, -0.2f));
-	worldModel = glm::rotate(worldModel, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	draw_slope(sh);
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
+	model = glm::rotate(model, glm::radians(float(-90)), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
+	l_shape[2].draw(sh, model);
 
-	worldModel = glm::mat4(1.0f);
-	worldModel = glm::translate(worldModel, glm::vec3(0.0f, 2.3f, -1.1f));
-	worldModel = glm::rotate(worldModel, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	draw_goal(sh);
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
+	model = glm::rotate(model, glm::radians(float(-180)), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
+	l_shape[3].draw(sh, model);
+
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
+	model = glm::scale(model, glm::vec3(1.25f, 1.0f, 1.0f));
+	cuboid.draw(sh, model);
+
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 2.0f, -0.2f));
+	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
+	slope.draw(sh, model);
+
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 2.3f, -1.1f));
+	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
+	goal.draw(sh, model);
 }

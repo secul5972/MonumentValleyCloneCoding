@@ -140,6 +140,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\OpenGL_GLFW_Example\glad.c" />
+    <ClCompile Include="level\level1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="shape\axes.cpp" />
     <ClCompile Include="shape\Cube.cpp" />
