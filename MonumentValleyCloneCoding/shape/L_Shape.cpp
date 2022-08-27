@@ -1,76 +1,27 @@
 #include "../headerFIle/Shape.h"
 
-extern unsigned int cuboid_tri_VAO, cuboid_line_VAO, cube_tri_VAO, cube_line_VAO;
-extern glm::mat4 projection, view, worldModel;
-
-void prepare_L_shape()
+L_shape::L_shape()
 {
-#ifndef P_CUBE
-	prepare_cube();
-#endif
-#ifndef P_CUBOID
-	prepare_cuboid();
-#endif
-#ifndef P_L_SHAPE
-#define P_L_SHAPE
-#endif
 
 }
 
-void draw_L_shape(Shader sh)
+void L_shape::draw(Shader sh, glm::mat4 model)
 {
 	//cube
 	glm::mat4 shapeModel;
 
-	sh.use();
-	sh.setMat4("projection", projection);
-	sh.setMat4("view", view);
-
-	shapeModel = worldModel;
+	shapeModel = model;
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.0f, 1.0f, 1.0f));
-	sh.setMat4("model", shapeModel);
+	cube.draw(sh, shapeModel);
 
-	sh.setVec3("ObjectColor", glm::vec3(1.0f, 0.5f, 0.2f));
-	glBindVertexArray(cube_tri_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-
-	sh.setVec3("ObjectColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	glBindVertexArray(cube_line_VAO);
-	glDrawArrays(GL_LINE_STRIP, 0, 4);
-	glDrawArrays(GL_LINE_STRIP, 4, 4);
-	glDrawArrays(GL_LINE_STRIP, 8, 4);
-	glDrawArrays(GL_LINE_STRIP, 12, 4);
-
-	//cuboid
-	shapeModel = worldModel;
+	//cuboid0
+	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.5f, 0.0f, 0.0f));
-	sh.setMat4("model", shapeModel);
+	cuboid[0].draw(sh, shapeModel);
 
-	sh.setVec3("ObjectColor", glm::vec3(1.0f, 0.5f, 0.2f));
-	glBindVertexArray(cuboid_tri_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-
-	sh.setVec3("ObjectColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	glBindVertexArray(cuboid_line_VAO);
-	glDrawArrays(GL_LINE_STRIP, 0, 4);
-	glDrawArrays(GL_LINE_STRIP, 4, 4);
-	glDrawArrays(GL_LINE_STRIP, 8, 4);
-	glDrawArrays(GL_LINE_STRIP, 12, 4);
-
-	shapeModel = worldModel;
+	//cuboid1
+	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.0f, 0.0f, 0.5f));
 	shapeModel = glm::rotate(shapeModel, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	sh.setMat4("model", shapeModel);
-
-	sh.setVec3("ObjectColor", glm::vec3(1.0f, 0.5f, 0.2f));
-	glBindVertexArray(cuboid_tri_VAO);
-	glDrawArrays(GL_TRIANGLES, 0, 36);
-
-	sh.setVec3("ObjectColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	glBindVertexArray(cuboid_line_VAO);
-	glDrawArrays(GL_LINE_STRIP, 0, 4);
-	glDrawArrays(GL_LINE_STRIP, 4, 4);
-	glDrawArrays(GL_LINE_STRIP, 8, 4);
-	glDrawArrays(GL_LINE_STRIP, 12, 4);
-	sh.unuse();
+	cuboid[1].draw(sh, shapeModel);
 }

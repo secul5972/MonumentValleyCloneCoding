@@ -1,21 +1,13 @@
 #include "../headerFIle/Shape.h"
 
-unsigned int cuboid_tri_VAO, cuboid_tri_VBO, cuboid_line_VAO, cuboid_line_VBO;
-extern glm::mat4 projection, view, worldModel;
-extern float cube_tri_ver[], cube_line_ver[];
+unsigned int Cuboid::tri_VAO, Cuboid::tri_VBO, Cuboid::line_VAO, Cuboid::line_VBO;
 
-
-bool prepare_cuboid()
+Cuboid::Cuboid()
 {
-#ifndef P_CUBOID
-#define P_CUBOID
-#endif
 	float* cuboid_tri_ver, * cuboid_line_ver;
 
-	if ((cuboid_tri_ver = (float *)malloc(sizeof(float) * 108)) == NULL)
-		return (1);
-	if ((cuboid_line_ver = (float *)malloc(sizeof(float) * 48)) == NULL)
-		return (1);
+	cuboid_tri_ver = (float*)malloc(sizeof(float) * 108);
+	cuboid_line_ver = (float*)malloc(sizeof(float) * 48);
 
 	glm::mat4 shearing(1.0f);
 	shearing = glm::scale(shearing, glm::vec3(4.0f, 1.0f, 1.0f));
@@ -46,23 +38,23 @@ bool prepare_cuboid()
 	}
 
 	//triangle
-	glGenBuffers(1, &cuboid_tri_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, cuboid_tri_VBO);
+	glGenBuffers(1, &tri_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 108, cuboid_tri_ver, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &cuboid_tri_VAO);
-	glBindVertexArray(cuboid_tri_VAO);
+	glGenVertexArrays(1, &tri_VAO);
+	glBindVertexArray(tri_VAO);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	//line
-	glGenBuffers(1, &cuboid_line_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, cuboid_line_VBO);
+	glGenBuffers(1, &line_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 48, cuboid_line_ver, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &cuboid_line_VAO);
-	glBindVertexArray(cuboid_line_VAO);
+	glGenVertexArrays(1, &line_VAO);
+	glBindVertexArray(line_VAO);
 
 	// position atlinebute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -70,26 +62,24 @@ bool prepare_cuboid()
 
 	free(cuboid_tri_ver);
 	free(cuboid_line_ver);
-
-	return (0);
 }
 
-void draw_cuboid(Shader sh)
+void Cuboid::draw(Shader sh, glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
 	sh.use();
 
-	shapeModel = worldModel;
+	shapeModel = model;
 	sh.setMat4("model", shapeModel);
 	sh.setMat4("projection", projection);
 	sh.setMat4("view", view);
 	sh.setVec3("ObjectColor", glm::vec3(1.0f, 0.5f, 0.2f));
-	glBindVertexArray(cuboid_tri_VAO);
+	glBindVertexArray(tri_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	sh.setVec3("ObjectColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	glBindVertexArray(cuboid_line_VAO);
+	glBindVertexArray(line_VAO);
 	glDrawArrays(GL_LINE_STRIP, 0, 4);
 	glDrawArrays(GL_LINE_STRIP, 4, 4);
 	glDrawArrays(GL_LINE_STRIP, 8, 4);

@@ -141,7 +141,11 @@
   <ItemGroup>
     <ClCompile Include="..\..\OpenGL_GLFW_Example\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="shape\axes.cpp" />
     <ClCompile Include="shape\Cube.cpp" />
+    <ClCompile Include="shape\Cuboid.cpp" />
+    <ClCompile Include="shape\Goal.cpp" />
+    <ClCompile Include="shape\L_Shape.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />

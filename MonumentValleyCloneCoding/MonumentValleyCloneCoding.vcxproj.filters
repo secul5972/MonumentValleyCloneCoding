@@ -24,6 +24,18 @@
     <ClCompile Include="shape\Cube.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="shape\axes.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="shape\Cuboid.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="shape\Goal.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="shape\L_Shape.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag">

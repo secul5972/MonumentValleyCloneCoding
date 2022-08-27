@@ -1,10 +1,9 @@
 #include "../headerFIle/Shape.h"
 
-bool Cube::prepare()
+unsigned int Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
+
+Cube::Cube()
 {
-#ifndef P_CUBE
-#define P_CUBE
-	//triangle
 	glGenBuffers(1, &tri_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_tri_ver), cube_tri_ver, GL_STATIC_DRAW);
@@ -26,17 +25,15 @@ bool Cube::prepare()
 	// position atlinebute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-#endif
-	return (0);
 }
 
-void Cube::draw(Shader sh)
+void Cube::draw(Shader sh, glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
 	sh.use();
 
-	shapeModel = worldModel;
+	shapeModel = model;
 	sh.setMat4("model", shapeModel);
 	sh.setMat4("projection", projection);
 	sh.setMat4("view", view);
