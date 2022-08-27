@@ -77,7 +77,7 @@ static float cube_line_ver[] = {
 	-0.1f,	 0.1f,	-0.1f,
 };
 
-extern glm::mat4 projection, view, worldModel;
+extern glm::mat4 projection, view;
 
 class Shape
 {
@@ -121,6 +121,15 @@ protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	L_shape();
+	virtual void draw(Shader sh, glm::mat4 model);
+};
+
+class Slope:Shape
+{
+protected:
+	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
+public:
+	Slope();
 	virtual void draw(Shader sh, glm::mat4 model);
 };
 

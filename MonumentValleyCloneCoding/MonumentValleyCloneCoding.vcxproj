@@ -146,6 +146,7 @@
     <ClCompile Include="shape\Cuboid.cpp" />
     <ClCompile Include="shape\Goal.cpp" />
     <ClCompile Include="shape\L_Shape.cpp" />
+    <ClCompile Include="shape\Slope.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />

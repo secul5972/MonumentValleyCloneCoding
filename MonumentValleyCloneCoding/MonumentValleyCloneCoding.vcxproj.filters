@@ -36,6 +36,9 @@
     <ClCompile Include="shape\L_Shape.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="shape\Slope.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag">
