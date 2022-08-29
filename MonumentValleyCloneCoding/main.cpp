@@ -91,6 +91,11 @@ int main()
 	// prepare_shapes
 	// ---------------
 	prepare_axes();
+	Cube a;
+	Cuboid b;
+	Goal c;
+	L_shape d;
+	Slope e;
 	Level1 l;
 	// render loop
 	// -----------
@@ -119,6 +124,11 @@ int main()
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
 		draw_axes(defaultShader);
+		//a.draw(defaultShader, worldModel);
+		//b.draw(defaultShader, worldModel);
+		//c.draw(defaultShader, worldModel);
+		//d.draw(defaultShader, worldModel);
+		//e.draw(defaultShader, worldModel);
 		l.draw(defaultShader);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
