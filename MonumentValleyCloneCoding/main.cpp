@@ -21,14 +21,15 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void processInput(GLFWwindow* window);
 
 // settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+const unsigned int SCR_WIDTH = 1200;
+const unsigned int SCR_HEIGHT = 1200;
 
 // camera
-Camera camera(glm::vec3(3.025261f, 3.367383f, 1.579483f), glm::vec3(0.0f, 0.1f, 0.0f), -135.199924f, -35.399974f);
+Camera camera(glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(-1.0f, -1.0f, -1.0f), -90.0f, 0.0f);
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -39,6 +40,8 @@ float lastFrame = 0.0f;
 
 glm::mat4 projection, view, worldModel;
 glm::vec3 lightPos, lightColor;
+
+bool l_shape_rotate_flag = false;
 
 int main()
 {
@@ -64,6 +67,7 @@ int main()
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// tell GLFW to capture our mouse
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -80,6 +84,7 @@ int main()
 
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 
 	// build and compile shaders
 	// -------------------------
@@ -98,6 +103,7 @@ int main()
 	L_shape d;
 	Slope e;
 	Level1 l;
+
 	//light
 	// ----
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -201,7 +207,7 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 	lastX = xpos;
 	lastY = ypos;
 
-	//camera.ProcessMouseMovement(xoffset, yoffset);
+	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
 // glfw: whenever the mouse scroll wheel scrolls, this callback is called
@@ -209,4 +215,12 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	camera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button ==  GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
+	{
+		l_shape_rotate_flag = !l_shape_rotate_flag;
+	}
 }

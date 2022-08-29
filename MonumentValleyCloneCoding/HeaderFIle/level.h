@@ -3,6 +3,7 @@
 
 #include "shader.h"
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -18,10 +19,11 @@ public:
 class Level1
 {
 private:
-	L_shape	l_shape[4];
+	L_shape	l_shape[3];
 	Cuboid	cuboid;
 	Slope	slope;
 	Goal	goal;
+	
 public:
 	Level1();
 	virtual void draw(Shader sh);
