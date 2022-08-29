@@ -41,11 +41,11 @@ void Cube::draw(Shader sh, glm::mat4 model)
 	sh.setMat4("model", shapeModel);
 	sh.setMat4("projection", projection);
 	sh.setMat4("view", view);
-	sh.setVec3("ObjectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	sh.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
 	glBindVertexArray(tri_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	sh.setVec3("ObjectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	sh.setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	glBindVertexArray(line_VAO);
 	glDrawArrays(GL_LINE_STRIP, 0, 4);
 	glDrawArrays(GL_LINE_STRIP, 4, 4);

@@ -39,11 +39,11 @@ void draw_axes(Shader sh) {
 	sh.setMat4("model", shapeModel);
 
 	glBindVertexArray(axes_VAO);
-	sh.setVec3("ObjectColor", axes_color[0][0], axes_color[0][1], axes_color[0][2]);
+	sh.setVec3("objectColor", axes_color[0][0], axes_color[0][1], axes_color[0][2]);
 	glDrawArrays(GL_LINES, 0, 2);
-	sh.setVec3("ObjectColor", axes_color[1][0], axes_color[1][1], axes_color[1][2]);
+	sh.setVec3("objectColor", axes_color[1][0], axes_color[1][1], axes_color[1][2]);
 	glDrawArrays(GL_LINES, 2, 2);
-	sh.setVec3("ObjectColor", axes_color[2][0], axes_color[2][1], axes_color[2][2]);
+	sh.setVec3("objectColor", axes_color[2][0], axes_color[2][1], axes_color[2][2]);
 	glDrawArrays(GL_LINES, 4, 2);
 	glBindVertexArray(0);
 	sh.unuse();

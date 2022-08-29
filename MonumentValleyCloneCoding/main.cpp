@@ -38,6 +38,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 glm::mat4 projection, view, worldModel;
+glm::vec3 lightPos, lightColor;
 
 int main()
 {
@@ -97,6 +98,14 @@ int main()
 	L_shape d;
 	Slope e;
 	Level1 l;
+	//light
+	// ----
+	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
+	lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	defaultShader.use();
+	defaultShader.setVec3("lightPos", lightPos);
+	defaultShader.setVec3("lightColor", lightColor);
+	defaultShader.unuse();
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
