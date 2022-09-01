@@ -1,4 +1,4 @@
-#include "../headerFIle/Shape.h"
+#include "../headerFile/Shape.h"
 
 unsigned int Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 

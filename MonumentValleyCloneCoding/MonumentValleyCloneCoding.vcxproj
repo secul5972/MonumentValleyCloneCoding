@@ -83,6 +83,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)$(SolutionName)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>104857600</StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -102,6 +103,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)$(SolutionName)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>104857600</StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -117,6 +119,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)$(SolutionName)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>104857600</StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -136,30 +139,39 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)$(SolutionName)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+      <StackReserveSize>104857600</StackReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\OpenGL_GLFW_Example\glad.c" />
     <ClCompile Include="level\level1.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
     <ClCompile Include="shape\axes.cpp" />
     <ClCompile Include="shape\Cube.cpp" />
     <ClCompile Include="shape\Cuboid.cpp" />
     <ClCompile Include="shape\Goal.cpp" />
     <ClCompile Include="shape\L_Shape.cpp" />
+    <ClCompile Include="shape\Point.cpp" />
     <ClCompile Include="shape\Slope.cpp" />
+    <ClCompile Include="shape\Circle.cpp" />
+    <ClCompile Include="touchBox\CircleBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />
     <None Include="shader\default.vert" />
+    <None Include="shader\test.frag" />
+    <None Include="shader\test.vert" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headerFIle\camera.h" />
-    <ClInclude Include="headerFIle\level.h" />
-    <ClInclude Include="headerFIle\Shape.h" />
-    <ClInclude Include="headerFIle\mesh.h" />
-    <ClInclude Include="headerFIle\model.h" />
-    <ClInclude Include="headerFIle\shader.h" />
+    <ClInclude Include="headerFile\AdditionalMathFunction.h" />
+    <ClInclude Include="headerFile\camera.h" />
+    <ClInclude Include="headerFile\Level.h" />
+    <ClInclude Include="headerFile\Shape.h" />
+    <ClInclude Include="headerFile\mesh.h" />
+    <ClInclude Include="headerFile\model.h" />
+    <ClInclude Include="headerFile\shader.h" />
+    <ClInclude Include="headerFile\TouchBox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

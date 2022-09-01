@@ -8,7 +8,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../headerFIle/Shape.h"
+#include "Shape.h"
+#include "TouchBox.h"
+
+extern GLFWwindow* window;
 
 class Level
 {
@@ -23,10 +26,12 @@ private:
 	Cuboid	cuboid;
 	Slope	slope;
 	Goal	goal;
-	
+	Circle	circle;
+	Point	point;
 public:
 	Level1();
 	virtual void draw(Shader sh);
+	~Level1();
 };
 
 #endif
