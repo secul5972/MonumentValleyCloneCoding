@@ -1,11 +1,12 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define GLFW_INCLUDE_NONE
 
-#include "HeaderFIle/shader.h"
-#include "HeaderFIle/camera.h"
-#include "HeaderFIle/model.h"
-//prepare
-#include "HeaderFIle/PrepareObjects.h"
+#include "headerFIle/shader.h"
+#include "headerFIle/camera.h"
+#include "headerFIle/model.h"
+//shape
+#include "headerFIle/Shape.h"
+#include "headerFIle/level.h"
 
 //#include <stb/stb_image.h>
 //#include <glad/glad.h>
@@ -20,14 +21,15 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void processInput(GLFWwindow* window);
 
 // settings
-const unsigned int SCR_WIDTH = 1280;
-const unsigned int SCR_HEIGHT = 720;
+const unsigned int SCR_WIDTH = 1200;
+const unsigned int SCR_HEIGHT = 1200;
 
 // camera
-Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+Camera camera(glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(-1.0f, -1.0f, -1.0f), -90.0f, 0.0f);
 float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
@@ -36,7 +38,10 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-glm::mat4 projection, view, model;
+glm::mat4 projection, view, worldModel;
+glm::vec3 lightPos, lightColor;
+
+bool l_shape_rotate_flag = false;
 
 int main()
 {
@@ -51,7 +56,7 @@ int main()
 #endif
 
 	// glfw window creation
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "LearnOpenGL", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "MonumentVallyCloneCoding", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -62,9 +67,10 @@ int main()
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
+	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// tell GLFW to capture our mouse
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// glad: load all OpenGL function pointers
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -78,6 +84,7 @@ int main()
 
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LEQUAL);
 
 	// build and compile shaders
 	// -------------------------
@@ -87,10 +94,24 @@ int main()
 	// -----------
 	//Model ourModel("objects/backpack/backpack.obj");
 
-	// prepare_objects
+	// prepare_shapes
 	// ---------------
-	prepare_cuboid();
+	prepare_axes();
+	Cube a;
+	Cuboid b;
+	Goal c;
+	L_shape d;
+	Slope e;
+	Level1 l;
 
+	//light
+	// ----
+	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
+	lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	defaultShader.use();
+	defaultShader.setVec3("lightPos", lightPos);
+	defaultShader.setVec3("lightColor", lightColor);
+	defaultShader.unuse();
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
@@ -111,19 +132,19 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// view/projection transformations
-		projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		//projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		projection = glm::ortho(-2.0f,2.0f, -2.0f, 2.0f, 0.0f, 100.0f);
 		view = camera.GetViewMatrix();
 
-
-		draw_cuboid(defaultShader);
-		//// render the loaded model
-		//model = glm::mat4(1.0f);
-		//model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f)); // translate it down so it's at the center of the scene
-		//model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));	// it's a bit too big for our scene, so scale it down
-		//defaultShader.setMat4("model", model);
-		//ourModel.Draw(defaultShader);
-
-
+		//draw_shapes
+		worldModel = glm::mat4(1.0f);
+		draw_axes(defaultShader);
+		//a.draw(defaultShader, worldModel);
+		//b.draw(defaultShader, worldModel);
+		//c.draw(defaultShader, worldModel);
+		//d.draw(defaultShader, worldModel);
+		//e.draw(defaultShader, worldModel);
+		l.draw(defaultShader);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
@@ -194,4 +215,12 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn)
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	camera.ProcessMouseScroll(static_cast<float>(yoffset));
+}
+
+void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+{
+	if (button ==  GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
+	{
+		l_shape_rotate_flag = !l_shape_rotate_flag;
+	}
 }
