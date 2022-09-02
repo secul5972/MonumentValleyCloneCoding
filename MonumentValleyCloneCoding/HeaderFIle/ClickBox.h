@@ -19,6 +19,8 @@ extern glm::mat4 projection, view, viewport;
 extern const unsigned int SCR_WIDTH;
 extern const unsigned int SCR_HEIGHT;
 
+extern bool l_shape_moving_flag;
+
 static glm::vec2 prev_mouse_pos_in_model;
 static float click_and_rotate_angle;
 

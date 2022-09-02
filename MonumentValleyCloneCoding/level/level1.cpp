@@ -9,14 +9,9 @@ double rotateCurrTime = 0;
 double l_shape_angle = 0;
 int shape = 0;
 
-extern Shader *aa;
 CircleBox *circle_box;
 glm::mat4 circle_box_model;
-bool l_shape_rotate_flag = false;
 bool l_shape_moving_flag = false;
-
-extern bool left_mouse_button_down;
-extern glm::vec2 prev_mouse_pos;
 
 Level1::Level1()
 {
@@ -50,34 +45,19 @@ void Level1::draw(Shader sh)
 	circle_box_model = model;
 	circle.draw(sh, model);
 
-	//if (l_shape_rotate_flag && (rotateEndTime < 0))
-	//{
-	//	rotateStartTime = glfwGetTime();
-	//	rotateEndTime = glfwGetTime() + 1;
-	//	l_shape_moving_flag = true;
-	//}
-
-	//if (l_shape_rotate_flag && (glfwGetTime() < rotateEndTime))
-	//{
-	//	rotateCurrTime = glfwGetTime();
-	//	l_shape_angle = (rotateCurrTime - rotateStartTime) * 90;
-	//	if (shape == 0)
-	//		l_shape_angle *= -1;
-	//	else
-	//		l_shape_angle = -90 + l_shape_angle;
-	//}
-	//else if (l_shape_rotate_flag && (glfwGetTime() > rotateEndTime))
-	//{
-	//	rotateStartTime = 0;
-	//	rotateEndTime = -1;
-	//	if (shape == 0)
-	//		l_shape_angle = -90;
-	//	else
-	//		l_shape_angle = 0;
-	//	shape = !shape;
-	//	l_shape_rotate_flag = false;
-	//	l_shape_moving_flag = false;
-	//}
+	float tmp_angle = fmod(l_shape_angle, 90);
+	if (!l_shape_moving_flag)
+	{
+		if (tmp_angle < 0.5)
+			l_shape_angle = int(l_shape_angle / 90) * 90;
+		else if (tmp_angle > 90 - 0.5)
+			l_shape_angle = (int(l_shape_angle / 90) + 1) % 4 * 90;
+		else if (tmp_angle > 45.0f)
+			l_shape_angle += deltaTime * 60;
+		else
+			l_shape_angle -= deltaTime * 60;
+		printf("%f %f\n", l_shape_angle, deltaTime);
+	}
 	if (225 < l_shape_angle && l_shape_angle < 315)
 		commonModel = glm::translate(commonModel, glm::vec3(-1.8f, -1.8f, -1.8f));
 
@@ -114,7 +94,10 @@ void level1_mouse_button_callback(GLFWwindow* window, int button, int action, in
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
 		left_mouse_button_down = true;
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+	{
 		left_mouse_button_down = false;
+		l_shape_moving_flag = false;
+	}
 }
 
 void level1_mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)

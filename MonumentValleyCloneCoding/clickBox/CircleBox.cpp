@@ -34,6 +34,7 @@ float CircleBox::CheckClickAndRotateInBox(float xpos, float ypos, glm::mat4 mode
 
 	if (glm::distance(modelpos, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) < radius)
 	{
+		l_shape_moving_flag = true;
 		if (prev_mouse_pos_in_model.x == -1)
 		{
 			prev_mouse_pos_in_model = glm::normalize(glm::vec2(modelpos.y, modelpos.z));
@@ -44,6 +45,7 @@ float CircleBox::CheckClickAndRotateInBox(float xpos, float ypos, glm::mat4 mode
 			glm::vec2 currpos = glm::normalize(glm::vec2(modelpos.y, modelpos.z));
 			float angle = glm::degrees(acos(glm::dot(prev_mouse_pos_in_model, currpos)));
 
+			 
 			if (isnan(angle))
 				return 0;
 
