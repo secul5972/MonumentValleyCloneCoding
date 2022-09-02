@@ -155,7 +155,7 @@
     <ClCompile Include="shape\Point.cpp" />
     <ClCompile Include="shape\Slope.cpp" />
     <ClCompile Include="shape\Circle.cpp" />
-    <ClCompile Include="touchBox\CircleBox.cpp" />
+    <ClCompile Include="clickBox\CircleBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />
@@ -171,7 +171,7 @@
     <ClInclude Include="headerFile\mesh.h" />
     <ClInclude Include="headerFile\model.h" />
     <ClInclude Include="headerFile\shader.h" />
-    <ClInclude Include="headerFile\TouchBox.h" />
+    <ClInclude Include="headerFile\ClickBox.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

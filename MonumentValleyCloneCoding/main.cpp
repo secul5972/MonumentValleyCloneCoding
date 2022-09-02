@@ -7,8 +7,8 @@
 //shape
 #include "headerFile/Shape.h"
 #include "headerFile/Level.h"
-//TouchBox
-#include "headerFile/TouchBox.h"
+//ClickBox
+#include "headerFile/ClickBox.h"
 
 #include "headerFile/AdditionalMathFunction.h"
 //#include <stb/stb_image.h>
@@ -49,6 +49,7 @@ glm::mat4 projection, view, worldModel;
 glm::mat4 viewport;
 glm::vec3 lightPos, lightColor;
 
+bool left_mouse_button_down = false;
 ///////////////////////////////////////////////////////////////
 Shader* aa;
 ///////////////////////////////////////////////////////////////

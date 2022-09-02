@@ -9,7 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shape.h"
-#include "TouchBox.h"
+#include "ClickBox.h"
 
 extern GLFWwindow* window;
 
@@ -27,7 +27,6 @@ private:
 	Slope	slope;
 	Goal	goal;
 	Circle	circle;
-	Point	point;
 public:
 	Level1();
 	virtual void draw(Shader sh);

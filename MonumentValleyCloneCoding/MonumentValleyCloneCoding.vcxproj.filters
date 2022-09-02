@@ -45,7 +45,7 @@
     <ClCompile Include="shape\Circle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="touchBox\CircleBox.cpp">
+    <ClCompile Include="clickBox\CircleBox.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp">
@@ -84,7 +84,7 @@
     <ClInclude Include="headerFile\Level.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="headerFile\TouchBox.h">
+    <ClInclude Include="headerFile\ClickBox.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="headerFile\AdditionalMathFunction.h">

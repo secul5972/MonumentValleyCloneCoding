@@ -1,5 +1,5 @@
-#ifndef TOUCHBOX_H
-#define TOUCHBOX_H
+#ifndef ClickBox_H
+#define ClickBox_H
 
 #include "shader.h"
 #include <glad/glad.h>
@@ -19,19 +19,24 @@ extern glm::mat4 projection, view, viewport;
 extern const unsigned int SCR_WIDTH;
 extern const unsigned int SCR_HEIGHT;
 
-class TouchBox
+static glm::vec2 prev_mouse_pos_in_model;
+static float click_and_rotate_angle;
+
+class ClickBox
 {
 public:
 	virtual bool CheckClickInBox(float xpos, float ypos, glm::mat4 model) = 0;
+	virtual float CheckClickAndRotateInBox(float xpos, float ypos, glm::mat4 model) = 0;
 };
 
-class CircleBox :TouchBox
+class CircleBox :ClickBox
 {
 private:
 	float radius;
 public:
 	CircleBox();
 	virtual bool CheckClickInBox(float xpos, float ypos, glm::mat4 model);
+	virtual float CheckClickAndRotateInBox(float xpos, float ypos, glm::mat4 model);
 };
 
 #endif
