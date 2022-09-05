@@ -1,4 +1,4 @@
-#include "../headerFIle/Shape.h"
+#include "../headerFile/Shape.h"
 
 extern glm::mat4 projection, view, worldModel;
 
@@ -33,7 +33,6 @@ void draw_axes(Shader sh) {
 
 	glm::mat4 shapeModel;
 	shapeModel = worldModel;
-	shapeModel = glm::translate(shapeModel, glm::vec3(0.0f, -0.4f, 1.2f));
 	shapeModel = glm::scale(shapeModel, glm::vec3(100.0f, 100.0f, 100.0f));
 	sh.setMat4("projection", projection);
 	sh.setMat4("view", view);

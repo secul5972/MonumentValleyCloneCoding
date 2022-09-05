@@ -86,7 +86,7 @@ public:
 	virtual void draw(Shader sh, glm::mat4 model) = 0;
 };
 
-class Cube:Shape
+class Cube :Shape
 {
 protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -95,7 +95,7 @@ public:
 	virtual void draw(Shader sh, glm::mat4 model);
 };
 
-class Cuboid:Shape
+class Cuboid :Shape
 {
 protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -104,7 +104,7 @@ public:
 	virtual void draw(Shader sh, glm::mat4 model);
 };
 
-class Goal:Shape
+class Goal :Shape
 {
 protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -113,7 +113,7 @@ public:
 	virtual void draw(Shader sh, glm::mat4 model);
 };
 
-class L_shape:Shape
+class L_shape :Shape
 {
 private:
 	Cube cube;
@@ -125,7 +125,7 @@ public:
 	virtual void draw(Shader sh, glm::mat4 model);
 };
 
-class Slope:Shape
+class Slope :Shape
 {
 protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -133,6 +133,29 @@ public:
 	Slope();
 	virtual void draw(Shader sh, glm::mat4 model);
 };
+
+static float* circle_vertex;
+
+class Circle :Shape
+{
+protected:
+	static unsigned int line_VAO, line_VBO;
+public:
+	Circle();
+	virtual void draw(Shader sh, glm::mat4 model);
+};
+
+class Point
+{
+protected:
+	static unsigned int point_VAO, point_VBO;
+public:
+	Point();
+	void draw(Shader sh, glm::mat4 model, glm::vec3 pos);
+};
+
+bool MakeCircleVertex();
+
 
 void prepare_axes();
 void draw_axes(Shader sh);

@@ -1,13 +1,16 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define GLFW_INCLUDE_NONE
 
-#include "headerFIle/shader.h"
-#include "headerFIle/camera.h"
-#include "headerFIle/model.h"
+#include "headerFile/shader.h"
+#include "headerFile/camera.h"
+#include "headerFile/model.h"
 //shape
-#include "headerFIle/Shape.h"
-#include "headerFIle/level.h"
+#include "headerFile/Shape.h"
+#include "headerFile/Level.h"
+//ClickBox
+#include "headerFile/ClickBox.h"
 
+#include "headerFile/AdditionalMathFunction.h"
 //#include <stb/stb_image.h>
 //#include <glad/glad.h>
 
@@ -21,12 +24,16 @@
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
 void processInput(GLFWwindow* window);
+
+void MakeViewportMatrixWithoutDepth();
 
 // settings
 const unsigned int SCR_WIDTH = 1200;
 const unsigned int SCR_HEIGHT = 1200;
+
+//window
+GLFWwindow* window;
 
 // camera
 Camera camera(glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(-1.0f, -1.0f, -1.0f), -90.0f, 0.0f);
@@ -39,10 +46,13 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 glm::mat4 projection, view, worldModel;
+glm::mat4 viewport;
 glm::vec3 lightPos, lightColor;
 
-bool l_shape_rotate_flag = false;
-
+bool left_mouse_button_down = false;
+///////////////////////////////////////////////////////////////
+Shader* aa;
+///////////////////////////////////////////////////////////////
 int main()
 {
 	// glfw: initialize and configure
@@ -56,7 +66,7 @@ int main()
 #endif
 
 	// glfw window creation
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "MonumentVallyCloneCoding", NULL, NULL);
+	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "MonumentVallyCloneCoding", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -67,7 +77,6 @@ int main()
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
-	glfwSetMouseButtonCallback(window, mouse_button_callback);
 
 	// tell GLFW to capture our mouse
 	//glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -84,26 +93,31 @@ int main()
 
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
-	glDepthFunc(GL_LEQUAL);
 
 	// build and compile shaders
 	// -------------------------
 	Shader defaultShader("shader/default.vert", "shader/default.frag");
-
+	aa = new Shader("shader/test.vert", "shader/test.frag");
 	// load models
 	// -----------
 	//Model ourModel("objects/backpack/backpack.obj");
 
+	// viewport matrix
+	// ---------------
+	MakeViewportMatrixWithoutDepth();
+
 	// prepare_shapes
 	// ---------------
 	prepare_axes();
+	//MakeCircleVertex();
 	Cube a;
 	Cuboid b;
 	Goal c;
 	L_shape d;
 	Slope e;
 	Level1 l;
-
+	Circle f;
+	Point g;
 	//light
 	// ----
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -138,6 +152,7 @@ int main()
 
 		//draw_shapes
 		worldModel = glm::mat4(1.0f);
+		worldModel = glm::translate(worldModel, glm::vec3(0.0f, -0.4f, 1.2f));
 		draw_axes(defaultShader);
 		//a.draw(defaultShader, worldModel);
 		//b.draw(defaultShader, worldModel);
@@ -145,6 +160,8 @@ int main()
 		//d.draw(defaultShader, worldModel);
 		//e.draw(defaultShader, worldModel);
 		l.draw(defaultShader);
+		//g.draw(defaultShader, glm::mat4(1.0f), projection * view * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
+		//f.draw(defaultShader, worldModel);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
@@ -217,10 +234,16 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 	camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }
 
-void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+void MakeViewportMatrixWithoutDepth()
 {
-	if (button ==  GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS) 
-	{
-		l_shape_rotate_flag = !l_shape_rotate_flag;
-	}
+	glm::mat4 viewport_matrix(1.0f);
+
+	viewport_matrix[0][0] = SCR_WIDTH / 2;
+	viewport_matrix[3][0] = SCR_WIDTH / 2;
+	viewport_matrix[1][1] = SCR_HEIGHT / 2;
+	viewport_matrix[3][1] = SCR_HEIGHT / 2;
+	viewport_matrix[2][2] = 0.5f;
+	viewport_matrix[3][2] = 0.5f;
+
+	viewport = viewport_matrix;
 }

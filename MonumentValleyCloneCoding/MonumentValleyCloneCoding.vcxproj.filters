@@ -42,6 +42,18 @@
     <ClCompile Include="level\level1.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="shape\Circle.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="clickBox\CircleBox.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="shape\Point.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag">
@@ -50,24 +62,32 @@
     <None Include="shader\default.vert">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="shader\test.vert" />
+    <None Include="shader\test.frag" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headerFIle\camera.h">
+    <ClInclude Include="headerFile\camera.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="headerFIle\Shape.h">
+    <ClInclude Include="headerFile\Shape.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="headerFIle\mesh.h">
+    <ClInclude Include="headerFile\mesh.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="headerFIle\model.h">
+    <ClInclude Include="headerFile\model.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="headerFIle\shader.h">
+    <ClInclude Include="headerFile\shader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="headerFIle\level.h">
+    <ClInclude Include="headerFile\Level.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="headerFile\ClickBox.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="headerFile\AdditionalMathFunction.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

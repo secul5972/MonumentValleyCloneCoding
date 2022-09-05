@@ -1,4 +1,4 @@
-#include "../headerFIle/Shape.h"
+#include "../headerFile/Shape.h"
 
 unsigned int Slope::tri_VAO, Slope::tri_VBO, Slope::line_VAO, Slope::line_VBO;
 

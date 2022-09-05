@@ -1,4 +1,4 @@
-#include "../headerFIle/Shape.h"
+#include "../headerFile/Shape.h"
 
 unsigned int Goal::tri_VAO, Goal::tri_VBO, Goal::line_VAO, Goal::line_VBO;
 

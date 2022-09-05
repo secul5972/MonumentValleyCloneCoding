@@ -8,7 +8,13 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-#include "../headerFIle/Shape.h"
+#include "Shape.h"
+#include "ClickBox.h"
+
+extern GLFWwindow* window;
+extern bool left_mouse_button_down;
+extern glm::vec2 prev_mouse_pos;
+extern float deltaTime;
 
 class Level
 {
@@ -23,10 +29,11 @@ private:
 	Cuboid	cuboid;
 	Slope	slope;
 	Goal	goal;
-	
+	Circle	circle;
 public:
 	Level1();
 	virtual void draw(Shader sh);
+	~Level1();
 };
 
 #endif
