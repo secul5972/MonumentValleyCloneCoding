@@ -27,7 +27,7 @@ protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Cube();
-	virtual void draw(Shader sh, glm::mat4 model);
+	void draw(Shader sh, glm::mat4 model);
 };
 
 class Cuboid :Shape
@@ -36,7 +36,7 @@ protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Cuboid();
-	virtual void draw(Shader sh, glm::mat4 model);
+	void draw(Shader sh, glm::mat4 model);
 };
 
 class Goal :Shape
@@ -45,7 +45,7 @@ protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Goal();
-	virtual void draw(Shader sh, glm::mat4 model);
+	void draw(Shader sh, glm::mat4 model);
 };
 
 class L_shape :Shape
@@ -57,7 +57,7 @@ protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	L_shape();
-	virtual void draw(Shader sh, glm::mat4 model);
+	void draw(Shader sh, glm::mat4 model);
 };
 
 class Slope :Shape
@@ -66,26 +66,27 @@ protected:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Slope();
-	virtual void draw(Shader sh, glm::mat4 model);
+	void draw(Shader sh, glm::mat4 model);
 };
 
 class Circle :Shape
 {
 protected:
-	static unsigned int line_VAO, line_VBO;
+	static unsigned int tri_VAO, tri_VBO;
 public:
 	Circle();
-	virtual void draw(Shader sh, glm::mat4 model);
+	void draw(Shader sh, glm::mat4 model);
 };
 
-//class Cylinder :Shape
-//{
-//protected:
-//	static unsigned int line_VAO, line_VBO;
-//public:
-//	Cylinder();
-//	virtual void draw(Shader sh, glm::mat4 model);
-//};
+class Cylinder :Shape
+{
+protected:
+	static unsigned int line_VAO, line_VBO;
+	Circle circle;
+public:
+	Cylinder();
+	void draw(Shader sh, glm::mat4 model);
+};
 
 
 bool MakeCircleVertex();

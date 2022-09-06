@@ -117,6 +117,7 @@ int main()
 	Slope e;
 	Level1 l;
 	Circle f;
+	Cylinder g;
 	//light
 	// ----
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -158,8 +159,9 @@ int main()
 		//c.draw(defaultShader, worldModel);
 		//d.draw(defaultShader, worldModel);
 		//e.draw(defaultShader, worldModel);
-		l.draw(defaultShader);
+		//l.draw(defaultShader);
 		//f.draw(defaultShader, worldModel);
+		g.draw(defaultShader, worldModel);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);

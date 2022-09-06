@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-unsigned int Circle::line_VAO, Circle::line_VBO;
+unsigned int Circle::tri_VAO, Circle::tri_VBO;
 float* circle_vertex;
 int circle_vertex_cnt;
 
@@ -26,7 +26,7 @@ bool MakeCircleVertex()
 		circle_vertex[i * 6 + 5] = 1.0f;
 	}
 
-	circle_vertex_cnt = 0;
+	circle_vertex_cnt = 362;
 
 	return (0);
 
@@ -37,12 +37,12 @@ Circle::Circle()
 	if (circle_vertex == 0)
 		MakeCircleVertex();
 
-	glGenBuffers(1, &line_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 2172, circle_vertex, GL_STATIC_DRAW);
+	glGenBuffers(1, &tri_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * circle_vertex_cnt * 6, circle_vertex, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &line_VAO);
-	glBindVertexArray(line_VAO);
+	glGenVertexArrays(1, &tri_VAO);
+	glBindVertexArray(tri_VAO);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -61,8 +61,8 @@ void Circle::draw(Shader sh, glm::mat4 model)
 	sh.setMat4("projection", projection);
 	sh.setMat4("view", view);
 	sh.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
-	glBindVertexArray(line_VAO);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, 362);
+	glBindVertexArray(tri_VAO);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, circle_vertex_cnt);
 
 	sh.unuse();
 }
