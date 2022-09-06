@@ -51,7 +51,7 @@
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="shape\Point.cpp">
+    <ClCompile Include="shape\Cylinder.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

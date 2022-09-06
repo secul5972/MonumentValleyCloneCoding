@@ -1,6 +1,8 @@
 #include "../headerFile/Shape.h"
 
 unsigned int Circle::line_VAO, Circle::line_VBO;
+float* circle_vertex;
+int circle_vertex_cnt;
 
 bool MakeCircleVertex()
 {
@@ -23,12 +25,8 @@ bool MakeCircleVertex()
 		circle_vertex[i * 6 + 4] = 1.0f;
 		circle_vertex[i * 6 + 5] = 1.0f;
 	}
-	//circle_vertex[361 * 6] = 0.0f;
-	//circle_vertex[361 * 6 + 1] = 0.0f;
-	//circle_vertex[361 * 6 + 2] = 0.0f;
-	//circle_vertex[361 * 6 + 3] = 1.0f;
-	//circle_vertex[361 * 6 + 4] = 1.0f;
-	//circle_vertex[361 * 6 + 5] = 1.0f;
+
+	circle_vertex_cnt = 0;
 
 	return (0);
 

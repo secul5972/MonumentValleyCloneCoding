@@ -1,7 +1,5 @@
 #include "../headerFile/ClickBox.h"
 
-glm::vec2 prev_mouse_pos_in_model;
-
 CircleBox::CircleBox(): radius(0.1f)
 {
 }
@@ -30,7 +28,7 @@ float CircleBox::CheckClickAndRotateInBox(float xpos, float ypos, glm::mat4 mode
 	glReadPixels((int)xpos, (int)ypos, 1, 1, GL_DEPTH_COMPONENT, GL_FLOAT, &zpos);
 	mousepos = glm::vec4(xpos, ypos, zpos, 1.0f);
 	modelpos = glm::inverse(viewport * projection * view * model) * mousepos;
-	printf("%f %f\n", prev_mouse_pos_in_model.x, prev_mouse_pos_in_model.y);
+
 	if (glm::distance(modelpos, glm::vec4(0.0f, 0.0f, 0.0f, 1.0f)) < radius)
 	{
 		l_shape_moving_flag = true;

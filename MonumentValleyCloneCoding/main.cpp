@@ -117,7 +117,6 @@ int main()
 	Slope e;
 	Level1 l;
 	Circle f;
-	Point g;
 	//light
 	// ----
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -160,7 +159,6 @@ int main()
 		//d.draw(defaultShader, worldModel);
 		//e.draw(defaultShader, worldModel);
 		l.draw(defaultShader);
-		//g.draw(defaultShader, glm::mat4(1.0f), projection * view * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f));
 		//f.draw(defaultShader, worldModel);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------

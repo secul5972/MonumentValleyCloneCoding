@@ -15,7 +15,7 @@ extern GLFWwindow* window;
 extern bool left_mouse_button_down;
 extern glm::vec2 prev_mouse_pos;
 extern float deltaTime;
-extern glm::vec2 prev_mouse_pos_in_model;
+
 
 class Level
 {

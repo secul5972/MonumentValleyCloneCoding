@@ -11,74 +11,9 @@
 #include <iostream>
 using namespace std;
 
-static float cube_tri_ver[] = {
-	-0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,
-	 0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,
-	 0.1f,  0.1f, -0.1f,  0.0f,  0.0f, -1.0f,
-	 0.1f,  0.1f, -0.1f,  0.0f,  0.0f, -1.0f,
-	-0.1f,  0.1f, -0.1f,  0.0f,  0.0f, -1.0f,
-	-0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,
-
-	-0.1f, -0.1f,  0.1f,  0.0f,  0.0f, 1.0f,
-	 0.1f, -0.1f,  0.1f,  0.0f,  0.0f, 1.0f,
-	 0.1f,  0.1f,  0.1f,  0.0f,  0.0f, 1.0f,
-	 0.1f,  0.1f,  0.1f,  0.0f,  0.0f, 1.0f,
-	-0.1f,  0.1f,  0.1f,  0.0f,  0.0f, 1.0f,
-	-0.1f, -0.1f,  0.1f,  0.0f,  0.0f, 1.0f,
-
-	-0.1f,  0.1f,  0.1f, -1.0f,  0.0f,  0.0f,
-	-0.1f,  0.1f, -0.1f, -1.0f,  0.0f,  0.0f,
-	-0.1f, -0.1f, -0.1f, -1.0f,  0.0f,  0.0f,
-	-0.1f, -0.1f, -0.1f, -1.0f,  0.0f,  0.0f,
-	-0.1f, -0.1f,  0.1f, -1.0f,  0.0f,  0.0f,
-	-0.1f,  0.1f,  0.1f, -1.0f,  0.0f,  0.0f,
-
-	 0.1f,  0.1f,  0.1f,  1.0f,  0.0f,  0.0f,
-	 0.1f,  0.1f, -0.1f,  1.0f,  0.0f,  0.0f,
-	 0.1f, -0.1f, -0.1f,  1.0f,  0.0f,  0.0f,
-	 0.1f, -0.1f, -0.1f,  1.0f,  0.0f,  0.0f,
-	 0.1f, -0.1f,  0.1f,  1.0f,  0.0f,  0.0f,
-	 0.1f,  0.1f,  0.1f,  1.0f,  0.0f,  0.0f,
-
-	-0.1f, -0.1f, -0.1f,  0.0f, -1.0f,  0.0f,
-	 0.1f, -0.1f, -0.1f,  0.0f, -1.0f,  0.0f,
-	 0.1f, -0.1f,  0.1f,  0.0f, -1.0f,  0.0f,
-	 0.1f, -0.1f,  0.1f,  0.0f, -1.0f,  0.0f,
-	-0.1f, -0.1f,  0.1f,  0.0f, -1.0f,  0.0f,
-	-0.1f, -0.1f, -0.1f,  0.0f, -1.0f,  0.0f,
-
-	-0.1f,  0.1f, -0.1f,  0.0f,  1.0f,  0.0f,
-	 0.1f,  0.1f, -0.1f,  0.0f,  1.0f,  0.0f,
-	 0.1f,  0.1f,  0.1f,  0.0f,  1.0f,  0.0f,
-	 0.1f,  0.1f,  0.1f,  0.0f,  1.0f,  0.0f,
-	-0.1f,  0.1f,  0.1f,  0.0f,  1.0f,  0.0f,
-	-0.1f,  0.1f, -0.1f,  0.0f,  1.0f,  0.0f
-};
-
-
-static float cube_line_ver[] = {
-	-0.1f, -0.1f, -0.1f,  0.0f, 0.0f, 0.0f,
-	-0.1f,  0.1f, -0.1f,  0.0f, 0.0f, 0.0f,
-	-0.1f,  0.1f,  0.1f,  0.0f, 0.0f, 0.0f,
-	-0.1f, -0.1f,  0.1f,  0.0f, 0.0f, 0.0f,
-
-	 0.1f,  0.1f,  0.1f,  0.0f, 0.0f, 0.0f,
-	 0.1f, -0.1f,  0.1f,  0.0f, 0.0f, 0.0f,
-	 0.1f, -0.1f, -0.1f,  0.0f, 0.0f, 0.0f,
-	 0.1f,  0.1f, -0.1f,  0.0f, 0.0f, 0.0f,
-
-	 0.1f, -0.1f, -0.1f,  0.0f, 0.0f, 0.0f,
-	-0.1f, -0.1f, -0.1f,  0.0f, 0.0f, 0.0f,
-	-0.1f, -0.1f,  0.1f,  0.0f, 0.0f, 0.0f,
-	 0.1f, -0.1f,  0.1f,  0.0f, 0.0f, 0.0f,
-
-	-0.1f,  0.1f,  0.1f,  0.0f, 0.0f, 0.0f,
-	 0.1f,  0.1f,  0.1f,  0.0f, 0.0f, 0.0f,
-	 0.1f,  0.1f, -0.1f,  0.0f, 0.0f, 0.0f,
-	-0.1f,  0.1f, -0.1f,  0.0f, 0.0f, 0.0f
-};
-
 extern glm::mat4 projection, view;
+extern float cube_tri_ver[];
+extern float cube_line_ver[];
 
 class Shape
 {
@@ -134,8 +69,6 @@ public:
 	virtual void draw(Shader sh, glm::mat4 model);
 };
 
-static float* circle_vertex;
-
 class Circle :Shape
 {
 protected:
@@ -145,18 +78,17 @@ public:
 	virtual void draw(Shader sh, glm::mat4 model);
 };
 
-class Point
-{
-protected:
-	static unsigned int point_VAO, point_VBO;
-public:
-	Point();
-	void draw(Shader sh, glm::mat4 model, glm::vec3 pos);
-};
+//class Cylinder :Shape
+//{
+//protected:
+//	static unsigned int line_VAO, line_VBO;
+//public:
+//	Cylinder();
+//	virtual void draw(Shader sh, glm::mat4 model);
+//};
+
 
 bool MakeCircleVertex();
-
-
 void prepare_axes();
 void draw_axes(Shader sh);
 

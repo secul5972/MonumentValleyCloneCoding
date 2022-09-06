@@ -12,6 +12,7 @@ int shape = 0;
 CircleBox *circle_box;
 glm::mat4 circle_box_model;
 bool l_shape_moving_flag = false;
+glm::vec2 prev_mouse_pos_in_model;
 
 Level1::Level1()
 {
