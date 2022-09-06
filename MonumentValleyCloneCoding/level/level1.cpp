@@ -16,6 +16,8 @@ bool l_shape_moving_flag = false;
 Level1::Level1()
 {
 	circle_box = new CircleBox;
+	prev_mouse_pos_in_model.x = -1;
+	prev_mouse_pos_in_model.y = -1;
 }
 
 void Level1::draw(Shader sh)
@@ -56,7 +58,6 @@ void Level1::draw(Shader sh)
 			l_shape_angle += deltaTime * 60;
 		else
 			l_shape_angle -= deltaTime * 60;
-		printf("%f %f\n", l_shape_angle, deltaTime);
 	}
 	if (225 < l_shape_angle && l_shape_angle < 315)
 		commonModel = glm::translate(commonModel, glm::vec3(-1.8f, -1.8f, -1.8f));
@@ -97,6 +98,8 @@ void level1_mouse_button_callback(GLFWwindow* window, int button, int action, in
 	{
 		left_mouse_button_down = false;
 		l_shape_moving_flag = false;
+		prev_mouse_pos_in_model.x = -1;
+		prev_mouse_pos_in_model.y = -1;
 	}
 }
 
