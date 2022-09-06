@@ -42,12 +42,6 @@ void Level1::draw(Shader sh)
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	l_shape[1].draw(sh, model);
 
-	model = commonModel;
-	model = glm::translate(model, glm::vec3(1.91f, 1.91f, 0.0f));
-	model = glm::scale(model, glm::vec3(1.5f, 1.5f, 1.5f));
-	circle_box_model = model;
-	circle.draw(sh, model);
-
 	float tmp_angle = fmod(l_shape_angle, 90);
 	if (!l_shape_moving_flag)
 	{
@@ -60,6 +54,19 @@ void Level1::draw(Shader sh)
 		else
 			l_shape_angle -= deltaTime * 60;
 	}
+
+	model = commonModel;
+	glm::mat4 model2 = commonModel;
+	model2 = glm::translate(model2, glm::vec3(1.9f, 1.8f, 0.0f));
+	model2 = glm::rotate(model2, glm::radians(float(l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
+	rotary_knob.draw(sh, model2);
+
+	model = glm::translate(model, glm::vec3(2.15f, 1.8f, 0.0f));
+	model = glm::scale(model, glm::vec3(1.0f, 3.0f, 3.0f));
+	circle_box_model = model;
+	circle.draw(sh, model);
+
+
 	if (225 < l_shape_angle && l_shape_angle < 315)
 		commonModel = glm::translate(commonModel, glm::vec3(-1.8f, -1.8f, -1.8f));
 

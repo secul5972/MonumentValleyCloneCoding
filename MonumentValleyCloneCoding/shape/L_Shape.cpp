@@ -1,9 +1,6 @@
 #include "../headerFile/Shape.h"
 
-L_shape::L_shape()
-{
-
-}
+L_shape::L_shape() {}
 
 void L_shape::draw(Shader sh, glm::mat4 model)
 {
@@ -11,7 +8,6 @@ void L_shape::draw(Shader sh, glm::mat4 model)
 	glm::mat4 shapeModel;
 
 	shapeModel = model;
-	shapeModel = glm::scale(shapeModel, glm::vec3(1.0f, 1.0f, 1.0f));
 	cube.draw(sh, shapeModel);
 
 	//cuboid0

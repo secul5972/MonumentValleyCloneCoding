@@ -31,6 +31,7 @@ private:
 	Slope	slope;
 	Goal	goal;
 	Circle	circle;
+	Rotary_Knob rotary_knob;
 public:
 	Level1();
 	virtual void draw(Shader sh);

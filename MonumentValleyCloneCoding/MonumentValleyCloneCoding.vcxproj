@@ -157,6 +157,7 @@
     <ClCompile Include="shape\Cylinder.cpp" />
     <ClCompile Include="shape\Goal.cpp" />
     <ClCompile Include="shape\L_Shape.cpp" />
+    <ClCompile Include="shape\Rotary_Knob.cpp" />
     <ClCompile Include="shape\Slope.cpp" />
     <ClCompile Include="shape\Circle.cpp" />
     <ClCompile Include="clickBox\CircleBox.cpp" />

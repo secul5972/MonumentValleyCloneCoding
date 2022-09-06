@@ -53,8 +53,6 @@ class L_shape :Shape
 private:
 	Cube cube;
 	Cuboid cuboid[2];
-protected:
-	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	L_shape();
 	void draw(Shader sh, glm::mat4 model);
@@ -88,6 +86,15 @@ public:
 	void draw(Shader sh, glm::mat4 model);
 };
 
+class Rotary_Knob :Shape
+{
+private:
+	Cylinder cylinder;
+	Cube cube;
+public:
+	Rotary_Knob();
+	void draw(Shader sh, glm::mat4 model);
+};
 
 bool MakeCircleVertex();
 void prepare_axes();
