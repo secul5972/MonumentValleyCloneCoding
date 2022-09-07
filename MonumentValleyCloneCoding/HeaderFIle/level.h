@@ -9,7 +9,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include "Shape.h"
-#include "ClickBox.h"
+#include "ClickArea.h"
 
 extern GLFWwindow* window;
 extern bool left_mouse_button_down;

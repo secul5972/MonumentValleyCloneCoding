@@ -147,7 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\OpenGL_GLFW_Example\glad.c" />
+    <ClCompile Include="glad.c" />
     <ClCompile Include="level\level1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
@@ -160,7 +160,7 @@
     <ClCompile Include="shape\Rotary_Knob.cpp" />
     <ClCompile Include="shape\Slope.cpp" />
     <ClCompile Include="shape\Circle.cpp" />
-    <ClCompile Include="clickBox\CircleBox.cpp" />
+    <ClCompile Include="clickArea\CircleArea.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />
@@ -176,7 +176,7 @@
     <ClInclude Include="headerFile\mesh.h" />
     <ClInclude Include="headerFile\model.h" />
     <ClInclude Include="headerFile\shader.h" />
-    <ClInclude Include="headerFile\ClickBox.h" />
+    <ClInclude Include="headerFile\ClickArea.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

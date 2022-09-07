@@ -1,10 +1,10 @@
-#include "../headerFile/ClickBox.h"
+#include "../headerFile/ClickArea.h"
 
-CircleBox::CircleBox(): radius(0.1f)
+CircleArea::CircleArea(): radius(0.1f)
 {
 }
 
-bool CircleBox::CheckClickInBox(float xpos, float ypos, glm::mat4 model)
+bool CircleArea::CheckClickInArea(float xpos, float ypos, glm::mat4 model)
 {
 	float		zpos;
 	glm::vec4	modelpos;
@@ -19,7 +19,7 @@ bool CircleBox::CheckClickInBox(float xpos, float ypos, glm::mat4 model)
 	return (0);
 }
 
-float CircleBox::CheckClickAndRotateInBox(float xpos, float ypos, glm::mat4 model)
+float CircleArea::CheckClickAndRotateInArea(float xpos, float ypos, glm::mat4 model)
 {
 	float		zpos;
 	glm::vec4	modelpos;

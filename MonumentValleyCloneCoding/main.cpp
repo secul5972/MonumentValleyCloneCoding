@@ -7,8 +7,8 @@
 //shape
 #include "headerFile/Shape.h"
 #include "headerFile/Level.h"
-//ClickBox
-#include "headerFile/ClickBox.h"
+//ClickArea
+#include "headerFile/ClickArea.h"
 
 #include "headerFile/AdditionalMathFunction.h"
 //#include <stb/stb_image.h>

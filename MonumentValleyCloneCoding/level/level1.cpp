@@ -9,14 +9,14 @@ double rotateCurrTime = 0;
 double l_shape_angle = 0;
 int shape = 0;
 
-CircleBox *circle_box;
-glm::mat4 circle_box_model;
+CircleArea *circle_Area;
+glm::mat4 circle_Area_model;
 bool l_shape_moving_flag = false;
 glm::vec2 prev_mouse_pos_in_model;
 
 Level1::Level1()
 {
-	circle_box = new CircleBox;
+	circle_Area = new CircleArea;
 	prev_mouse_pos_in_model.x = -1;
 	prev_mouse_pos_in_model.y = -1;
 }
@@ -42,7 +42,7 @@ void Level1::draw(Shader sh)
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	l_shape[1].draw(sh, model);
 
-	float tmp_angle = fmod(l_shape_angle, 90);
+	float tmp_angle = (float)fmod(l_shape_angle, 90);
 	if (!l_shape_moving_flag)
 	{
 		if (tmp_angle < 0.5)
@@ -63,7 +63,7 @@ void Level1::draw(Shader sh)
 
 	model = glm::translate(model, glm::vec3(2.15f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.0f, 3.0f, 3.0f));
-	circle_box_model = model;
+	circle_Area_model = model;
 	circle.draw(sh, model);
 
 
@@ -94,8 +94,8 @@ void Level1::draw(Shader sh)
 
 Level1::~Level1()
 {
-	if (circle_box)
-		delete circle_box;
+	if (circle_Area)
+		delete circle_Area;
 }
 
 void level1_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -115,7 +115,7 @@ void level1_mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double yp
 {
 	if (left_mouse_button_down)
 	{
-		l_shape_angle += circle_box->CheckClickAndRotateInBox((float)xpos, (float)(SCR_HEIGHT - ypos), circle_box_model);
+		l_shape_angle += circle_Area->CheckClickAndRotateInArea((float)xpos, (float)(SCR_HEIGHT - ypos), circle_Area_model);
 		l_shape_angle = fmod(l_shape_angle + 360, (double)360);
 	}
 }
