@@ -52,7 +52,7 @@ class L_shape :Shape
 {
 private:
 	Cube cube;
-	Cuboid cuboid[2];
+	Cuboid cuboid;
 public:
 	L_shape();
 	void draw(Shader sh, glm::mat4 model);

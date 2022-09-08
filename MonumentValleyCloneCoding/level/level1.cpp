@@ -9,14 +9,14 @@ double rotateCurrTime = 0;
 double l_shape_angle = 0;
 int shape = 0;
 
-CircleArea *circle_Area;
-glm::mat4 circle_Area_model;
+EllipseArea* ellipse_area;
+glm::mat4 ellipse_area_model;
 bool l_shape_moving_flag = false;
 glm::vec2 prev_mouse_pos_in_model;
 
 Level1::Level1()
 {
-	circle_Area = new CircleArea;
+	ellipse_area = new EllipseArea;
 	prev_mouse_pos_in_model.x = -1;
 	prev_mouse_pos_in_model.y = -1;
 }
@@ -34,13 +34,13 @@ void Level1::draw(Shader sh)
 
 	model = commonModel;
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	l_shape[0].draw(sh, model);
+	l_shape.draw(sh, model);
 
 	model = commonModel;
 	model = glm::translate(model, glm::vec3(1.8f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
-	l_shape[1].draw(sh, model);
+	l_shape.draw(sh, model);
 
 	float tmp_angle = (float)fmod(l_shape_angle, 90);
 	if (!l_shape_moving_flag)
@@ -63,9 +63,7 @@ void Level1::draw(Shader sh)
 
 	model = glm::translate(model, glm::vec3(2.15f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.0f, 3.0f, 3.0f));
-	circle_Area_model = model;
-	circle.draw(sh, model);
-
+	ellipse_area_model = model;
 
 	if (225 < l_shape_angle && l_shape_angle < 315)
 		commonModel = glm::translate(commonModel, glm::vec3(-1.8f, -1.8f, -1.8f));
@@ -74,7 +72,7 @@ void Level1::draw(Shader sh)
 	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
-	l_shape[2].draw(sh, model);
+	l_shape.draw(sh, model);
 
 	model = commonModel;
 	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
@@ -94,8 +92,8 @@ void Level1::draw(Shader sh)
 
 Level1::~Level1()
 {
-	if (circle_Area)
-		delete circle_Area;
+	if (ellipse_area)
+		delete ellipse_area;
 }
 
 void level1_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
@@ -115,7 +113,7 @@ void level1_mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double yp
 {
 	if (left_mouse_button_down)
 	{
-		l_shape_angle += circle_Area->CheckClickAndRotateInArea((float)xpos, (float)(SCR_HEIGHT - ypos), circle_Area_model);
+		l_shape_angle += ellipse_area->CheckClickAndRotateInArea((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
 		l_shape_angle = fmod(l_shape_angle + 360, (double)360);
 	}
 }

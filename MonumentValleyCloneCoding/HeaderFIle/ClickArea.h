@@ -30,14 +30,12 @@ public:
 	virtual float CheckClickAndRotateInArea(float xpos, float ypos, glm::mat4 model) = 0;
 };
 
-class CircleArea :ClickArea
+class EllipseArea :ClickArea
 {
-private:
-	float radius;
 public:
-	CircleArea();
-	virtual bool CheckClickInArea(float xpos, float ypos, glm::mat4 model);
-	virtual float CheckClickAndRotateInArea(float xpos, float ypos, glm::mat4 model);
+	EllipseArea();
+	bool CheckClickInArea(float xpos, float ypos, glm::mat4 model);
+	float CheckClickAndRotateInArea(float xpos, float ypos, glm::mat4 model);
 };
 
 #endif

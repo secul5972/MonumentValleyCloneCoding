@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="clickArea\EllipseArea.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="level\level1.cpp" />
     <ClCompile Include="main.cpp" />
@@ -160,7 +161,6 @@
     <ClCompile Include="shape\Rotary_Knob.cpp" />
     <ClCompile Include="shape\Slope.cpp" />
     <ClCompile Include="shape\Circle.cpp" />
-    <ClCompile Include="clickArea\CircleArea.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />

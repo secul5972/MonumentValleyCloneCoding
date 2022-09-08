@@ -42,9 +42,6 @@
     <ClCompile Include="shape\Circle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="clickArea\CircleArea.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -55,6 +52,9 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="glad.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="clickArea\EllipseArea.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

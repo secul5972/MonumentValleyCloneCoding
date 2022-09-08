@@ -10,14 +10,13 @@ void L_shape::draw(Shader sh, glm::mat4 model)
 	shapeModel = model;
 	cube.draw(sh, shapeModel);
 
-	//cuboid0
+	//cuboid
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.5f, 0.0f, 0.0f));
-	cuboid[0].draw(sh, shapeModel);
+	cuboid.draw(sh, shapeModel);
 
-	//cuboid1
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.0f, 0.0f, 0.5f));
 	shapeModel = glm::rotate(shapeModel, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	cuboid[1].draw(sh, shapeModel);
+	cuboid.draw(sh, shapeModel);
 }

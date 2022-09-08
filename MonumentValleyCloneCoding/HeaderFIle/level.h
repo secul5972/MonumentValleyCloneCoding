@@ -26,7 +26,7 @@ public:
 class Level1
 {
 private:
-	L_shape	l_shape[3];
+	L_shape	l_shape;
 	Cuboid	cuboid;
 	Slope	slope;
 	Goal	goal;
