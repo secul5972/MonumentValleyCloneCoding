@@ -84,6 +84,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)$(SolutionName)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>104857600</StackReserveSize>
+      <HeapReserveSize>104857600</HeapReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -104,6 +105,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)$(SolutionName)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>104857600</StackReserveSize>
+      <HeapReserveSize>104857600</HeapReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -120,6 +122,7 @@
       <AdditionalLibraryDirectories>$(SolutionDir)$(SolutionName)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>104857600</StackReserveSize>
+      <HeapReserveSize>104857600</HeapReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -140,22 +143,24 @@
       <AdditionalLibraryDirectories>$(SolutionDir)$(SolutionName)\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>assimp-vc143-mtd.lib;glfw3.lib;opengl32.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
       <StackReserveSize>104857600</StackReserveSize>
+      <HeapReserveSize>104857600</HeapReserveSize>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\OpenGL_GLFW_Example\glad.c" />
+    <ClCompile Include="clickArea\EllipseArea.cpp" />
+    <ClCompile Include="glad.c" />
     <ClCompile Include="level\level1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
     <ClCompile Include="shape\axes.cpp" />
     <ClCompile Include="shape\Cube.cpp" />
     <ClCompile Include="shape\Cuboid.cpp" />
+    <ClCompile Include="shape\Cylinder.cpp" />
     <ClCompile Include="shape\Goal.cpp" />
     <ClCompile Include="shape\L_Shape.cpp" />
-    <ClCompile Include="shape\Point.cpp" />
+    <ClCompile Include="shape\Rotary_Knob.cpp" />
     <ClCompile Include="shape\Slope.cpp" />
     <ClCompile Include="shape\Circle.cpp" />
-    <ClCompile Include="clickBox\CircleBox.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />
@@ -171,7 +176,7 @@
     <ClInclude Include="headerFile\mesh.h" />
     <ClInclude Include="headerFile\model.h" />
     <ClInclude Include="headerFile\shader.h" />
-    <ClInclude Include="headerFile\ClickBox.h" />
+    <ClInclude Include="headerFile\ClickArea.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

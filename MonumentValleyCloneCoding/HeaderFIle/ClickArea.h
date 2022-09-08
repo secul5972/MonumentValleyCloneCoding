@@ -1,5 +1,5 @@
-#ifndef ClickBox_H
-#define ClickBox_H
+#ifndef ClickArea_H
+#define ClickArea_H
 
 #include "shader.h"
 #include <glad/glad.h>
@@ -21,22 +21,21 @@ extern const unsigned int SCR_HEIGHT;
 
 extern bool l_shape_moving_flag;
 extern bool left_mouse_button_down;
+extern glm::vec2 prev_mouse_pos_in_model;
 
-class ClickBox
+class ClickArea
 {
 public:
-	virtual bool CheckClickInBox(float xpos, float ypos, glm::mat4 model) = 0;
-	virtual float CheckClickAndRotateInBox(float xpos, float ypos, glm::mat4 model) = 0;
+	virtual bool CheckClickInArea(float xpos, float ypos, glm::mat4 model) = 0;
+	virtual float CheckClickAndRotateInArea(float xpos, float ypos, glm::mat4 model) = 0;
 };
 
-class CircleBox :ClickBox
+class EllipseArea :ClickArea
 {
-private:
-	float radius;
 public:
-	CircleBox();
-	virtual bool CheckClickInBox(float xpos, float ypos, glm::mat4 model);
-	virtual float CheckClickAndRotateInBox(float xpos, float ypos, glm::mat4 model);
+	EllipseArea();
+	bool CheckClickInArea(float xpos, float ypos, glm::mat4 model);
+	float CheckClickAndRotateInArea(float xpos, float ypos, glm::mat4 model);
 };
 
 #endif

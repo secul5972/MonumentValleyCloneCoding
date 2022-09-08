@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\OpenGL_GLFW_Example\glad.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -45,13 +42,19 @@
     <ClCompile Include="shape\Circle.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="clickBox\CircleBox.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="shape\Point.cpp">
+    <ClCompile Include="shape\Cylinder.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="shape\Rotary_Knob.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="glad.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="clickArea\EllipseArea.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -84,7 +87,7 @@
     <ClInclude Include="headerFile\Level.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="headerFile\ClickBox.h">
+    <ClInclude Include="headerFile\ClickArea.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="headerFile\AdditionalMathFunction.h">
