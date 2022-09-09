@@ -153,6 +153,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
     <ClCompile Include="shape\axes.cpp" />
+    <ClCompile Include="shape\Character.cpp" />
+    <ClCompile Include="shape\Corn.cpp" />
     <ClCompile Include="shape\Cube.cpp" />
     <ClCompile Include="shape\Cuboid.cpp" />
     <ClCompile Include="shape\Cylinder.cpp" />
@@ -161,6 +163,7 @@
     <ClCompile Include="shape\Rotary_Knob.cpp" />
     <ClCompile Include="shape\Slope.cpp" />
     <ClCompile Include="shape\Circle.cpp" />
+    <ClCompile Include="shape\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />

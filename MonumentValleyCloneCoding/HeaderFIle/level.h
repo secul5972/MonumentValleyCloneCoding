@@ -26,15 +26,16 @@ public:
 class Level1
 {
 private:
-	L_shape	l_shape;
-	Cuboid	cuboid;
-	Slope	slope;
-	Goal	goal;
-	Circle	circle;
-	Rotary_Knob rotary_knob;
+	L_shape		l_shape;
+	Cuboid		cuboid;
+	Slope		slope;
+	Goal		goal;
+	Circle		circle;
+	Rotary_Knob	rotary_knob;
+	Character	character;
 public:
 	Level1();
-	virtual void draw(Shader sh);
+	void draw(Shader sh);
 	~Level1();
 };
 

@@ -23,7 +23,7 @@ public:
 
 class Cube :Shape
 {
-protected:
+private:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Cube();
@@ -32,7 +32,7 @@ public:
 
 class Cuboid :Shape
 {
-protected:
+private:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Cuboid();
@@ -41,7 +41,7 @@ public:
 
 class Goal :Shape
 {
-protected:
+private:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Goal();
@@ -60,7 +60,7 @@ public:
 
 class Slope :Shape
 {
-protected:
+private:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Slope();
@@ -69,7 +69,7 @@ public:
 
 class Circle :Shape
 {
-protected:
+private:
 	static unsigned int tri_VAO, tri_VBO;
 public:
 	Circle();
@@ -78,7 +78,7 @@ public:
 
 class Cylinder :Shape
 {
-protected:
+private:
 	static unsigned int line_VAO, line_VBO;
 	Circle circle;
 public:
@@ -93,6 +93,37 @@ private:
 	Cube cube;
 public:
 	Rotary_Knob();
+	void draw(Shader sh, glm::mat4 model);
+};
+
+class Corn :Shape
+{
+private:
+	static unsigned int tri_VAO, tri_VBO;
+	Circle circle;
+public:
+	Corn();
+	void draw(Shader sh, glm::mat4 model);
+};
+ 
+class Sphere :Shape
+{
+private:
+	static unsigned int tri_VAO, tri_VBO;
+public:
+	Sphere();
+	void draw(Shader sh, glm::mat4 model);
+};
+
+class Character :Shape
+{
+private:
+	static unsigned int tri_VAO, tri_VBO;
+	Corn corn;
+	Cylinder cylinder;
+	Sphere sphere;
+public:
+	Character();
 	void draw(Shader sh, glm::mat4 model);
 };
 

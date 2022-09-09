@@ -42,6 +42,11 @@ void Level1::draw(Shader sh)
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	l_shape.draw(sh, model);
 
+	model = commonModel;
+	model = glm::translate(model, glm::vec3(0.0f, 0.1f, 0.0f));
+	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
+	character.draw(sh, model);
+
 	float tmp_angle = (float)fmod(l_shape_angle, 90);
 	if (!l_shape_moving_flag)
 	{

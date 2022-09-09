@@ -119,6 +119,9 @@ int main()
 	Circle f;
 	Cylinder g;
 	Rotary_Knob h;
+	Corn m;
+	Character n;
+	Sphere o;
 	//light
 	// ----
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -164,7 +167,9 @@ int main()
 		//g.draw(defaultShader, worldModel);
 		l.draw(defaultShader);
 		//h.draw(defaultShader, worldModel);
-		 
+		//m.draw(defaultShader, worldModel);
+		//n.draw(defaultShader, worldModel);
+		//o.draw(defaultShader, worldModel);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
