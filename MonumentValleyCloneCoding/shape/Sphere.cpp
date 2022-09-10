@@ -55,19 +55,19 @@ Sphere::Sphere()
 
 } 
 
-void Sphere::draw(Shader sh, glm::mat4 model)
+void Sphere::draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
-	sh.use();
+	def_shader->use();
 
 	shapeModel = model;
-	sh.setMat4("model", shapeModel);
-	sh.setMat4("projection", projection);
-	sh.setMat4("view", view);
-	sh.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	def_shader->setMat4("model", shapeModel);
+	def_shader->setMat4("projection", projection);
+	def_shader->setMat4("view", view);
+	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
 	glBindVertexArray(tri_VAO);
 	for (int i = 0; i < circle_cnt; i++)
 		glDrawArrays(GL_LINE_STRIP, i * 360, sphere_vertex_cnt / circle_cnt);
-	sh.unuse();
+	def_shader->unuse();
 }

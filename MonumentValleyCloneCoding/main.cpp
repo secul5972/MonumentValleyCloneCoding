@@ -40,6 +40,9 @@ glm::mat4 viewport, projection, view, worldModel;
 // light
 glm::vec3 lightPos, lightColor;
 
+// shader
+Shader *def_shader;
+
 bool left_mouse_button_down = false;
 
 int main()
@@ -79,13 +82,13 @@ int main()
 	stbi_set_flip_vertically_on_load(true);
 
 	// build and compile shaders
-	Shader defaultShader("shader/default.vert", "shader/default.frag");
+	def_shader = new Shader("shader/default.vert", "shader/default.frag");
 
 	// viewport matrix
 	MakeViewportMatrix();
 
 	// prepare_shapes
-	prepare_axes();
+	Axes aa;
 	Cube a;
 	Cuboid b;
 	Goal c;
@@ -102,10 +105,10 @@ int main()
 	// light setting
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
 	lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
-	defaultShader.use();
-	defaultShader.setVec3("lightPos", lightPos);
-	defaultShader.setVec3("lightColor", lightColor);
-	defaultShader.unuse();
+	def_shader->use();
+	def_shader->setVec3("lightPos", lightPos);
+	def_shader->setVec3("lightColor", lightColor);
+	def_shader->unuse();
 
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
@@ -133,7 +136,7 @@ int main()
 		worldModel = glm::translate(worldModel, glm::vec3(0.0f, -0.4f, 1.2f));
 
 		// draw_shapes
-		draw_axes(defaultShader);
+		aa.draw(worldModel);
 		//a.draw(defaultShader, worldModel);
 		//b.draw(defaultShader, worldModel);
 		//c.draw(defaultShader, worldModel);
@@ -141,7 +144,7 @@ int main()
 		//e.draw(defaultShader, worldModel);
 		//f.draw(defaultShader, worldModel);
 		//g.draw(defaultShader, worldModel);
-		l.draw(defaultShader);
+		l.draw(worldModel);
 		//h.draw(defaultShader, worldModel);
 		//m.draw(defaultShader, worldModel);
 		//n.draw(defaultShader, worldModel);

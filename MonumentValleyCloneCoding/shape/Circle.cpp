@@ -50,19 +50,19 @@ Circle::Circle()
 	glEnableVertexAttribArray(1);
 }
 
-void Circle::draw(Shader sh, glm::mat4 model)
+void Circle::draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
-	sh.use();
+	def_shader->use();
 
 	shapeModel = model;
-	sh.setMat4("model", shapeModel);
-	sh.setMat4("projection", projection);
-	sh.setMat4("view", view);
-	sh.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	def_shader->setMat4("model", shapeModel);
+	def_shader->setMat4("projection", projection);
+	def_shader->setMat4("view", view);
+	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
 	glBindVertexArray(tri_VAO);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, circle_vertex_cnt);
 
-	sh.unuse();
+	def_shader->unuse();
 }

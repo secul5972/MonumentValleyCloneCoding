@@ -14,11 +14,21 @@ using namespace std;
 extern glm::mat4 projection, view;
 extern float cube_tri_ver[];
 extern float cube_line_ver[];
+extern Shader* def_shader;
 
 class Shape
 {
 public:
-	virtual void draw(Shader sh, glm::mat4 model) = 0;
+	virtual void draw(glm::mat4 model) = 0;
+};
+
+class Axes :Shape
+{
+private:
+	static GLuint line_VAO, line_VBO;
+public:
+	Axes();
+	void draw(glm::mat4 model);
 };
 
 class Cube :Shape
@@ -27,7 +37,7 @@ private:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Cube();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 class Cuboid :Shape
@@ -36,7 +46,7 @@ private:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Cuboid();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 class Goal :Shape
@@ -45,7 +55,7 @@ private:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Goal();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 class L_shape :Shape
@@ -55,7 +65,7 @@ private:
 	Cuboid cuboid;
 public:
 	L_shape();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 class Slope :Shape
@@ -64,7 +74,7 @@ private:
 	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Slope();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 class Circle :Shape
@@ -73,7 +83,7 @@ private:
 	static unsigned int tri_VAO, tri_VBO;
 public:
 	Circle();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 class Cylinder :Shape
@@ -83,7 +93,7 @@ private:
 	Circle circle;
 public:
 	Cylinder();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 class Rotary_Knob :Shape
@@ -93,7 +103,7 @@ private:
 	Cube cube;
 public:
 	Rotary_Knob();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 class Corn :Shape
@@ -103,7 +113,7 @@ private:
 	Circle circle;
 public:
 	Corn();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
  
 class Sphere :Shape
@@ -112,7 +122,7 @@ private:
 	static unsigned int tri_VAO, tri_VBO;
 public:
 	Sphere();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 class Character :Shape
@@ -124,11 +134,9 @@ private:
 	Sphere sphere;
 public:
 	Character();
-	void draw(Shader sh, glm::mat4 model);
+	void draw(glm::mat4 model);
 };
 
 bool MakeCircleVertex();
-void prepare_axes();
-void draw_axes(Shader sh);
 
 #endif

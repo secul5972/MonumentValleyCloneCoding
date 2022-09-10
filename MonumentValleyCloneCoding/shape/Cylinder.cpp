@@ -43,26 +43,26 @@ Cylinder::Cylinder()
 	free(cylinder_line_ver);
 }
 
-void Cylinder::draw(Shader sh, glm::mat4 model)
+void Cylinder::draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
 	shapeModel = model;
-	circle.draw(sh, shapeModel);
+	circle.draw(shapeModel);
 
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.1f, 0.0f, 0.0f));
-	circle.draw(sh, shapeModel);
+	circle.draw(shapeModel);
 
-	sh.use();
+	def_shader->use();
 
 	shapeModel = model;
-	sh.setMat4("model", shapeModel);
-	sh.setMat4("projection", projection);
-	sh.setMat4("view", view);
-	sh.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	def_shader->setMat4("model", shapeModel);
+	def_shader->setMat4("projection", projection);
+	def_shader->setMat4("view", view);
+	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
 
 	glBindVertexArray(line_VAO);
 	glDrawArrays(GL_LINES, 0, (circle_vertex_cnt - 1) * 2);
-	sh.unuse();
+	def_shader->unuse();
 }

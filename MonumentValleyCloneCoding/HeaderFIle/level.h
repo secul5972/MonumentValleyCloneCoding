@@ -35,7 +35,7 @@ private:
 	Character	character;
 public:
 	Level1();
-	void draw(Shader sh);
+	void draw(glm::mat4 worldModel);
 	~Level1();
 };
 
