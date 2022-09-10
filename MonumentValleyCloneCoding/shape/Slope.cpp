@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-unsigned int Slope::tri_VAO, Slope::tri_VBO, Slope::line_VAO, Slope::line_VBO;
+GLuint Slope::tri_VAO, Slope::tri_VBO, Slope::line_VAO, Slope::line_VBO;
 
 Slope::Slope()
 {
@@ -37,17 +37,17 @@ Slope::Slope()
 	for (int i = 0; i < 16; i++)
 	{
 		glm::vec3 tmp, ret;
-		tmp.x = cube_line_ver[i * 6];
-		tmp.y = cube_line_ver[i * 6 + 1];
-		tmp.z = cube_line_ver[i * 6 + 2];
+		tmp.x = cube_side_ver[i * 6];
+		tmp.y = cube_side_ver[i * 6 + 1];
+		tmp.z = cube_side_ver[i * 6 + 2];
 		ret = glm::vec3(shapeModel * glm::vec4(tmp, 1.0f));
 		slope_line_ver[i * 6] = ret.x;
 		slope_line_ver[i * 6 + 1] = ret.y;
 		slope_line_ver[i * 6 + 2] = ret.z;
 
-		tmp.x = cube_line_ver[i * 6 + 3];
-		tmp.y = cube_line_ver[i * 6 + 4];
-		tmp.z = cube_line_ver[i * 6 + 5];
+		tmp.x = cube_side_ver[i * 6 + 3];
+		tmp.y = cube_side_ver[i * 6 + 4];
+		tmp.z = cube_side_ver[i * 6 + 5];
 		ret = glm::vec3(shapeModel * glm::vec4(tmp, 1.0f));
 		slope_line_ver[i * 6 + 3] = ret.x;
 		slope_line_ver[i * 6 + 4] = ret.y;

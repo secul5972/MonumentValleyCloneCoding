@@ -14,7 +14,7 @@
 class Shader
 {
 public:
-	unsigned int ID;
+	GLuint ID;
 	// constructor generates the shader on the fly
 	// ------------------------------------------------------------------------
 	Shader(const char* vertexPath, const char* fragmentPath)
@@ -50,7 +50,7 @@ public:
 		const char* vShaderCode = vertexCode.c_str();
 		const char* fShaderCode = fragmentCode.c_str();
 		// 2. compile shaders
-		unsigned int vertex, fragment;
+		GLuint vertex, fragment;
 		// vertex shader
 		vertex = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertex, 1, &vShaderCode, NULL);
@@ -126,7 +126,7 @@ public:
 private:
 	// utility function for checking shader compilation/linking errors.
 	// ------------------------------------------------------------------------
-	void checkCompileErrors(unsigned int shader, std::string type)
+	void checkCompileErrors(GLuint shader, std::string type)
 	{
 		int success;
 		char infoLog[1024];

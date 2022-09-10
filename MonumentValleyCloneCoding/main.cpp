@@ -1,7 +1,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define GLFW_INCLUDE_NONE
 
-#include "headerFile/shader.h"
+#include "headerFile/Shader.h"
 #include "headerFile/camera.h"
 #include "headerFile/model.h"
 #include "headerFile/Shape.h"
@@ -21,8 +21,8 @@ void processInput(GLFWwindow* window);
 void MakeViewportMatrix();
 
 // settings
-const unsigned int SCR_WIDTH = 1200;
-const unsigned int SCR_HEIGHT = 1200;
+const GLuint SCR_WIDTH = 1200;
+const GLuint SCR_HEIGHT = 1200;
 
 // window
 GLFWwindow* window;
@@ -88,10 +88,11 @@ int main()
 	MakeViewportMatrix();
 
 	// prepare_shapes
-	Axes aa;
-	Cube a;
+	Axes axes;
+	Cube cube;
+	Goal goal;
 	Cuboid b;
-	Goal c;
+	
 	L_shape d;
 	Slope e;
 	Level1 l;
@@ -101,6 +102,8 @@ int main()
 	Corn m;
 	Character n;
 	Sphere o;
+
+	goal.MakeVertex();
 
 	// light setting
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -136,15 +139,15 @@ int main()
 		worldModel = glm::translate(worldModel, glm::vec3(0.0f, -0.4f, 1.2f));
 
 		// draw_shapes
-		aa.draw(worldModel);
-		//a.draw(defaultShader, worldModel);
-		//b.draw(defaultShader, worldModel);
+		axes.draw(worldModel);
+		//cube.draw(worldModel);
+		goal.draw(worldModel);
 		//c.draw(defaultShader, worldModel);
 		//d.draw(defaultShader, worldModel);
 		//e.draw(defaultShader, worldModel);
 		//f.draw(defaultShader, worldModel);
 		//g.draw(defaultShader, worldModel);
-		l.draw(worldModel);
+		//l.draw(worldModel);
 		//h.draw(defaultShader, worldModel);
 		//m.draw(defaultShader, worldModel);
 		//n.draw(defaultShader, worldModel);
@@ -154,6 +157,11 @@ int main()
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
+
+	if (def_shader)
+		delete def_shader;
+
+	goal.FreeVertex();
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	glfwTerminate();

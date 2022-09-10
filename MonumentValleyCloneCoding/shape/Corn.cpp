@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-unsigned int Corn::tri_VAO, Corn::tri_VBO;
+GLuint Corn::tri_VAO, Corn::tri_VBO;
 
 extern float* circle_vertex;
 extern int circle_vertex_cnt;

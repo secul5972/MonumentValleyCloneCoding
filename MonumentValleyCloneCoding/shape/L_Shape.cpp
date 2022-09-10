@@ -1,6 +1,9 @@
 #include "../headerFile/Shape.h"
 
-L_shape::L_shape() {}
+L_shape::L_shape()
+{
+
+}
 
 void L_shape::draw(glm::mat4 model)
 {

@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-unsigned int Circle::tri_VAO, Circle::tri_VBO;
+GLuint Circle::tri_VAO, Circle::tri_VBO;
 float* circle_vertex;
 int circle_vertex_cnt;
 

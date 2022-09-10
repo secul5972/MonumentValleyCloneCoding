@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-unsigned int Sphere::tri_VAO, Sphere::tri_VBO;
+GLuint Sphere::tri_VAO, Sphere::tri_VBO;
 
 float* sphere_vertex;
 int sphere_vertex_cnt;

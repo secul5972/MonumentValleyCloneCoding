@@ -90,7 +90,7 @@
     <ClInclude Include="headerFile\model.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="headerFile\shader.h">
+    <ClInclude Include="headerFile\Shader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="headerFile\Level.h">

@@ -178,7 +178,7 @@
     <ClInclude Include="headerFile\Shape.h" />
     <ClInclude Include="headerFile\mesh.h" />
     <ClInclude Include="headerFile\model.h" />
-    <ClInclude Include="headerFile\shader.h" />
+    <ClInclude Include="headerFile\Shader.h" />
     <ClInclude Include="headerFile\ClickArea.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

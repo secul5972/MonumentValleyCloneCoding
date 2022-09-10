@@ -1,7 +1,7 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
-#include "shader.h"
+#include "Shader.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -13,7 +13,7 @@ using namespace std;
 
 extern glm::mat4 projection, view;
 extern float cube_tri_ver[];
-extern float cube_line_ver[];
+extern float cube_side_ver[];
 extern Shader* def_shader;
 
 class Shape
@@ -34,7 +34,7 @@ public:
 class Cube :Shape
 {
 private:
-	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Cube();
 	void draw(glm::mat4 model);
@@ -43,7 +43,7 @@ public:
 class Cuboid :Shape
 {
 private:
-	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Cuboid();
 	void draw(glm::mat4 model);
@@ -52,10 +52,12 @@ public:
 class Goal :Shape
 {
 private:
-	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Goal();
 	void draw(glm::mat4 model);
+	void MakeVertex();
+	void FreeVertex();
 };
 
 class L_shape :Shape
@@ -71,7 +73,7 @@ public:
 class Slope :Shape
 {
 private:
-	static unsigned int tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
 public:
 	Slope();
 	void draw(glm::mat4 model);
@@ -80,7 +82,7 @@ public:
 class Circle :Shape
 {
 private:
-	static unsigned int tri_VAO, tri_VBO;
+	static GLuint tri_VAO, tri_VBO;
 public:
 	Circle();
 	void draw(glm::mat4 model);
@@ -89,7 +91,7 @@ public:
 class Cylinder :Shape
 {
 private:
-	static unsigned int line_VAO, line_VBO;
+	static GLuint line_VAO, line_VBO;
 	Circle circle;
 public:
 	Cylinder();
@@ -109,7 +111,7 @@ public:
 class Corn :Shape
 {
 private:
-	static unsigned int tri_VAO, tri_VBO;
+	static GLuint tri_VAO, tri_VBO;
 	Circle circle;
 public:
 	Corn();
@@ -119,7 +121,7 @@ public:
 class Sphere :Shape
 {
 private:
-	static unsigned int tri_VAO, tri_VBO;
+	static GLuint tri_VAO, tri_VBO;
 public:
 	Sphere();
 	void draw(glm::mat4 model);
@@ -128,7 +130,7 @@ public:
 class Character :Shape
 {
 private:
-	static unsigned int tri_VAO, tri_VBO;
+	static GLuint tri_VAO, tri_VBO;
 	Corn corn;
 	Cylinder cylinder;
 	Sphere sphere;
