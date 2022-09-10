@@ -6,10 +6,11 @@ float* sphere_vertex;
 int sphere_vertex_cnt;
 int circle_cnt;
 
-bool MakeSphereVertex()
+Sphere::Sphere() {};
+
+void Sphere::MakeBuffer()
 {
-	if (!(sphere_vertex = (float *)malloc(sizeof(float) * 180 * 360 * 6)))
-		return (1);
+	sphere_vertex = (float*)malloc(sizeof(float) * 180 * 360 * 6);
 
 	float radius;
 
@@ -31,14 +32,6 @@ bool MakeSphereVertex()
 	sphere_vertex_cnt = 360 * 180;
 	circle_cnt = 180;
 
-	return (0);
-}
-
-Sphere::Sphere()
-{
-	if (sphere_vertex == 0)
-		MakeSphereVertex();
-
 	glGenBuffers(1, &tri_VBO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO);
@@ -51,16 +44,19 @@ Sphere::Sphere()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-
-
 } 
+
+void FreeVertex()
+{
+	if (sphere_vertex)
+		delete sphere_vertex;
+}
 
 void Sphere::draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
 	def_shader->use();
-
 	shapeModel = model;
 	def_shader->setMat4("model", shapeModel);
 	def_shader->setMat4("projection", projection);

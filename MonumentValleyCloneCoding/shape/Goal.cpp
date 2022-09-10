@@ -6,7 +6,7 @@ int goal_side_ver_cnt;
 
 Goal::Goal() {};
 
-void Goal::MakeVertex()
+void Goal::MakeBuffer()
 {
 	if (goal_side_ver)
 		return;

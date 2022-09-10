@@ -5,9 +5,10 @@ GLuint Cylinder::line_VAO, Cylinder::line_VBO;
 extern float* circle_vertex;
 extern int circle_vertex_cnt;
 
-Cylinder::Cylinder()
-{
+Cylinder::Cylinder() {};
 
+void Cylinder::MakeBuffer()
+{
 	float* cylinder_line_ver;
 
 	cylinder_line_ver = (float*)malloc(sizeof(float) * (circle_vertex_cnt - 1) * 6 * 2);

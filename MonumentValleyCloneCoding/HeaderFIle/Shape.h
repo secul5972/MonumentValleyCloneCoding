@@ -38,6 +38,8 @@ private:
 public:
 	Cube();
 	void draw(glm::mat4 model);
+	void MakeBuffer();
+	void FreeVertex();
 };
 
 class Cuboid :Shape
@@ -56,7 +58,7 @@ private:
 public:
 	Goal();
 	void draw(glm::mat4 model);
-	void MakeVertex();
+	void MakeBuffer();
 	void FreeVertex();
 };
 
@@ -77,6 +79,8 @@ private:
 public:
 	Slope();
 	void draw(glm::mat4 model);
+	void MakeBuffer();
+	void FreeVertex();
 };
 
 class Circle :Shape
@@ -86,6 +90,8 @@ private:
 public:
 	Circle();
 	void draw(glm::mat4 model);
+	void MakeBuffer();
+	void FreeVertex();
 };
 
 class Cylinder :Shape
@@ -96,6 +102,8 @@ private:
 public:
 	Cylinder();
 	void draw(glm::mat4 model);
+	void MakeBuffer();
+	void FreeVertex();
 };
 
 class Rotary_Knob :Shape
@@ -116,6 +124,8 @@ private:
 public:
 	Corn();
 	void draw(glm::mat4 model);
+	void MakeBuffer();
+	void FreeVertex();
 };
  
 class Sphere :Shape
@@ -125,6 +135,8 @@ private:
 public:
 	Sphere();
 	void draw(glm::mat4 model);
+	void MakeBuffer();
+	void FreeVertex();
 };
 
 class Character :Shape
@@ -138,7 +150,5 @@ public:
 	Character();
 	void draw(glm::mat4 model);
 };
-
-bool MakeCircleVertex();
 
 #endif

@@ -92,18 +92,25 @@ int main()
 	Cube cube;
 	Goal goal;
 	Cuboid b;
-	
+	Slope slope;
+	Circle circle;
 	L_shape d;
-	Slope e;
-	Level1 l;
-	Circle f;
-	Cylinder g;
-	Rotary_Knob h;
-	Corn m;
-	Character n;
-	Sphere o;
 
-	goal.MakeVertex();
+	Cylinder cylinder;
+	Rotary_Knob rotary_knob;
+	Corn corn;
+	Character character;
+	Sphere sphere;
+
+	Level1 l;
+
+	cube.MakeBuffer();
+	goal.MakeBuffer();
+	slope.MakeBuffer();
+	circle.MakeBuffer();
+	cylinder.MakeBuffer();
+	corn.MakeBuffer();
+	sphere.MakeBuffer();
 
 	// light setting
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -141,13 +148,13 @@ int main()
 		// draw_shapes
 		axes.draw(worldModel);
 		//cube.draw(worldModel);
-		goal.draw(worldModel);
-		//c.draw(defaultShader, worldModel);
-		//d.draw(defaultShader, worldModel);
+		//goal.draw(worldModel);
+		//slope.draw(worldModel);
+		//circle.draw(worldModel);
 		//e.draw(defaultShader, worldModel);
 		//f.draw(defaultShader, worldModel);
 		//g.draw(defaultShader, worldModel);
-		//l.draw(worldModel);
+		l.draw(worldModel);
 		//h.draw(defaultShader, worldModel);
 		//m.draw(defaultShader, worldModel);
 		//n.draw(defaultShader, worldModel);
@@ -161,7 +168,13 @@ int main()
 	if (def_shader)
 		delete def_shader;
 
+	cube.FreeVertex();
 	goal.FreeVertex();
+	slope.FreeVertex();
+	circle.FreeVertex();
+	cylinder.FreeVertex();
+	corn.FreeVertex();
+	sphere.FreeVertex();
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	glfwTerminate();

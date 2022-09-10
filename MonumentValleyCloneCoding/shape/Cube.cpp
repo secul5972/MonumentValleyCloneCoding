@@ -69,7 +69,9 @@ float cube_side_ver[] = {
 
 GLuint Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 
-Cube::Cube()
+Cube::Cube() {};
+
+void Cube::MakeBuffer()
 {
 	//triangle
 	glGenBuffers(1, &tri_VBO);
