@@ -39,7 +39,6 @@ public:
 	Cube();
 	void draw(glm::mat4 model);
 	void MakeBuffer();
-	void FreeVertex();
 };
 
 class Cuboid :Shape
@@ -103,7 +102,7 @@ public:
 	Cylinder();
 	void draw(glm::mat4 model);
 	void MakeBuffer();
-	void FreeVertex();
+	//void FreeVertex();
 };
 
 class Rotary_Knob :Shape
@@ -125,7 +124,6 @@ public:
 	Corn();
 	void draw(glm::mat4 model);
 	void MakeBuffer();
-	void FreeVertex();
 };
  
 class Sphere :Shape

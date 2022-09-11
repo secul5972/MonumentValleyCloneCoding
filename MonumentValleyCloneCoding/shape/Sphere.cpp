@@ -46,7 +46,7 @@ void Sphere::MakeBuffer()
 	glEnableVertexAttribArray(1);
 } 
 
-void FreeVertex()
+void Sphere::FreeVertex()
 {
 	if (sphere_vertex)
 		delete sphere_vertex;

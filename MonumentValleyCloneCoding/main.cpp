@@ -168,12 +168,9 @@ int main()
 	if (def_shader)
 		delete def_shader;
 
-	cube.FreeVertex();
 	goal.FreeVertex();
 	slope.FreeVertex();
 	circle.FreeVertex();
-	cylinder.FreeVertex();
-	corn.FreeVertex();
 	sphere.FreeVertex();
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
