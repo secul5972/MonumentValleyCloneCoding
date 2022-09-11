@@ -19,6 +19,8 @@ Level1::Level1()
 	ellipse_area = new EllipseArea;
 	prev_mouse_pos_in_model.x = -1;
 	prev_mouse_pos_in_model.y = -1;
+
+	shapes = new Shape[7];
 }
 
 void Level1::draw(glm::mat4 worldModel)
@@ -79,7 +81,8 @@ void Level1::draw(glm::mat4 worldModel)
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.25f, 1.0f, 1.0f));
-	cuboid.draw(model);
+	model = glm::scale(model, glm::vec3(4.0f, 1.0f, 1.0f));
+	cube.draw(model);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.0f, -0.2f));

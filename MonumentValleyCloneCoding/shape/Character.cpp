@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-Character::Character() {}
+Character::Character() : Shape(CHARACTER, false) {}
 
 void Character::draw(glm::mat4 model)
 {

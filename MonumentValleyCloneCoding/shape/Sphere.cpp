@@ -6,7 +6,7 @@ float* sphere_vertex;
 int sphere_vertex_cnt;
 int circle_cnt;
 
-Sphere::Sphere() {};
+Sphere::Sphere() : Shape(SPHERE, false) {};
 
 void Sphere::MakeBuffer()
 {
@@ -16,12 +16,12 @@ void Sphere::MakeBuffer()
 
 	for (int i = 0; i < 180; i++)
 	{
-		radius = 0.1 * cos(glm::radians(float(i - 90)));
+		radius = 0.1f * cos(glm::radians(float(i - 90)));
 
 		for (int j = 0; j < 360; j++)
 		{
 			sphere_vertex[i * 360 * 6 + j * 6] = radius * sin(glm::radians(float(j)));
-			sphere_vertex[i * 360 * 6 + j * 6 + 1] = 0.1 * sin(glm::radians(float(i - 90)));
+			sphere_vertex[i * 360 * 6 + j * 6 + 1] = 0.1f * sin(glm::radians(float(i - 90)));
 			sphere_vertex[i * 360 * 6 + j * 6 + 2] = radius * cos(glm::radians(float(j)));
 			sphere_vertex[i * 360 * 6 + j * 6 + 3] = 1.0f;
 			sphere_vertex[i * 360 * 6 + j * 6 + 4] = 1.0f;

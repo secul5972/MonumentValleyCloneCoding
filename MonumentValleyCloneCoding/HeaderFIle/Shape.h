@@ -16,10 +16,30 @@ extern float cube_tri_ver[];
 extern float cube_side_ver[];
 extern Shader* def_shader;
 
+enum ShapeType
+{
+	NONE,
+	AXES,
+	CUBE,
+	GOAL,
+	L_SHAPE,
+	SLOPE,
+	CIRCLE,
+	CYLINDER,
+	RORTARY_KNOB,
+	CORN,
+	SPHERE,
+	CHARACTER
+};
+
 class Shape
 {
+protected:
+	GLuint type_;
+	bool can_be_located_;
 public:
-	virtual void draw(glm::mat4 model) = 0;
+	Shape(GLuint type = 0, bool can_be_located = false) : type_(type), can_be_located_(can_be_located) {};
+	virtual void draw(glm::mat4 model) {};
 };
 
 class Axes :Shape
@@ -41,15 +61,6 @@ public:
 	void MakeBuffer();
 };
 
-class Cuboid :Shape
-{
-private:
-	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
-public:
-	Cuboid();
-	void draw(glm::mat4 model);
-};
-
 class Goal :Shape
 {
 private:
@@ -65,7 +76,6 @@ class L_shape :Shape
 {
 private:
 	Cube cube;
-	Cuboid cuboid;
 public:
 	L_shape();
 	void draw(glm::mat4 model);

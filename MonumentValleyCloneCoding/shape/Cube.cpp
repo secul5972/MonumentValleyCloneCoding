@@ -69,7 +69,7 @@ float cube_side_ver[] = {
 
 GLuint Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 
-Cube::Cube() {};
+Cube::Cube() : Shape(CUBE, true) {};
 
 void Cube::MakeBuffer()
 {

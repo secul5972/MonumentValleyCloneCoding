@@ -8,7 +8,7 @@ GLfloat axes_vertices[6][3] = {
 };
 GLfloat axes_color[3][3] = { { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } };
 
-Axes::Axes()
+Axes::Axes() : Shape(AXES, false)
 {
 	glGenBuffers(1, &line_VBO);
 
@@ -27,10 +27,9 @@ Axes::Axes()
 
 void Axes::draw(glm::mat4 model)
 {
-	def_shader->use();
-
 	glm::mat4 shapeModel;
 
+	def_shader->use();
 	shapeModel = model;
 	shapeModel = glm::scale(shapeModel, glm::vec3(100.0f, 100.0f, 100.0f));
 	def_shader->setMat4("projection", projection);

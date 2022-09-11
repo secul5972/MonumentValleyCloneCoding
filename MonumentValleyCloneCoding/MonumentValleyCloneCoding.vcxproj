@@ -156,7 +156,6 @@
     <ClCompile Include="shape\Character.cpp" />
     <ClCompile Include="shape\Corn.cpp" />
     <ClCompile Include="shape\Cube.cpp" />
-    <ClCompile Include="shape\Cuboid.cpp" />
     <ClCompile Include="shape\Cylinder.cpp" />
     <ClCompile Include="shape\Goal.cpp" />
     <ClCompile Include="shape\L_Shape.cpp" />

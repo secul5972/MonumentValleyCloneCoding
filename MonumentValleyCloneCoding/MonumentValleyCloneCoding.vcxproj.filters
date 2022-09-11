@@ -24,9 +24,6 @@
     <ClCompile Include="shape\Axes.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="shape\Cuboid.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="shape\Goal.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>

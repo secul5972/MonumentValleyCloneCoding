@@ -1,9 +1,6 @@
 #include "../headerFile/Shape.h"
 
-L_shape::L_shape()
-{
-
-}
+L_shape::L_shape() : Shape(L_SHAPE, true) {}
 
 void L_shape::draw(glm::mat4 model)
 {
@@ -13,13 +10,14 @@ void L_shape::draw(glm::mat4 model)
 	shapeModel = model;
 	cube.draw(shapeModel);
 
-	//cuboid
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.5f, 0.0f, 0.0f));
-	cuboid.draw(shapeModel);
+	shapeModel = glm::scale(shapeModel, glm::vec3(4.0f, 1.0f, 1.0f));
+	cube.draw(shapeModel);
 
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.0f, 0.0f, 0.5f));
 	shapeModel = glm::rotate(shapeModel, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	cuboid.draw(shapeModel);
+	shapeModel = glm::scale(shapeModel, glm::vec3(4.0f, 1.0f, 1.0f));
+	cube.draw(shapeModel);
 }

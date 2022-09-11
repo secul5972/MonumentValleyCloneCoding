@@ -91,7 +91,6 @@ int main()
 	Axes axes;
 	Cube cube;
 	Goal goal;
-	Cuboid b;
 	Slope slope;
 	Circle circle;
 	L_shape d;

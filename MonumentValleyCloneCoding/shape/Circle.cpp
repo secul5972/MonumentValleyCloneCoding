@@ -4,7 +4,7 @@ GLuint Circle::tri_VAO, Circle::tri_VBO;
 float* circle_vertex;
 int circle_vertex_cnt;
 
-Circle::Circle() {};
+Circle::Circle() : Shape(CIRCLE, false) {};
 
 void Circle::MakeBuffer()
 {

@@ -4,7 +4,7 @@ GLuint Slope::tri_VAO, Slope::tri_VBO, Slope::line_VAO, Slope::line_VBO;
 float* slope_side_ver;
 int slope_side_ver_cnt;
 
-Slope::Slope() {};
+Slope::Slope() : Shape(SLOPE, true) {};
 
 void Slope::MakeBuffer()
 {

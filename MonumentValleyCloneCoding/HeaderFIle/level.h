@@ -27,12 +27,13 @@ class Level1
 {
 private:
 	L_shape		l_shape;
-	Cuboid		cuboid;
+	Cube		cube;
 	Slope		slope;
 	Goal		goal;
 	Circle		circle;
 	Rotary_Knob	rotary_knob;
 	Character	character;
+	Shape* shapes;
 public:
 	Level1();
 	void draw(glm::mat4 worldModel);

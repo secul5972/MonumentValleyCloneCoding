@@ -4,7 +4,7 @@ GLuint Goal::tri_VAO, Goal::tri_VBO, Goal::line_VAO, Goal::line_VBO;
 float *goal_side_ver;
 int goal_side_ver_cnt;
 
-Goal::Goal() {};
+Goal::Goal() : Shape(GOAL, true) {};
 
 void Goal::MakeBuffer()
 {

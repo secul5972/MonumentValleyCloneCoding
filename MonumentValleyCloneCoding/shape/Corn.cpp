@@ -5,7 +5,7 @@ GLuint Corn::tri_VAO, Corn::tri_VBO;
 extern float* circle_vertex;
 extern int circle_vertex_cnt;
 
-Corn::Corn() {};
+Corn::Corn() : Shape(CORN, false) {};
 
 void Corn::MakeBuffer()
 {
