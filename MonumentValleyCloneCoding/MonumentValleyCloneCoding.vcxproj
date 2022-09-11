@@ -152,7 +152,7 @@
     <ClCompile Include="level\level1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
-    <ClCompile Include="shape\axes.cpp" />
+    <ClCompile Include="shape\Axes.cpp" />
     <ClCompile Include="shape\Character.cpp" />
     <ClCompile Include="shape\Corn.cpp" />
     <ClCompile Include="shape\Cube.cpp" />

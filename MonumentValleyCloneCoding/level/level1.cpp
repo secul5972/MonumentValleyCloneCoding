@@ -62,7 +62,7 @@ void Level1::draw(glm::mat4 worldModel)
 	model2 = glm::rotate(model2, glm::radians(float(l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	rotary_knob.draw(model2);
 
-	model = commonModel;
+	model = worldModel;
 	model = glm::translate(model, glm::vec3(2.15f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.0f, 3.0f, 3.0f));
 	ellipse_area_model = model;
@@ -113,7 +113,6 @@ void level1_mouse_button_callback(GLFWwindow* window, int button, int action, in
 
 void level1_mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	printf("%f %f\n", xpos, (float)(SCR_HEIGHT - ypos));
 	if (left_mouse_button_down)
 	{
 		l_shape_angle += ellipse_area->CheckClickAndRotateInArea((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
