@@ -69,7 +69,7 @@ float cube_side_ver[] = {
 
 GLuint Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 
-Cube::Cube() : Shape(CUBE, true) {};
+Cube::Cube() : Shape(CUBE, true, true) {};
 
 void Cube::MakeBuffer()
 {
@@ -97,9 +97,11 @@ void Cube::MakeBuffer()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	base_side_vertex_ = cube_side_ver;
 }
 
-void Cube::draw(glm::mat4 model)
+void Cube::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 

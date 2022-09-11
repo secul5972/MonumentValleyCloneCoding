@@ -4,7 +4,7 @@ GLuint Circle::tri_VAO, Circle::tri_VBO;
 float* circle_vertex;
 int circle_vertex_cnt;
 
-Circle::Circle() : Shape(CIRCLE, false) {};
+Circle::Circle() : Shape(CIRCLE, false, true) {};
 
 void Circle::MakeBuffer()
 {
@@ -48,7 +48,7 @@ void Circle::FreeVertex()
 		free(circle_vertex);
 }
 
-void Circle::draw(glm::mat4 model)
+void Circle::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 

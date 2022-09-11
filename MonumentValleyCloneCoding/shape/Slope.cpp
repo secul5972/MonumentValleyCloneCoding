@@ -4,7 +4,7 @@ GLuint Slope::tri_VAO, Slope::tri_VBO, Slope::line_VAO, Slope::line_VBO;
 float* slope_side_ver;
 int slope_side_ver_cnt;
 
-Slope::Slope() : Shape(SLOPE, true) {};
+Slope::Slope() : Shape(SLOPE, true, true) {};
 
 void Slope::MakeBuffer()
 {
@@ -86,7 +86,7 @@ void Slope::FreeVertex()
 		free(slope_side_ver);
 }
 
-void Slope::draw(glm::mat4 model)
+void Slope::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 

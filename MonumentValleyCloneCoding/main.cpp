@@ -145,19 +145,19 @@ int main()
 		worldModel = glm::translate(worldModel, glm::vec3(0.0f, -0.4f, 1.2f));
 
 		// draw_shapes
-		axes.draw(worldModel);
-		//cube.draw(worldModel);
-		//goal.draw(worldModel);
-		//slope.draw(worldModel);
-		//circle.draw(worldModel);
-		//e.draw(defaultShader, worldModel);
-		//f.draw(defaultShader, worldModel);
-		//g.draw(defaultShader, worldModel);
-		l.draw(worldModel);
-		//h.draw(defaultShader, worldModel);
-		//m.draw(defaultShader, worldModel);
-		//n.draw(defaultShader, worldModel);
-		//o.draw(defaultShader, worldModel);
+		axes.Draw(worldModel);
+		//cube.Draw(worldModel);
+		//goal.Draw(worldModel);
+		//slope.Draw(worldModel);
+		//circle.Draw(worldModel);
+		//e.Draw(defaultShader, worldModel);
+		//f.Draw(defaultShader, worldModel);
+		//g.Draw(defaultShader, worldModel);
+		l.Draw(worldModel);
+		//h.Draw(defaultShader, worldModel);
+		//m.Draw(defaultShader, worldModel);
+		//n.Draw(defaultShader, worldModel);
+		//o.Draw(defaultShader, worldModel);
 		
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		glfwSwapBuffers(window);

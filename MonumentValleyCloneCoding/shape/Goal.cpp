@@ -4,7 +4,7 @@ GLuint Goal::tri_VAO, Goal::tri_VBO, Goal::line_VAO, Goal::line_VBO;
 float *goal_side_ver;
 int goal_side_ver_cnt;
 
-Goal::Goal() : Shape(GOAL, true) {};
+Goal::Goal() : Shape(GOAL, true, true) {};
 
 void Goal::MakeBuffer()
 {
@@ -78,6 +78,7 @@ void Goal::MakeBuffer()
 
 	goal_side_ver_cnt = 48;
 	free(goal_tri_ver);
+	base_side_vertex_ = goal_side_ver;
 }
 
 void Goal::FreeVertex()
@@ -86,7 +87,7 @@ void Goal::FreeVertex()
 		delete goal_side_ver;
 }
 
-void Goal::draw(glm::mat4 model)
+void Goal::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 

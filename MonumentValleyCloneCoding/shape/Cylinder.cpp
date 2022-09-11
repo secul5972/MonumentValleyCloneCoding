@@ -5,7 +5,7 @@ GLuint Cylinder::line_VAO, Cylinder::line_VBO;
 extern float* circle_vertex;
 extern int circle_vertex_cnt;
 
-Cylinder::Cylinder() : Shape(CYLINDER, false) {};
+Cylinder::Cylinder() : Shape(CYLINDER, false, true) {};
 
 void Cylinder::MakeBuffer()
 {
@@ -44,16 +44,16 @@ void Cylinder::MakeBuffer()
 	free(cylinder_line_ver);
 }
 
-void Cylinder::draw(glm::mat4 model)
+void Cylinder::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
 	shapeModel = model;
-	circle.draw(shapeModel);
+	circle.Draw(shapeModel);
 
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.1f, 0.0f, 0.0f));
-	circle.draw(shapeModel);
+	circle.Draw(shapeModel);
 
 	def_shader->use();
 

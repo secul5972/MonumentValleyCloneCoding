@@ -8,7 +8,7 @@ GLfloat axes_vertices[6][3] = {
 };
 GLfloat axes_color[3][3] = { { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } };
 
-Axes::Axes() : Shape(AXES, false)
+Axes::Axes() : Shape(AXES, false, true)
 {
 	glGenBuffers(1, &line_VBO);
 
@@ -25,7 +25,7 @@ Axes::Axes() : Shape(AXES, false)
 	glBindVertexArray(0);
 }
 
-void Axes::draw(glm::mat4 model)
+void Axes::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 

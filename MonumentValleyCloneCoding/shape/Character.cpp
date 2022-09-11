@@ -1,8 +1,8 @@
 #include "../headerFile/Shape.h"
 
-Character::Character() : Shape(CHARACTER, false) {}
+Character::Character() : Shape(CHARACTER, false, true) {}
 
-void Character::draw(glm::mat4 model)
+void Character::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
@@ -12,29 +12,29 @@ void Character::draw(glm::mat4 model)
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.0f, -0.2f, 0.0f));
 	shapeModel = glm::rotate(shapeModel, glm::radians(float(90)), glm::vec3(0.0f, 0.0f, 1.0f));
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.6f, 0.85f, 0.85f));
-	corn.draw(shapeModel);
+	corn.Draw(shapeModel);
 
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.02f, 0.5f, 0.0f));
 	shapeModel = glm::rotate(shapeModel, glm::radians(float(30)), glm::vec3(0.0f, 0.0f, 1.0f));
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.06f, 0.0f, 0.0f));
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.8f, 0.6f, 0.6f));
-	corn.draw(shapeModel);
+	corn.Draw(shapeModel);
 
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.0f, 0.0f, 0.04f));
 	shapeModel = glm::rotate(shapeModel, glm::radians(float(90)), glm::vec3(0.0f, 0.0f, 1.0f));
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.5f, 0.1f, 0.1f));
-	cylinder.draw(shapeModel);
+	cylinder.Draw(shapeModel);
 
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.0f, 0.0f, -0.04f));
 	shapeModel = glm::rotate(shapeModel, glm::radians(float(90)), glm::vec3(0.0f, 0.0f, 1.0f));
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.5f, 0.1f, 0.1f));
-	cylinder.draw(shapeModel);
+	cylinder.Draw(shapeModel);
 
 	shapeModel = model;
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.02f, 0.5f, 0.0f));
 	shapeModel = glm::scale(shapeModel, glm::vec3(0.6f, 0.6f, 0.6f));
-	sphere.draw(shapeModel);
+	sphere.Draw(shapeModel);
 }

@@ -152,17 +152,18 @@
     <ClCompile Include="level\level1.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
-    <ClCompile Include="shape\Axes.cpp" />
-    <ClCompile Include="shape\Character.cpp" />
-    <ClCompile Include="shape\Corn.cpp" />
-    <ClCompile Include="shape\Cube.cpp" />
-    <ClCompile Include="shape\Cylinder.cpp" />
-    <ClCompile Include="shape\Goal.cpp" />
-    <ClCompile Include="shape\L_Shape.cpp" />
-    <ClCompile Include="shape\Rotary_Knob.cpp" />
-    <ClCompile Include="shape\Slope.cpp" />
-    <ClCompile Include="shape\Circle.cpp" />
-    <ClCompile Include="shape\Sphere.cpp" />
+    <ClCompile Include="Shape\Axes.cpp" />
+    <ClCompile Include="Shape\Character.cpp" />
+    <ClCompile Include="Shape\Corn.cpp" />
+    <ClCompile Include="Shape\Cube.cpp" />
+    <ClCompile Include="Shape\Cylinder.cpp" />
+    <ClCompile Include="Shape\Goal.cpp" />
+    <ClCompile Include="Shape\L_Shape.cpp" />
+    <ClCompile Include="Shape\Rotary_Knob.cpp" />
+    <ClCompile Include="Shape\Shape.cpp" />
+    <ClCompile Include="Shape\Slope.cpp" />
+    <ClCompile Include="Shape\Circle.cpp" />
+    <ClCompile Include="Shape\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />

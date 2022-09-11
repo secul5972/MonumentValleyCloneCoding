@@ -20,7 +20,7 @@ extern float deltaTime;
 class Level
 {
 public:
-	virtual void draw() = 0;
+	virtual void Draw() = 0;
 };
 
 class Level1
@@ -29,7 +29,7 @@ private:
 	Shape* shapes[8];
 public:
 	Level1();
-	void draw(glm::mat4 worldModel);
+	void Draw(glm::mat4 worldModel);
 	~Level1();
 };
 

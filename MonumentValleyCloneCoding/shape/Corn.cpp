@@ -5,7 +5,7 @@ GLuint Corn::tri_VAO, Corn::tri_VBO;
 extern float* circle_vertex;
 extern int circle_vertex_cnt;
 
-Corn::Corn() : Shape(CORN, false) {};
+Corn::Corn() : Shape(CORN, false, true) {};
 
 void Corn::MakeBuffer()
 {
@@ -26,11 +26,11 @@ void Corn::MakeBuffer()
 	circle_vertex[0] = 0.0f;
 }
 
-void Corn::draw(glm::mat4 model)
+void Corn::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
-	circle.draw(model);
+	circle.Draw(model);
 
 	def_shader->use();
 	shapeModel = model;

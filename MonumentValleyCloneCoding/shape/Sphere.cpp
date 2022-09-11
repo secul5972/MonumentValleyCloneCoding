@@ -6,7 +6,7 @@ float* sphere_vertex;
 int sphere_vertex_cnt;
 int circle_cnt;
 
-Sphere::Sphere() : Shape(SPHERE, false) {};
+Sphere::Sphere() : Shape(SPHERE, false, true) {};
 
 void Sphere::MakeBuffer()
 {
@@ -52,7 +52,7 @@ void Sphere::FreeVertex()
 		delete sphere_vertex;
 }
 
-void Sphere::draw(glm::mat4 model)
+void Sphere::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 

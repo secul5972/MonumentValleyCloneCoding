@@ -21,36 +21,52 @@ Level1::Level1()
 	prev_mouse_pos_in_model.y = -1;
 
 	shapes[0] = new L_shape();
+	shapes[0]->SetCanBeLocated(true);
+
 	shapes[1] = new L_shape();
+	shapes[1]->SetCanBeLocated(true);
+
 	shapes[2] = new Character();
+
 	shapes[3] = new Rotary_Knob();
+
 	shapes[4] = new L_shape();
+	shapes[4]->SetCanBeLocated(true);
+	shapes[4]->SetIsFixed(false);
+
 	shapes[5] = new Cube();
+	shapes[5]->SetCanBeLocated(true);
+
 	shapes[6] = new Slope();
+	shapes[6]->SetCanBeLocated(true);
+
 	shapes[7] = new Goal();
+	shapes[7]->SetCanBeLocated(true);
 }
 
-void Level1::draw(glm::mat4 worldModel)
+void Level1::Draw(glm::mat4 worldModel)
 {
 	glm::mat4 model;
 
 	glfwSetMouseButtonCallback(window, level1_mouse_button_callback);
 	glfwSetCursorPosCallback(window, level1_mouse_cursor_pos_callback);
 
+	//l_shape
 	model = worldModel;
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes[0]->draw(model);
+	shapes[0]->Draw(model);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(1.8f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes[1]->draw(model);
+	shapes[1]->Draw(model);
 
+	//character
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 0.1f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-	shapes[2]->draw(model);
+	shapes[2]->Draw(model);
 
 	float tmp_angle = (float)fmod(l_shape_angle, 90);
 	if (!l_shape_moving_flag)
@@ -65,11 +81,12 @@ void Level1::draw(glm::mat4 worldModel)
 			l_shape_angle -= deltaTime * 60;
 	}
 
+	//rotary_knob
 	model = worldModel;
 	glm::mat4 model2 = worldModel;
 	model2 = glm::translate(model2, glm::vec3(1.9f, 1.8f, 0.0f));
 	model2 = glm::rotate(model2, glm::radians(float(l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
-	shapes[3]->draw(model2);
+	shapes[3]->Draw(model2);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(2.15f, 1.8f, 0.0f));
@@ -79,27 +96,31 @@ void Level1::draw(glm::mat4 worldModel)
 	if (225 < l_shape_angle && l_shape_angle < 315)
 		worldModel = glm::translate(worldModel, glm::vec3(-1.8f, -1.8f, -1.8f));
 
+	//l_shape
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes[4]->draw(model);
+	shapes[4]->Draw(model);
 
+	//cube
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.25f, 1.0f, 1.0f));
 	model = glm::scale(model, glm::vec3(4.0f, 1.0f, 1.0f));
-	shapes[5]->draw(model);
+	shapes[5]->Draw(model);
 
+	//slope
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.0f, -0.2f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes[6]->draw(model);
+	shapes[6]->Draw(model);
 
+	//goal
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.3f, -1.1f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes[7]->draw(model);
+	shapes[7]->Draw(model);
 }
 
 Level1::~Level1()
