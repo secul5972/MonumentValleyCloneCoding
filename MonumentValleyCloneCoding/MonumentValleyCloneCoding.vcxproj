@@ -153,6 +153,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
     <ClCompile Include="shape\axes.cpp" />
+    <ClCompile Include="shape\Character.cpp" />
+    <ClCompile Include="shape\Corn.cpp" />
     <ClCompile Include="shape\Cube.cpp" />
     <ClCompile Include="shape\Cuboid.cpp" />
     <ClCompile Include="shape\Cylinder.cpp" />
@@ -161,6 +163,7 @@
     <ClCompile Include="shape\Rotary_Knob.cpp" />
     <ClCompile Include="shape\Slope.cpp" />
     <ClCompile Include="shape\Circle.cpp" />
+    <ClCompile Include="shape\Sphere.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />
@@ -175,7 +178,7 @@
     <ClInclude Include="headerFile\Shape.h" />
     <ClInclude Include="headerFile\mesh.h" />
     <ClInclude Include="headerFile\model.h" />
-    <ClInclude Include="headerFile\shader.h" />
+    <ClInclude Include="headerFile\Shader.h" />
     <ClInclude Include="headerFile\ClickArea.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

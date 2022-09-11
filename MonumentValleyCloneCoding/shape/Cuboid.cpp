@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-unsigned int Cuboid::tri_VAO, Cuboid::tri_VBO, Cuboid::line_VAO, Cuboid::line_VBO;
+GLuint Cuboid::tri_VAO, Cuboid::tri_VBO, Cuboid::line_VAO, Cuboid::line_VBO;
 
 Cuboid::Cuboid()
 {
@@ -35,17 +35,17 @@ Cuboid::Cuboid()
 	for (int i = 0; i < 16; i++)
 	{
 		glm::vec3 tmp, ret;
-		tmp.x = cube_line_ver[i * 6];
-		tmp.y = cube_line_ver[i * 6 + 1];
-		tmp.z = cube_line_ver[i * 6 + 2];
+		tmp.x = cube_side_ver[i * 6];
+		tmp.y = cube_side_ver[i * 6 + 1];
+		tmp.z = cube_side_ver[i * 6 + 2];
 		ret = glm::vec3(shapeModel * glm::vec4(tmp, 1.0f));
 		cuboid_line_ver[i * 6] = ret.x;
 		cuboid_line_ver[i * 6 + 1] = ret.y;
 		cuboid_line_ver[i * 6 + 2] = ret.z;
 
-		tmp.x = cube_line_ver[i * 6 + 3];
-		tmp.y = cube_line_ver[i * 6 + 4];
-		tmp.z = cube_line_ver[i * 6 + 5];
+		tmp.x = cube_side_ver[i * 6 + 3];
+		tmp.y = cube_side_ver[i * 6 + 4];
+		tmp.z = cube_side_ver[i * 6 + 5];
 		ret = glm::vec3(shapeModel * glm::vec4(tmp, 1.0f));
 		cuboid_line_ver[i * 6 + 3] = ret.x;
 		cuboid_line_ver[i * 6 + 4] = ret.y;
@@ -83,25 +83,25 @@ Cuboid::Cuboid()
 	free(cuboid_line_ver);
 }
 
-void Cuboid::draw(Shader sh, glm::mat4 model)
+void Cuboid::draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
-	sh.use();
+	def_shader->use();
 
 	shapeModel = model;
-	sh.setMat4("model", shapeModel);
-	sh.setMat4("projection", projection);
-	sh.setMat4("view", view);
-	sh.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	def_shader->setMat4("model", shapeModel);
+	def_shader->setMat4("projection", projection);
+	def_shader->setMat4("view", view);
+	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
 	glBindVertexArray(tri_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	sh.setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	def_shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	glBindVertexArray(line_VAO);
 	glDrawArrays(GL_LINE_STRIP, 0, 4);
 	glDrawArrays(GL_LINE_STRIP, 4, 4);
 	glDrawArrays(GL_LINE_STRIP, 8, 4);
 	glDrawArrays(GL_LINE_STRIP, 12, 4);
-	sh.unuse();
+	def_shader->unuse();
 }

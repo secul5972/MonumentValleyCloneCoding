@@ -1,7 +1,7 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include "shader.h"
+#include "Shader.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -26,15 +26,16 @@ public:
 class Level1
 {
 private:
-	L_shape	l_shape;
-	Cuboid	cuboid;
-	Slope	slope;
-	Goal	goal;
-	Circle	circle;
-	Rotary_Knob rotary_knob;
+	L_shape		l_shape;
+	Cuboid		cuboid;
+	Slope		slope;
+	Goal		goal;
+	Circle		circle;
+	Rotary_Knob	rotary_knob;
+	Character	character;
 public:
 	Level1();
-	virtual void draw(Shader sh);
+	void draw(glm::mat4 worldModel);
 	~Level1();
 };
 

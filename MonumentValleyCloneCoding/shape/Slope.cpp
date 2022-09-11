@@ -1,13 +1,17 @@
 #include "../headerFile/Shape.h"
 
-unsigned int Slope::tri_VAO, Slope::tri_VBO, Slope::line_VAO, Slope::line_VBO;
+GLuint Slope::tri_VAO, Slope::tri_VBO, Slope::line_VAO, Slope::line_VBO;
+float* slope_side_ver;
+int slope_side_ver_cnt;
 
-Slope::Slope()
+Slope::Slope() {};
+
+void Slope::MakeBuffer()
 {
-	float* slope_tri_ver, * slope_line_ver;
+	float* slope_tri_ver;
 
 	slope_tri_ver = (float*)malloc(sizeof(float) * 216);
-	slope_line_ver = (float*)malloc(sizeof(float) * 96);
+	slope_side_ver = (float*)malloc(sizeof(float) * 48);
 
 	glm::mat4 shapeModel(1.0f);
 	shapeModel = glm::shearY3D(shapeModel, 2.0f, 0.0f);
@@ -37,21 +41,13 @@ Slope::Slope()
 	for (int i = 0; i < 16; i++)
 	{
 		glm::vec3 tmp, ret;
-		tmp.x = cube_line_ver[i * 6];
-		tmp.y = cube_line_ver[i * 6 + 1];
-		tmp.z = cube_line_ver[i * 6 + 2];
+		tmp.x = cube_side_ver[i * 3];
+		tmp.y = cube_side_ver[i * 3 + 1];
+		tmp.z = cube_side_ver[i * 3 + 2];
 		ret = glm::vec3(shapeModel * glm::vec4(tmp, 1.0f));
-		slope_line_ver[i * 6] = ret.x;
-		slope_line_ver[i * 6 + 1] = ret.y;
-		slope_line_ver[i * 6 + 2] = ret.z;
-
-		tmp.x = cube_line_ver[i * 6 + 3];
-		tmp.y = cube_line_ver[i * 6 + 4];
-		tmp.z = cube_line_ver[i * 6 + 5];
-		ret = glm::vec3(shapeModel * glm::vec4(tmp, 1.0f));
-		slope_line_ver[i * 6 + 3] = ret.x;
-		slope_line_ver[i * 6 + 4] = ret.y;
-		slope_line_ver[i * 6 + 5] = ret.z;
+		slope_side_ver[i * 3] = ret.x;
+		slope_side_ver[i * 3 + 1] = ret.y;
+		slope_side_ver[i * 3 + 2] = ret.z;
 	}
 
 	//triangle
@@ -71,41 +67,43 @@ Slope::Slope()
 	//line
 	glGenBuffers(1, &line_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 96, slope_line_ver, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 48, slope_side_ver, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &line_VAO);
 	glBindVertexArray(line_VAO);
 
 	// position atlinebute
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-	glEnableVertexAttribArray(1);
 
-
+	slope_side_ver_cnt = 48;
 	free(slope_tri_ver);
-	free(slope_line_ver);
 }
 
-void Slope::draw(Shader sh, glm::mat4 model)
+void Slope::FreeVertex()
+{
+	if (slope_side_ver)
+		free(slope_side_ver);
+}
+
+void Slope::draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 
-	sh.use();
-
+	def_shader->use();
 	shapeModel = model;
-	sh.setMat4("model", shapeModel);
-	sh.setMat4("projection", projection);
-	sh.setMat4("view", view);
-	sh.setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	def_shader->setMat4("model", shapeModel);
+	def_shader->setMat4("projection", projection);
+	def_shader->setMat4("view", view);
+	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
 	glBindVertexArray(tri_VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
-	sh.setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
+	def_shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
 	glBindVertexArray(line_VAO);
 	glDrawArrays(GL_LINE_STRIP, 0, 4);
 	glDrawArrays(GL_LINE_STRIP, 4, 4);
 	glDrawArrays(GL_LINE_STRIP, 8, 4);
 	glDrawArrays(GL_LINE_STRIP, 12, 4);
-	sh.unuse();
+	def_shader->unuse();
 }

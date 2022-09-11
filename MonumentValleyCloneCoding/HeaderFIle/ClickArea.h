@@ -1,7 +1,7 @@
 #ifndef ClickArea_H
 #define ClickArea_H
 
-#include "shader.h"
+#include "Shader.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
@@ -16,8 +16,8 @@ using namespace std;
 
 extern glm::mat4 projection, view, viewport;
 
-extern const unsigned int SCR_WIDTH;
-extern const unsigned int SCR_HEIGHT;
+extern const GLuint SCR_WIDTH;
+extern const GLuint SCR_HEIGHT;
 
 extern bool l_shape_moving_flag;
 extern bool left_mouse_button_down;
