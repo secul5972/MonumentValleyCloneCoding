@@ -20,7 +20,14 @@ Level1::Level1()
 	prev_mouse_pos_in_model.x = -1;
 	prev_mouse_pos_in_model.y = -1;
 
-	shapes = new Shape[7];
+	shapes[0] = new L_shape();
+	shapes[1] = new L_shape();
+	shapes[2] = new Character();
+	shapes[3] = new Rotary_Knob();
+	shapes[4] = new L_shape();
+	shapes[5] = new Cube();
+	shapes[6] = new Slope();
+	shapes[7] = new Goal();
 }
 
 void Level1::draw(glm::mat4 worldModel)
@@ -32,18 +39,18 @@ void Level1::draw(glm::mat4 worldModel)
 
 	model = worldModel;
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	l_shape.draw(model);
+	shapes[0]->draw(model);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(1.8f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
-	l_shape.draw(model);
+	shapes[1]->draw(model);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 0.1f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-	character.draw(model);
+	shapes[2]->draw(model);
 
 	float tmp_angle = (float)fmod(l_shape_angle, 90);
 	if (!l_shape_moving_flag)
@@ -62,7 +69,7 @@ void Level1::draw(glm::mat4 worldModel)
 	glm::mat4 model2 = worldModel;
 	model2 = glm::translate(model2, glm::vec3(1.9f, 1.8f, 0.0f));
 	model2 = glm::rotate(model2, glm::radians(float(l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
-	rotary_knob.draw(model2);
+	shapes[3]->draw(model2);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(2.15f, 1.8f, 0.0f));
@@ -76,23 +83,23 @@ void Level1::draw(glm::mat4 worldModel)
 	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
-	l_shape.draw(model);
+	shapes[4]->draw(model);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.25f, 1.0f, 1.0f));
 	model = glm::scale(model, glm::vec3(4.0f, 1.0f, 1.0f));
-	cube.draw(model);
+	shapes[5]->draw(model);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.0f, -0.2f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	slope.draw(model);
+	shapes[6]->draw(model);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.3f, -1.1f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	goal.draw(model);
+	shapes[7]->draw(model);
 }
 
 Level1::~Level1()

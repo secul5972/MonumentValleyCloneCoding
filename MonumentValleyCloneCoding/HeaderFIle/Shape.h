@@ -37,12 +37,13 @@ class Shape
 protected:
 	GLuint type_;
 	bool can_be_located_;
+	float* side_vertex = 0;
 public:
 	Shape(GLuint type = 0, bool can_be_located = false) : type_(type), can_be_located_(can_be_located) {};
 	virtual void draw(glm::mat4 model) {};
 };
 
-class Axes :Shape
+class Axes :public Shape
 {
 private:
 	static GLuint line_VAO, line_VBO;
@@ -51,7 +52,7 @@ public:
 	void draw(glm::mat4 model);
 };
 
-class Cube :Shape
+class Cube :public Shape
 {
 private:
 	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -61,7 +62,7 @@ public:
 	void MakeBuffer();
 };
 
-class Goal :Shape
+class Goal :public Shape
 {
 private:
 	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -72,7 +73,7 @@ public:
 	void FreeVertex();
 };
 
-class L_shape :Shape
+class L_shape :public Shape
 {
 private:
 	Cube cube;
@@ -81,7 +82,7 @@ public:
 	void draw(glm::mat4 model);
 };
 
-class Slope :Shape
+class Slope :public Shape
 {
 private:
 	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -92,7 +93,7 @@ public:
 	void FreeVertex();
 };
 
-class Circle :Shape
+class Circle :public Shape
 {
 private:
 	static GLuint tri_VAO, tri_VBO;
@@ -103,7 +104,7 @@ public:
 	void FreeVertex();
 };
 
-class Cylinder :Shape
+class Cylinder :public Shape
 {
 private:
 	static GLuint line_VAO, line_VBO;
@@ -115,7 +116,7 @@ public:
 	//void FreeVertex();
 };
 
-class Rotary_Knob :Shape
+class Rotary_Knob :public Shape
 {
 private:
 	Cylinder cylinder;
@@ -125,7 +126,7 @@ public:
 	void draw(glm::mat4 model);
 };
 
-class Corn :Shape
+class Corn :public Shape
 {
 private:
 	static GLuint tri_VAO, tri_VBO;
@@ -136,7 +137,7 @@ public:
 	void MakeBuffer();
 };
  
-class Sphere :Shape
+class Sphere :public Shape
 {
 private:
 	static GLuint tri_VAO, tri_VBO;
@@ -147,7 +148,7 @@ public:
 	void FreeVertex();
 };
 
-class Character :Shape
+class Character :public Shape
 {
 private:
 	static GLuint tri_VAO, tri_VBO;
