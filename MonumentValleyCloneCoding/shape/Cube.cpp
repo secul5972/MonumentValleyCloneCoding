@@ -45,7 +45,7 @@ float cube_tri_ver[] = {
 };
 
 
-float cube_side_ver[] = {
+float cube_line_ver[] = {
 	-0.1f, -0.1f, -0.1f,
 	-0.1f,  0.1f, -0.1f,
 	-0.1f,  0.1f,  0.1f,
@@ -66,6 +66,49 @@ float cube_side_ver[] = {
 	 0.1f,  0.1f, -0.1f,
 	-0.1f,  0.1f, -0.1f
 };
+
+float cube_face_ver[] = {
+	// back
+	-0.1f, -0.1f, -0.1f,
+	-0.1f, -0.1f,  0.1f,
+	-0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f, -0.1f,
+
+	//right
+	 0.1f, -0.1f, -0.1f,
+	-0.1f, -0.1f, -0.1f,
+	-0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f,
+
+	// bottom
+	 0.1f, -0.1f,  0.1f,
+	-0.1f, -0.1f,  0.1f,
+	-0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f, -0.1f,
+
+	// front
+	 0.1f, -0.1f,  0.1f,
+	 0.1f, -0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f,  0.1f,
+
+	 // left
+	-0.1f, -0.1f, -0.1f,
+	 0.1f, -0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f,
+	-0.1f,  0.1f, -0.1f,
+
+	 // up
+	 0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f
+};
+
+//size of cube_face_ver
+const GLuint cube_face_ver_size = 72;
+//count of cube face(rectangle) vertex
+const GLuint cube_face_ver_cnt = 4;
 
 GLuint Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 
@@ -89,7 +132,7 @@ void Cube::MakeBuffer()
 	//line
 	glGenBuffers(1, &line_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_side_ver), cube_side_ver, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(cube_line_ver), cube_line_ver, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &line_VAO);
 	glBindVertexArray(line_VAO);
@@ -98,7 +141,11 @@ void Cube::MakeBuffer()
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	base_side_vertex_ = cube_side_ver;
+	base_face_vertex_ = cube_face_ver;
+	curr_face_vertex_ = new float[cube_face_ver_cnt];
+
+	for (int i = 0; i < cube_face_ver_cnt; i++)
+		curr_face_vertex_[i] = cube_face_ver[i];
 }
 
 void Cube::Draw(glm::mat4 model)
@@ -121,4 +168,23 @@ void Cube::Draw(glm::mat4 model)
 	glDrawArrays(GL_LINE_STRIP, 8, 4);
 	glDrawArrays(GL_LINE_STRIP, 12, 4);
 	def_shader->unuse();
+}
+
+float* Cube::IsOnShape(glm::vec3 point)
+{
+	if (isfixed_ == false && isdirty_ == true)
+	{
+		//update curr_face_vertex
+		isdirty_ = false;
+	}
+
+	int size = cube_face_ver_cnt / (4 * 3);
+	for (int i = 0; i < cube_face_ver_cnt; i++)
+	{
+		if (IsOnFace(point, curr_face_vertex_ + i * 4, cube_face_ver_cnt))
+			return curr_face_vertex_ + i * 4;
+	}
+
+	//fail to find
+	return (0);
 }

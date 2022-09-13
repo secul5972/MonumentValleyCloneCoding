@@ -123,6 +123,18 @@ void Level1::Draw(glm::mat4 worldModel)
 	shapes[7]->Draw(model);
 }
 
+void Level1::FindFace(glm::vec3 point)
+{
+	int size = sizeof(shapes) / sizeof(Shape*);
+	float* face;
+
+	for (int i = 0; i < size; i++)
+	{
+		if (shapes[i]->GetCanBeLocated() == false) continue;
+		if ((face = shapes[i]->IsOnShape(point))) break;
+	}
+}
+
 Level1::~Level1()
 {
 	if (ellipse_area)

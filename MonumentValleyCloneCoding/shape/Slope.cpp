@@ -1,8 +1,8 @@
 #include "../headerFile/Shape.h"
 
 GLuint Slope::tri_VAO, Slope::tri_VBO, Slope::line_VAO, Slope::line_VBO;
-float* slope_side_ver;
-int slope_side_ver_cnt;
+float* slope_face_ver;
+int slope_face_ver_cnt;
 
 Slope::Slope() : Shape(SLOPE, true, true) {};
 
@@ -11,7 +11,7 @@ void Slope::MakeBuffer()
 	float* slope_tri_ver;
 
 	slope_tri_ver = (float*)malloc(sizeof(float) * 216);
-	slope_side_ver = (float*)malloc(sizeof(float) * 48);
+	slope_face_ver = (float*)malloc(sizeof(float) * 48);
 
 	glm::mat4 shapeModel(1.0f);
 	shapeModel = glm::shearY3D(shapeModel, 2.0f, 0.0f);
@@ -41,13 +41,13 @@ void Slope::MakeBuffer()
 	for (int i = 0; i < 16; i++)
 	{
 		glm::vec3 tmp, ret;
-		tmp.x = cube_side_ver[i * 3];
-		tmp.y = cube_side_ver[i * 3 + 1];
-		tmp.z = cube_side_ver[i * 3 + 2];
+		tmp.x = cube_face_ver[i * 3];
+		tmp.y = cube_face_ver[i * 3 + 1];
+		tmp.z = cube_face_ver[i * 3 + 2];
 		ret = glm::vec3(shapeModel * glm::vec4(tmp, 1.0f));
-		slope_side_ver[i * 3] = ret.x;
-		slope_side_ver[i * 3 + 1] = ret.y;
-		slope_side_ver[i * 3 + 2] = ret.z;
+		slope_face_ver[i * 3] = ret.x;
+		slope_face_ver[i * 3 + 1] = ret.y;
+		slope_face_ver[i * 3 + 2] = ret.z;
 	}
 
 	//triangle
@@ -67,7 +67,7 @@ void Slope::MakeBuffer()
 	//line
 	glGenBuffers(1, &line_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 48, slope_side_ver, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 48, slope_face_ver, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &line_VAO);
 	glBindVertexArray(line_VAO);
@@ -76,14 +76,14 @@ void Slope::MakeBuffer()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	slope_side_ver_cnt = 48;
+	slope_face_ver_cnt = 48;
 	free(slope_tri_ver);
 }
 
 void Slope::FreeVertex()
 {
-	if (slope_side_ver)
-		free(slope_side_ver);
+	if (slope_face_ver)
+		free(slope_face_ver);
 }
 
 void Slope::Draw(glm::mat4 model)

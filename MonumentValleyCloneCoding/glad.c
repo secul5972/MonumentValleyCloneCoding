@@ -277,7 +277,7 @@ PFNGLACCUMPROC glad_glAccum = NULL;
 PFNGLACTIVESHADERPROGRAMPROC glad_glActiveShaderProgram = NULL;
 PFNGLACTIVETEXTUREPROC glad_glActiveTexture = NULL;
 PFNGLALPHAFUNCPROC glad_glAlphaFunc = NULL;
-PFNGLARETEXTURESRESIDENTPROC glad_glAreTexturesResident = NULL;
+PFNGLARETEXTURESRESIDENTPROC glad_glAreTexturesRefacent = NULL;
 PFNGLARRAYELEMENTPROC glad_glArrayElement = NULL;
 PFNGLATTACHSHADERPROC glad_glAttachShader = NULL;
 PFNGLBEGINPROC glad_glBegin = NULL;
@@ -1652,7 +1652,7 @@ static void load_GL_VERSION_1_1(GLADloadproc load) {
 	glad_glNormalPointer = (PFNGLNORMALPOINTERPROC)load("glNormalPointer");
 	glad_glTexCoordPointer = (PFNGLTEXCOORDPOINTERPROC)load("glTexCoordPointer");
 	glad_glVertexPointer = (PFNGLVERTEXPOINTERPROC)load("glVertexPointer");
-	glad_glAreTexturesResident = (PFNGLARETEXTURESRESIDENTPROC)load("glAreTexturesResident");
+	glad_glAreTexturesRefacent = (PFNGLARETEXTURESRESIDENTPROC)load("glAreTexturesRefacent");
 	glad_glPrioritizeTextures = (PFNGLPRIORITIZETEXTURESPROC)load("glPrioritizeTextures");
 	glad_glIndexub = (PFNGLINDEXUBPROC)load("glIndexub");
 	glad_glIndexubv = (PFNGLINDEXUBVPROC)load("glIndexubv");

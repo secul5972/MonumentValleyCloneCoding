@@ -2,6 +2,7 @@
 #define SHAPE_H
 
 #include "Shader.h"
+#include "Face.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -13,7 +14,7 @@ using namespace std;
 
 extern glm::mat4 projection, view;
 extern float cube_tri_ver[];
-extern float cube_side_ver[];
+extern float cube_face_ver[];
 extern Shader* def_shader;
 
 class Shape
@@ -24,10 +25,10 @@ protected:
 	bool		can_be_located_;
 	bool		isfixed_;
 
-	//changed per render
+	//can be changed per render
 	bool		isdirty_ = false;
-	float		*base_side_vertex_ = 0;
-	float		*curr_side_vertex_ = 0;
+	float		*base_face_vertex_ = 0;
+	float		*curr_face_vertex_ = 0;
 
 	enum ShapeType {
 		NONE,
@@ -47,13 +48,19 @@ protected:
 	static const string ShapeTypeName[];
 public:
 	Shape(GLuint type = 0, bool can_be_located = false, bool isfixed = true) {};
+
 	void SetCanBeLocated(bool can_be_located);
 	void SetIsFixed(bool isfixed);
 	void SetIsDirty(bool isdirty);
+	bool GetCanBeLocated();
+	bool GetIsFixed();
+	bool GetIsDirty();
+
 	virtual void Draw(glm::mat4 model);
 	virtual void MakeBuffer();
-	virtual void MakeSideVertex();
+	virtual void MakeFaceVertex();
 	virtual void FreeVertex();
+	virtual float* IsOnShape(glm::vec3);
 };
 
 class Axes :public Shape
@@ -73,6 +80,7 @@ public:
 	Cube();
 	void Draw(glm::mat4 model);
 	void MakeBuffer();
+	float* IsOnShape(glm::vec3);
 };
 
 class Goal :public Shape
@@ -92,7 +100,7 @@ private:
 	Cube cube;
 public:
 	L_shape();
-	void MakeSideVertex();
+	void MakeFaceVertex();
 	void Draw(glm::mat4 model);
 };
 

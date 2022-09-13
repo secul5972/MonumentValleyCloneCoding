@@ -30,6 +30,7 @@ private:
 public:
 	Level1();
 	void Draw(glm::mat4 worldModel);
+	void FindFace(glm::vec3);
 	~Level1();
 };
 

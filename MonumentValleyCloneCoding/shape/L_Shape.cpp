@@ -2,7 +2,7 @@
 
 L_shape::L_shape() : Shape(L_SHAPE, true, true) {}
 
-void L_shape::MakeSideVertex()
+void L_shape::MakeFaceVertex()
 {
 
 }
