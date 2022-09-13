@@ -4,6 +4,6 @@
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 
-bool IsOnFace(glm::vec3, float *, GLuint);
+//bool IsOnFace(glm::vec3, float *, GLuint);
 
 #endif

@@ -1,6 +1,9 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
+//vec3.xy();
+#define GLM_FORCE_SWIZZLE
+
 #include "Shader.h"
 #include "Face.h"
 #include <glad/glad.h>
@@ -31,7 +34,6 @@ protected:
 	float		*curr_face_vertex_ = 0;
 
 	enum ShapeType {
-		NONE,
 		AXES,
 		CUBE,
 		GOAL,
@@ -45,7 +47,23 @@ protected:
 		CHARACTER
 	}; 
 
-	static const string ShapeTypeName[];
+	enum FaceType {
+		NONE,
+		BACK,
+		BOTTOM,
+		RIGHT,
+		FRONT,
+		UP,
+		LEFT
+	};
+
+	static const int kFaceTypeCnt = 7;
+
+	static const string kShapeTypeName[];
+	//face normal vector
+	static const glm::vec3 kFaceAxes[];
+	//remove vec3 factor
+	static const glm::vec3 kFaceFactor[];
 public:
 	Shape(GLuint type = 0, bool can_be_located = false, bool isfixed = true) {};
 
@@ -61,6 +79,7 @@ public:
 	virtual void MakeFaceVertex();
 	virtual void FreeVertex();
 	virtual float* IsOnShape(glm::vec3);
+	bool IsOnFace(glm::vec3 point, float* face, GLuint face_vertex_cnt);
 };
 
 class Axes :public Shape

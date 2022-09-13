@@ -74,23 +74,29 @@ float cube_face_ver[] = {
 	-0.1f,  0.1f,  0.1f,
 	-0.1f,  0.1f, -0.1f,
 
-	//right
-	 0.1f, -0.1f, -0.1f,
-	-0.1f, -0.1f, -0.1f,
-	-0.1f,  0.1f, -0.1f,
-	 0.1f,  0.1f, -0.1f,
-
 	// bottom
 	 0.1f, -0.1f,  0.1f,
 	-0.1f, -0.1f,  0.1f,
 	-0.1f, -0.1f, -0.1f,
 	 0.1f, -0.1f, -0.1f,
 
+	//right
+	 0.1f, -0.1f, -0.1f,
+	-0.1f, -0.1f, -0.1f,
+	-0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f,
+
 	// front
 	 0.1f, -0.1f,  0.1f,
 	 0.1f, -0.1f, -0.1f,
 	 0.1f,  0.1f, -0.1f,
 	 0.1f,  0.1f,  0.1f,
+	 
+	// up
+	 0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f, -0.1f,
+	 0.1f,  0.1f, -0.1f
 
 	 // left
 	-0.1f, -0.1f, -0.1f,
@@ -98,11 +104,7 @@ float cube_face_ver[] = {
 	 0.1f,  0.1f, -0.1f,
 	-0.1f,  0.1f, -0.1f,
 
-	 // up
-	 0.1f,  0.1f,  0.1f,
-	-0.1f,  0.1f,  0.1f,
-	-0.1f,  0.1f, -0.1f,
-	 0.1f,  0.1f, -0.1f
+
 };
 
 //size of cube_face_ver
@@ -142,9 +144,9 @@ void Cube::MakeBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	base_face_vertex_ = cube_face_ver;
-	curr_face_vertex_ = new float[cube_face_ver_cnt];
+	curr_face_vertex_ = new float[cube_face_ver_size];
 
-	for (int i = 0; i < cube_face_ver_cnt; i++)
+	for (int i = 0; i < cube_face_ver_size; i++)
 		curr_face_vertex_[i] = cube_face_ver[i];
 }
 
@@ -178,9 +180,11 @@ float* Cube::IsOnShape(glm::vec3 point)
 		isdirty_ = false;
 	}
 
-	int size = cube_face_ver_cnt / (4 * 3);
-	for (int i = 0; i < cube_face_ver_cnt; i++)
+	int size = cube_face_ver_size / (cube_face_ver_cnt * 3);
+	for (int i = 0; i < cube_face_ver_size; i++)
 	{
+		//면이 평행한지 검사 필요
+
 		if (IsOnFace(point, curr_face_vertex_ + i * 4, cube_face_ver_cnt))
 			return curr_face_vertex_ + i * 4;
 	}
