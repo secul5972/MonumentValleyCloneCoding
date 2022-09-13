@@ -148,6 +148,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="clickArea\EllipseArea.cpp" />
+    <ClCompile Include="Face\Face.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="level\level1.cpp" />
     <ClCompile Include="main.cpp" />
@@ -174,6 +175,7 @@
   <ItemGroup>
     <ClInclude Include="headerFile\AdditionalMathFunction.h" />
     <ClInclude Include="headerFile\camera.h" />
+    <ClInclude Include="headerFile\Face.h" />
     <ClInclude Include="headerFile\Level.h" />
     <ClInclude Include="headerFile\Shape.h" />
     <ClInclude Include="headerFile\mesh.h" />
