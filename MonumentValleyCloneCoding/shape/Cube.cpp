@@ -93,18 +93,16 @@ float cube_face_ver[] = {
 	 0.1f,  0.1f,  0.1f,
 	 
 	// up
-	 0.1f,  0.1f,  0.1f,
 	-0.1f,  0.1f,  0.1f,
-	-0.1f,  0.1f, -0.1f,
-	 0.1f,  0.1f, -0.1f
-
-	 // left
-	-0.1f, -0.1f, -0.1f,
-	 0.1f, -0.1f, -0.1f,
+	 0.1f,  0.1f,  0.1f,
 	 0.1f,  0.1f, -0.1f,
 	-0.1f,  0.1f, -0.1f,
 
-
+	 // left
+	-0.1f, -0.1f,  0.1f,
+	 0.1f, -0.1f,  0.1f,
+	 0.1f,  0.1f,  0.1f,
+	-0.1f,  0.1f,  0.1f
 };
 
 //size of cube_face_ver
@@ -114,7 +112,12 @@ const GLuint cube_face_ver_cnt = 4;
 
 GLuint Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 
-Cube::Cube() : Shape(CUBE, true, true) {};
+float* Cube::base_face_vertex_;
+
+Cube::Cube() : Shape(CUBE, true, true)
+{
+	curr_face_vertex_ = new float[cube_face_ver_size];
+};
 
 void Cube::MakeBuffer()
 {
@@ -144,10 +147,6 @@ void Cube::MakeBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	base_face_vertex_ = cube_face_ver;
-	curr_face_vertex_ = new float[cube_face_ver_size];
-
-	for (int i = 0; i < cube_face_ver_size; i++)
-		curr_face_vertex_[i] = cube_face_ver[i];
 }
 
 void Cube::Draw(glm::mat4 model)
@@ -172,23 +171,40 @@ void Cube::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Cube::IsOnShape(glm::vec3 point)
+bool Cube::OnShape(glm::vec2 point)
 {
-	if (isfixed_ == false && isdirty_ == true)
-	{
-		//update curr_face_vertex
-		isdirty_ = false;
-	}
-
 	int size = cube_face_ver_size / (cube_face_ver_cnt * 3);
-	for (int i = 0; i < cube_face_ver_size; i++)
+	float* face = 0;
+	for (int i = 0; i < size; i++)
 	{
 		//면이 평행한지 검사 필요
-
-		if (IsOnFace(point, curr_face_vertex_ + i * 4, cube_face_ver_cnt))
-			return curr_face_vertex_ + i * 4;
+		if (OnFace(point, curr_face_vertex_ + i * cube_face_ver_cnt * 3, cube_face_ver_cnt))
+			face = curr_face_vertex_ + i * cube_face_ver_cnt * 3;
+	}
+	if (!face)
+		return 0;
+	for (int i = 0; i < cube_face_ver_cnt; i++)
+	{
+		printf("%f %f %f\n", face[i * 3], face[i * 3 + 1], face[i * 3 + 2]);
 	}
 
-	//fail to find
-	return (0);
+	return 1;
+}
+
+void Cube::SaveModelData(glm::mat4 model)
+{
+	if (isfixed_ && issaved_) return;
+	if (!isfixed_ && !isdirty_) return;
+	model_ = model;
+
+	glm::mat4 matrix = viewport * projection * view * model;
+	for (int i = 0; i < cube_face_ver_size / 3; i++)
+	{
+		glm::vec3 prev, curr;
+		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
+		curr = matrix * glm::vec4(prev, 1.0f);
+		curr_face_vertex_[i * 3] = curr.x;
+		curr_face_vertex_[i * 3 + 1] = curr.y;
+		curr_face_vertex_[i * 3 + 2] = curr.z;
+	}
 }

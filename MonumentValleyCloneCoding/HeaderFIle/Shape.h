@@ -15,7 +15,7 @@
 #include <iostream>
 using namespace std;
 
-extern glm::mat4 projection, view;
+extern glm::mat4 viewport, projection, view;
 extern float cube_tri_ver[];
 extern float cube_face_ver[];
 extern Shader* def_shader;
@@ -27,11 +27,13 @@ protected:
 	GLuint		type_;
 	bool		can_be_located_;
 	bool		isfixed_;
+	bool		issaved_ = false;
 
 	//can be changed per render
-	bool		isdirty_ = false;
-	float		*base_face_vertex_ = 0;
+	bool		isdirty_ = true;
 	float		*curr_face_vertex_ = 0;
+
+	glm::mat4 model_;
 
 	enum ShapeType {
 		AXES,
@@ -47,25 +49,10 @@ protected:
 		CHARACTER
 	}; 
 
-	enum FaceType {
-		NONE,
-		BACK,
-		BOTTOM,
-		RIGHT,
-		FRONT,
-		UP,
-		LEFT
-	};
-
-	static const int kFaceTypeCnt = 7;
-
 	static const string kShapeTypeName[];
-	//face normal vector
-	static const glm::vec3 kFaceAxes[];
-	//remove vec3 factor
-	static const glm::vec3 kFaceFactor[];
+
 public:
-	Shape(GLuint type = 0, bool can_be_located = false, bool isfixed = true) {};
+	Shape(GLuint type = 0, bool can_be_located = false, bool isfixed = true) : type_(type), can_be_located_(can_be_located), isfixed_(isfixed) {};
 
 	void SetCanBeLocated(bool can_be_located);
 	void SetIsFixed(bool isfixed);
@@ -74,12 +61,12 @@ public:
 	bool GetIsFixed();
 	bool GetIsDirty();
 
-	virtual void Draw(glm::mat4 model);
+	virtual void Draw(glm::mat4);
 	virtual void MakeBuffer();
 	virtual void MakeFaceVertex();
 	virtual void FreeVertex();
-	virtual float* IsOnShape(glm::vec3);
-	bool IsOnFace(glm::vec3 point, float* face, GLuint face_vertex_cnt);
+	virtual bool OnShape(glm::vec2);
+	virtual void SaveModelData(glm::mat4);
 };
 
 class Axes :public Shape
@@ -88,18 +75,20 @@ private:
 	static GLuint line_VAO, line_VBO;
 public:
 	Axes();
-	void Draw(glm::mat4 model);
+	void Draw(glm::mat4);
 };
 
-class Cube :public Shape
+class Cube :public Shape, public Face
 {
 private:
 	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static float* base_face_vertex_;
 public:
 	Cube();
-	void Draw(glm::mat4 model);
+	void Draw(glm::mat4);
 	void MakeBuffer();
-	float* IsOnShape(glm::vec3);
+	bool OnShape(glm::vec2);
+	void SaveModelData(glm::mat4);
 };
 
 class Goal :public Shape

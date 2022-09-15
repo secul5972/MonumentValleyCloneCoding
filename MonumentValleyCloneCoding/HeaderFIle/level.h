@@ -30,8 +30,11 @@ private:
 public:
 	Level1();
 	void Draw(glm::mat4 worldModel);
-	void FindFace(glm::vec3);
+	void FindFace(double xpos, double ypos);
 	~Level1();
+
+	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+	static void mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
 };
 
 #endif

@@ -78,7 +78,7 @@ void Goal::MakeBuffer()
 
 	goal_face_ver_cnt = 48;
 	free(goal_tri_ver);
-	base_face_vertex_ = goal_face_ver;
+	//base_face_vertex_ = goal_face_ver;
 }
 
 void Goal::FreeVertex()

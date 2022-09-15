@@ -1,8 +1,5 @@
 #include "../headerFile/Level.h"
 
-void level1_mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-void level1_mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
-
 double rotateStartTime = 0;
 double rotateEndTime = -1;
 double rotateCurrTime = 0;
@@ -13,6 +10,7 @@ EllipseArea* ellipse_area;
 glm::mat4 ellipse_area_model;
 bool l_shape_moving_flag = false;
 glm::vec2 prev_mouse_pos_in_model;
+extern Level1* level1;
 
 Level1::Level1()
 {
@@ -47,9 +45,6 @@ Level1::Level1()
 void Level1::Draw(glm::mat4 worldModel)
 {
 	glm::mat4 model;
-
-	glfwSetMouseButtonCallback(window, level1_mouse_button_callback);
-	glfwSetCursorPosCallback(window, level1_mouse_cursor_pos_callback);
 
 	//l_shape
 	model = worldModel;
@@ -108,6 +103,7 @@ void Level1::Draw(glm::mat4 worldModel)
 	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.25f, 1.0f, 1.0f));
 	model = glm::scale(model, glm::vec3(4.0f, 1.0f, 1.0f));
+	shapes[5]->SaveModelData(model);
 	shapes[5]->Draw(model);
 
 	//slope
@@ -123,15 +119,15 @@ void Level1::Draw(glm::mat4 worldModel)
 	shapes[7]->Draw(model);
 }
 
-void Level1::FindFace(glm::vec3 point)
+void Level1::FindFace(double xpos, double ypos)
 {
 	int size = sizeof(shapes) / sizeof(Shape*);
-	float* face;
+	glm::vec2 point(xpos, ypos);
 
 	for (int i = 0; i < size; i++)
 	{
 		if (shapes[i]->GetCanBeLocated() == false) continue;
-		if ((face = shapes[i]->IsOnShape(point))) break;
+		if (shapes[i]->OnShape(point)) break;
 	}
 }
 
@@ -141,10 +137,18 @@ Level1::~Level1()
 		delete ellipse_area;
 }
 
-void level1_mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
+void Level1::mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
 {
+	double xpos, ypos;
+
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+	{
 		left_mouse_button_down = true;
+		glfwGetCursorPos(window, &xpos, &ypos);
+		printf("%f %f\n", xpos, SCR_HEIGHT - ypos);
+		level1->FindFace((float)xpos, (float)(SCR_HEIGHT - ypos));
+		
+	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
 		left_mouse_button_down = false;
@@ -154,11 +158,14 @@ void level1_mouse_button_callback(GLFWwindow* window, int button, int action, in
 	}
 }
 
-void level1_mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
+void Level1::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
 	if (left_mouse_button_down)
 	{
+		//rotate angle of rotary knob
 		l_shape_angle += ellipse_area->CheckClickAndRotateInArea((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
 		l_shape_angle = fmod(l_shape_angle + 360, (double)360);
+
+
 	}
 }

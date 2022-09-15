@@ -45,6 +45,8 @@ Shader *def_shader;
 
 bool left_mouse_button_down = false;
 
+Level1* level1;
+
 int main()
 {
 	// glfw: initialize and configure
@@ -101,7 +103,7 @@ int main()
 	Character character;
 	Sphere sphere;
 
-	Level1 l;
+	level1 = new Level1;
 
 	cube.MakeBuffer();
 	goal.MakeBuffer();
@@ -153,7 +155,9 @@ int main()
 		//e.Draw(defaultShader, worldModel);
 		//f.Draw(defaultShader, worldModel);
 		//g.Draw(defaultShader, worldModel);
-		l.Draw(worldModel);
+		glfwSetMouseButtonCallback(window, &Level1::mouse_button_callback);
+		glfwSetCursorPosCallback(window, &Level1::mouse_cursor_pos_callback);
+		level1->Draw(worldModel);
 		//h.Draw(defaultShader, worldModel);
 		//m.Draw(defaultShader, worldModel);
 		//n.Draw(defaultShader, worldModel);
