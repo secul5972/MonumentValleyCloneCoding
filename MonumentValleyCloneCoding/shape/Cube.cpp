@@ -105,11 +105,6 @@ float cube_face_ver[] = {
 	-0.1f,  0.1f,  0.1f
 };
 
-//size of cube_face_ver
-const GLuint cube_face_ver_size = 72;
-//count of cube face(rectangle) vertex
-const GLuint cube_face_ver_cnt = 4;
-
 GLuint Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 
 float* Cube::base_face_vertex_;
@@ -118,6 +113,11 @@ Cube::Cube() : Shape(CUBE, true, true)
 {
 	curr_face_vertex_ = new float[cube_face_ver_size];
 };
+
+Cube::~Cube()
+{
+	delete []curr_face_vertex_;
+}
 
 void Cube::MakeBuffer()
 {
@@ -171,22 +171,26 @@ void Cube::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-bool Cube::OnShape(glm::vec2 point)
+bool Cube::InShape(glm::vec2 point)
 {
 	int size = cube_face_ver_size / (cube_face_ver_cnt * 3);
 	float* face = 0;
+
 	for (int i = 0; i < size; i++)
 	{
-		//면이 평행한지 검사 필요
+		//check per face
 		if (OnFace(point, curr_face_vertex_ + i * cube_face_ver_cnt * 3, cube_face_ver_cnt))
-			face = curr_face_vertex_ + i * cube_face_ver_cnt * 3;
+		{
+			face = curr_face_vertex_ + i * Cube::cube_face_ver_cnt * 3;
+			break;
+		}
 	}
+
+	//if face == 0, point is not in shape
 	if (!face)
 		return 0;
-	for (int i = 0; i < cube_face_ver_cnt; i++)
-	{
-		printf("%f %f %f\n", face[i * 3], face[i * 3 + 1], face[i * 3 + 2]);
-	}
+
+	cout << kShapeTypeName[type_] << '\n';
 
 	return 1;
 }

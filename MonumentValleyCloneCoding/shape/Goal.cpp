@@ -1,23 +1,30 @@
 #include "../headerFile/Shape.h"
 
 GLuint Goal::tri_VAO, Goal::tri_VBO, Goal::line_VAO, Goal::line_VBO;
-float *goal_face_ver;
-int goal_face_ver_cnt;
+float* Goal::base_face_vertex_;
+glm::mat4 Goal::pre_model_;
 
-Goal::Goal() : Shape(GOAL, true, true) {};
+extern float cube_face_ver[];
+
+Goal::Goal() : Shape(GOAL, true, true)
+{
+	curr_face_vertex_ = new float[Cube::cube_face_ver_size];
+}
+
+Goal::~Goal()
+{
+	delete []curr_face_vertex_;
+}
 
 void Goal::MakeBuffer()
 {
-	if (goal_face_ver)
-		return;
-	float* goal_tri_ver;
-
-	goal_tri_ver = (float*)malloc(sizeof(float) * 216);
-	goal_face_ver = (float*)malloc(sizeof(float) * 48);
+	float* goal_tri_ver = new float[216];
+	float* goal_line_ver = new float[48];
 
 	glm::mat4 shapeModel(1.0f);
 	shapeModel = glm::scale(shapeModel, glm::vec3(1.5f, 0.2f, 1.5f));
 	shapeModel = glm::translate(shapeModel, glm::vec3(0.1f, -0.1f, 0.0f));
+	pre_model_ = shapeModel;
 
 	for (int i = 0; i < 36; i++)
 	{
@@ -46,9 +53,9 @@ void Goal::MakeBuffer()
 		tmp.y = cube_face_ver[i * 3 + 1];
 		tmp.z = cube_face_ver[i * 3 + 2];
 		ret = glm::vec3(shapeModel * glm::vec4(tmp, 1.0f));
-		goal_face_ver[i * 3] = ret.x;
-		goal_face_ver[i * 3 + 1] = ret.y;
-		goal_face_ver[i * 3 + 2] = ret.z;
+		goal_line_ver[i * 3] = ret.x;
+		goal_line_ver[i * 3 + 1] = ret.y;
+		goal_line_ver[i * 3 + 2] = ret.z;
 	}
 
 	//triangle
@@ -68,7 +75,7 @@ void Goal::MakeBuffer()
 	//line
 	glGenBuffers(1, &line_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 48, goal_face_ver, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 48, goal_line_ver, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &line_VAO);
 	glBindVertexArray(line_VAO);
@@ -76,15 +83,9 @@ void Goal::MakeBuffer()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	goal_face_ver_cnt = 48;
-	free(goal_tri_ver);
-	//base_face_vertex_ = goal_face_ver;
-}
-
-void Goal::FreeVertex()
-{
-	if (goal_face_ver)
-		delete goal_face_ver;
+	delete []goal_tri_ver;
+	delete []goal_line_ver;
+	base_face_vertex_ = cube_face_ver;
 }
 
 void Goal::Draw(glm::mat4 model)
@@ -107,4 +108,47 @@ void Goal::Draw(glm::mat4 model)
 	glDrawArrays(GL_LINE_STRIP, 8, 4);
 	glDrawArrays(GL_LINE_STRIP, 12, 4);
 	def_shader->unuse();
+}
+
+bool Goal::InShape(glm::vec2 point)
+{
+	int size = Cube::cube_face_ver_size / (Cube::cube_face_ver_cnt * 3);
+	float* face = 0;
+
+	for (int i = 0; i < size; i++)
+	{
+		//check per face
+		printf("\ngoal\n");
+		if (OnFace(point, curr_face_vertex_ + i * Cube::cube_face_ver_cnt * 3, Cube::cube_face_ver_cnt))
+		{
+			face = curr_face_vertex_ + i * Cube::cube_face_ver_cnt * 3;
+			break;
+		}
+	}
+
+	//if face == 0, point is not in shape
+	if (!face)
+		return 0;
+
+	cout << kShapeTypeName[type_] << '\n';
+
+	return 1;
+}
+
+void Goal::SaveModelData(glm::mat4 model)
+{
+	if (isfixed_ && issaved_) return;
+	if (!isfixed_ && !isdirty_) return;
+	model_ =  model * pre_model_;
+
+	glm::mat4 matrix = viewport * projection * view * model_;
+	for (int i = 0; i < Cube::cube_face_ver_size / 3; i++)
+	{
+		glm::vec3 prev, curr;
+		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
+		curr = matrix * glm::vec4(prev, 1.0f);
+		curr_face_vertex_[i * 3] = curr.x;
+		curr_face_vertex_[i * 3 + 1] = curr.y;
+		curr_face_vertex_[i * 3 + 2] = curr.z;
+	}
 }

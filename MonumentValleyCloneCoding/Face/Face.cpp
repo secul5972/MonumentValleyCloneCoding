@@ -29,6 +29,9 @@ bool Face::OnFace(glm::vec2 point, float* face, GLuint face_vertex_cnt)
 	glm::vec3 vecC(face[6], face[7], 0.0f);
 	glm::vec3 normal = glm::cross(vecB - vecA, vecC - vecA);
 
+	for (int j = 0; j < face_vertex_cnt; j++)
+		printf("(%f, %f)\n", face[j * 3], face[j * 3 + 1]);
+	printf("\n\n");
 	if (normal.z < 0)
 		return 0;
 

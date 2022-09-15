@@ -24,18 +24,8 @@ class Shape
 {
 protected:
 	//fixed variable
-	GLuint		type_;
-	bool		can_be_located_;
-	bool		isfixed_;
-	bool		issaved_ = false;
-
-	//can be changed per render
-	bool		isdirty_ = true;
-	float		*curr_face_vertex_ = 0;
-
-	glm::mat4 model_;
-
 	enum ShapeType {
+		DEFAULT,
 		AXES,
 		CUBE,
 		GOAL,
@@ -47,12 +37,23 @@ protected:
 		CORN,
 		SPHERE,
 		CHARACTER
-	}; 
+	};
+
+	ShapeType	type_;
+	bool		can_be_located_;
+	bool		isfixed_;
+	bool		issaved_ = false;
+
+	//can be changed per render
+	bool		isdirty_ = true;
+	float		*curr_face_vertex_ = 0;
+
+	glm::mat4 model_;
 
 	static const string kShapeTypeName[];
 
 public:
-	Shape(GLuint type = 0, bool can_be_located = false, bool isfixed = true) : type_(type), can_be_located_(can_be_located), isfixed_(isfixed) {};
+	Shape(ShapeType type = DEFAULT, bool can_be_located = false, bool isfixed = true) : type_(type), can_be_located_(can_be_located), isfixed_(isfixed) {};
 
 	void SetCanBeLocated(bool can_be_located);
 	void SetIsFixed(bool isfixed);
@@ -65,7 +66,7 @@ public:
 	virtual void MakeBuffer();
 	virtual void MakeFaceVertex();
 	virtual void FreeVertex();
-	virtual bool OnShape(glm::vec2);
+	virtual bool InShape(glm::vec2);
 	virtual void SaveModelData(glm::mat4);
 };
 
@@ -81,25 +82,35 @@ public:
 class Cube :public Shape, public Face
 {
 private:
+
 	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
 	static float* base_face_vertex_;
 public:
+	//size of cube_face_ver
+	static const GLuint cube_face_ver_size = 72;
+	//count of cube face(rectangle) vertex
+	static const GLuint cube_face_ver_cnt = 4;
 	Cube();
+	~Cube();
 	void Draw(glm::mat4);
 	void MakeBuffer();
-	bool OnShape(glm::vec2);
+	bool InShape(glm::vec2);
 	void SaveModelData(glm::mat4);
 };
 
-class Goal :public Shape
+class Goal :public Shape, public Face
 {
 private:
 	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static float* base_face_vertex_;
+	static glm::mat4 pre_model_;
 public:
 	Goal();
+	~Goal();
 	void Draw(glm::mat4 model);
 	void MakeBuffer();
-	void FreeVertex();
+	bool InShape(glm::vec2);
+	void SaveModelData(glm::mat4);
 };
 
 class L_shape :public Shape

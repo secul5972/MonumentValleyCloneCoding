@@ -116,6 +116,7 @@ void Level1::Draw(glm::mat4 worldModel)
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.3f, -1.1f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
+	shapes[7]->SaveModelData(model);
 	shapes[7]->Draw(model);
 }
 
@@ -127,7 +128,7 @@ void Level1::FindFace(double xpos, double ypos)
 	for (int i = 0; i < size; i++)
 	{
 		if (shapes[i]->GetCanBeLocated() == false) continue;
-		if (shapes[i]->OnShape(point)) break;
+		if (shapes[i]->InShape(point)) break;
 	}
 }
 
