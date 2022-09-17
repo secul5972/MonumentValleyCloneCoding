@@ -166,7 +166,5 @@ void Level1::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double y
 		//rotate angle of rotary knob
 		l_shape_angle += ellipse_area->CheckClickAndRotateInArea((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
 		l_shape_angle = fmod(l_shape_angle + 360, (double)360);
-
-
 	}
 }

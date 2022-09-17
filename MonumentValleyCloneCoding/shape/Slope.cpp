@@ -10,8 +10,8 @@ void Slope::MakeBuffer()
 {
 	float* slope_tri_ver;
 
-	slope_tri_ver = (float*)malloc(sizeof(float) * 216);
-	slope_face_ver = (float*)malloc(sizeof(float) * 48);
+	slope_tri_ver = new float[216];
+	slope_face_ver = new float[48];
 
 	glm::mat4 shapeModel(1.0f);
 	shapeModel = glm::shearY3D(shapeModel, 2.0f, 0.0f);
@@ -77,7 +77,7 @@ void Slope::MakeBuffer()
 	glEnableVertexAttribArray(0);
 
 	slope_face_ver_cnt = 48;
-	free(slope_tri_ver);
+	delete[] slope_tri_ver;
 }
 
 void Slope::FreeVertex()

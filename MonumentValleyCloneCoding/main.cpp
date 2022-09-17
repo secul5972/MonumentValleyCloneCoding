@@ -171,7 +171,6 @@ int main()
 	if (def_shader)
 		delete def_shader;
 
-	goal.FreeVertex();
 	slope.FreeVertex();
 	circle.FreeVertex();
 	sphere.FreeVertex();

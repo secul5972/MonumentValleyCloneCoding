@@ -1,37 +1,37 @@
 #include "../headerFile/Shape.h"
 
 GLuint Circle::tri_VAO, Circle::tri_VBO;
-float* circle_vertex;
-int circle_vertex_cnt;
+float* circle_ver;
+int circle_ver_cnt;
 
 Circle::Circle() : Shape(CIRCLE, false, true) {};
 
 void Circle::MakeBuffer()
 {
-	circle_vertex = (float*)malloc(sizeof(float) * 362 * 6);
+	circle_ver = new float[362 * 6];
 
-	circle_vertex[0] = 0.0f;
-	circle_vertex[1] = 0.0f;
-	circle_vertex[2] = 0.0f;
-	circle_vertex[3] = 0.0f;
-	circle_vertex[4] = 0.0f;
-	circle_vertex[5] = 0.0f;
+	circle_ver[0] = 0.0f;
+	circle_ver[1] = 0.0f;
+	circle_ver[2] = 0.0f;
+	circle_ver[3] = 0.0f;
+	circle_ver[4] = 0.0f;
+	circle_ver[5] = 0.0f;
 
 	for (int i = 1; i < 362; i++)
 	{
-		circle_vertex[i * 6] = 0.0f;
-		circle_vertex[i * 6 + 1] = 0.1f * sin(glm::radians(float(i - 1)));
-		circle_vertex[i * 6 + 2] = 0.1f * cos(glm::radians(float(i - 1)));
-		circle_vertex[i * 6 + 3] = 0.0f;
-		circle_vertex[i * 6 + 4] = 0.0f;
-		circle_vertex[i * 6 + 5] = 0.0f;
+		circle_ver[i * 6] = 0.0f;
+		circle_ver[i * 6 + 1] = 0.1f * sin(glm::radians(float(i - 1)));
+		circle_ver[i * 6 + 2] = 0.1f * cos(glm::radians(float(i - 1)));
+		circle_ver[i * 6 + 3] = 0.0f;
+		circle_ver[i * 6 + 4] = 0.0f;
+		circle_ver[i * 6 + 5] = 0.0f;
 	}
 
-	circle_vertex_cnt = 362;
+	circle_ver_cnt = 362;
 
 	glGenBuffers(1, &tri_VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * circle_vertex_cnt * 6, circle_vertex, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * circle_ver_cnt * 6, circle_ver, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &tri_VAO);
 	glBindVertexArray(tri_VAO);
@@ -44,8 +44,8 @@ void Circle::MakeBuffer()
 
 void Circle::FreeVertex()
 {
-	if (circle_vertex)
-		free(circle_vertex);
+	if (circle_ver)
+		delete[] circle_ver;
 }
 
 void Circle::Draw(glm::mat4 model)
@@ -59,7 +59,7 @@ void Circle::Draw(glm::mat4 model)
 	def_shader->setMat4("view", view);
 	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
 	glBindVertexArray(tri_VAO);
-	glDrawArrays(GL_TRIANGLE_FAN, 0, circle_vertex_cnt);
+	glDrawArrays(GL_TRIANGLE_FAN, 0, circle_ver_cnt);
 
 	def_shader->unuse();
 }
