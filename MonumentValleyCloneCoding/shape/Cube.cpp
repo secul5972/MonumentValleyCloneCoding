@@ -109,14 +109,15 @@ GLuint Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 
 float* Cube::base_face_vertex_;
 
-Cube::Cube() : Shape(CUBE, true, true)
+Cube::Cube() : Shape(CUBE, true, true), Movement(face_cnt_)
 {
 	curr_face_vertex_ = new float[face_ver_size_];
+	MakeFaceDirFlag();
 };
 
 Cube::~Cube()
 {
-	delete []curr_face_vertex_;
+	delete[] curr_face_vertex_;
 }
 
 void Cube::MakeBuffer()
@@ -171,17 +172,17 @@ void Cube::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Cube::InShape(glm::vec2 point)
+float* Cube::InShape(glm::vec2 point, int* dir)
 {
-	int size = face_ver_size_ / (face_ver_cnt_ * 3);
 	float* face = 0;
+	int curr_dir = -1;
 
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < face_cnt_; i++)
 	{
-		//check per face
 		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
 		{
 			face = curr_face_vertex_ + i * Cube::face_ver_cnt_ * 3;
+			curr_dir = GetFaceDirFlag(i);
 			break;
 		}
 	}
@@ -190,6 +191,7 @@ float* Cube::InShape(glm::vec2 point)
 	if (!face)
 		return 0;
 
+	*dir = curr_dir;
 	return face;
 }
 
@@ -214,4 +216,12 @@ void Cube::SaveModelData(glm::mat4 model)
 const int Cube::GetFaceVerCnt()
 {
 	return face_ver_cnt_;
+}
+
+void Cube::MakeFaceDirFlag()
+{
+	for (int i = 0; i < face_cnt_; i++)
+	{
+		face_dir_flag_[i] = 0;
+	}
 }

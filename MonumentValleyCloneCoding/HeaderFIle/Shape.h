@@ -6,6 +6,7 @@
 
 #include "Shader.h"
 #include "Face.h"
+#include "Movement.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -23,7 +24,7 @@ extern Shader* def_shader;
 class Shape
 {
 protected:
-	//fixed variable
+
 	enum ShapeType {
 		DEFAULT,
 		AXES,
@@ -39,36 +40,43 @@ protected:
 		CHARACTER
 	};
 
-	ShapeType		type_;
-	bool			can_be_located_;
-	bool			isfixed_;
-	bool			issaved_ = false;
-
-	//can be changed per render
-	bool			isdirty_ = true;
-	float			*curr_face_vertex_ = 0;
-
-	glm::mat4		model_;
-
 	static const	string kShapeTypeName[];
 
+	//const로 고칠 필요가 있다.
+	//shape Type
+	ShapeType		type_;
+	//player can be located on shape
+	bool			can_be_located_;
+	//this shape do not rotate
+	bool			isfixed_;
+
+
+	//
+	bool			issaved_ = false;
+	//need to update face vertex position
+	bool			isdirty_ = true;
+	//current face vertex position
+	float			*curr_face_vertex_ = 0;
+	//current model matrix
+	glm::mat4		model_;
+
 public:
-	Shape(ShapeType type = DEFAULT, bool can_be_located = false, bool isfixed = true) : type_(type), can_be_located_(can_be_located), isfixed_(isfixed) {};
+	Shape(ShapeType, bool, bool);
 
-	void SetCanBeLocated(bool can_be_located);
-	void SetIsFixed(bool isfixed);
-	void SetIsDirty(bool isdirty);
-	bool GetCanBeLocated();
-	int GetShapeType();
-	bool GetIsFixed();
-	bool GetIsDirty();
+	void				SetCanBeLocated(bool can_be_located);
+	void				SetIsFixed(bool isfixed);
+	void				SetIsDirty(bool isdirty);
+	bool				GetCanBeLocated();
+	int					GetShapeType();
+	bool				GetIsFixed();
+	bool				GetIsDirty();
 
-	virtual void Draw(glm::mat4);
-	virtual void MakeBuffer();
-	virtual void MakeFaceVertex();
-	virtual void FreeVertex();
-	virtual float* InShape(glm::vec2);
-	virtual void SaveModelData(glm::mat4);
+	virtual void		Draw(glm::mat4);
+	virtual void		MakeBuffer();
+	virtual void		MakeFaceVertex();
+	virtual void		FreeVertex();
+	virtual float*		InShape(glm::vec2, int *);
+	virtual void		SaveModelData(glm::mat4);
 	virtual const int	GetFaceVerCnt();
 };
 
@@ -81,56 +89,62 @@ public:
 	void Draw(glm::mat4);
 };
 
-class Cube :public Shape, public Face
+class Cube :public Shape, public Face, public Movement
 {
 private:
 	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
 	static float*		base_face_vertex_;
 	static const int	face_ver_size_ = 72;
+	static const int	face_cnt_ = 6;
 	static const int	face_ver_cnt_ = 4;
 public:
 	Cube();
 	~Cube();
-	void Draw(glm::mat4);
-	void MakeBuffer();
-	float* InShape(glm::vec2);
-	void SaveModelData(glm::mat4);
+	void		Draw(glm::mat4);
+	void		MakeBuffer();
+	float*		InShape(glm::vec2, int*);
+	void		SaveModelData(glm::mat4);
 	const int	GetFaceVerCnt();
+	void		MakeFaceDirFlag();
 };
 
-class Goal :public Shape, public Face
+class Goal :public Shape, public Face, public Movement
 {
 private:
 	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
 	static float*		base_face_vertex_;
 	static const int	face_ver_size_ = 72;
+	static const int	face_cnt_ = 6;
 	static const int	face_ver_cnt_ = 4;
 	static glm::mat4	pre_model_;
 public:
 	Goal();
 	~Goal();
-	void	Draw(glm::mat4 model);
-	void	MakeBuffer();
-	float*	InShape(glm::vec2);
-	void	SaveModelData(glm::mat4);
+	void		Draw(glm::mat4 model);
+	void		MakeBuffer();
+	float*		InShape(glm::vec2, int*);
+	void		SaveModelData(glm::mat4);
 	const int	GetFaceVerCnt();
+	void		MakeFaceDirFlag();
 };
 
-class L_shape :public Shape, public Face
+class L_shape :public Shape, public Face, public Movement
 {
 private:
 	Cube				cube;
 	static float*		base_face_vertex_;
 	static const int	face_ver_size_ = 168;
+	static const int	face_cnt_ = 14;
 	static const int	face_ver_cnt_ = 4;
 public:
 	L_shape();
 	~L_shape();
 	void		MakeFaceVertex();
 	void		Draw(glm::mat4 model);
-	float*		InShape(glm::vec2);
+	float*		InShape(glm::vec2, int*);
 	void		SaveModelData(glm::mat4);
 	const int	GetFaceVerCnt();
+	void		MakeFaceDirFlag();
 };
 
 class Slope :public Shape

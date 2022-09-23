@@ -131,24 +131,28 @@ void Level1::FindFace(double xpos, double ypos)
 	float		depth = 1;
 	int			type = 0;
 	int			ver_cnt = 0;
+	int			dir = 0;
 
 	for (int i = 0; i < size; i++)
 	{
 		float*	curr_face;
 		float	curr_depth;
+		int		curr_dir;
 
 		if (shapes[i]->GetCanBeLocated() == false) continue;
-		if ((curr_face = shapes[i]->InShape(point)))
+		if ((curr_face = shapes[i]->InShape(point, &curr_dir)))
 		{
 			curr_depth = AverDepth(curr_face, shapes[i]->GetFaceVerCnt());
 			if (curr_depth > depth) continue;
 			face = curr_face;
 			depth = curr_depth;
+			dir = curr_dir;
 			ver_cnt = shapes[i]->GetFaceVerCnt();
 			type = (int)shapes[i]->GetShapeType();
 		}
 	}
 	printf("type: %d\n", type);
+	printf("dir: %d\n", dir);
 	PrintFace(face, ver_cnt);
 }
 
@@ -166,7 +170,7 @@ void Level1::mouse_button_callback(GLFWwindow* window, int button, int action, i
 	{
 		left_mouse_button_down = true;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		printf("mousepos: %f %f\n", xpos, SCR_HEIGHT - ypos);
+		printf("\nmousepos: %f %f\n", xpos, SCR_HEIGHT - ypos);
 		level1->FindFace((float)xpos, (float)(SCR_HEIGHT - ypos));
 		
 	}

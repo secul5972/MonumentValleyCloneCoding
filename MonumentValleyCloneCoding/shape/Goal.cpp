@@ -6,14 +6,15 @@ glm::mat4 Goal::pre_model_;
 
 extern float cube_face_ver[];
 
-Goal::Goal() : Shape(GOAL, true, true)
+Goal::Goal() : Shape(GOAL, true, true), Movement(face_cnt_)
 {
 	curr_face_vertex_ = new float[face_ver_size_];
+	MakeFaceDirFlag();
 }
 
 Goal::~Goal()
 {
-	delete []curr_face_vertex_;
+	delete[] curr_face_vertex_;
 }
 
 void Goal::MakeBuffer()
@@ -83,8 +84,8 @@ void Goal::MakeBuffer()
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	delete []goal_tri_ver;
-	delete []goal_line_ver;
+	delete[] goal_tri_ver;
+	delete[] goal_line_ver;
 	base_face_vertex_ = cube_face_ver;
 }
 
@@ -110,18 +111,17 @@ void Goal::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Goal::InShape(glm::vec2 point)
+float* Goal::InShape(glm::vec2 point, int* dir)
 {
-	int size = face_ver_size_ / (face_ver_cnt_ * 3);
 	float* face = 0;
+	int curr_dir = -1;
 
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < face_cnt_; i++)
 	{
-		//check per face
-		//printf("\ngoal\n");
 		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
 		{
 			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
+			curr_dir = GetFaceDirFlag(i);
 			break;
 		}
 	}
@@ -130,6 +130,7 @@ float* Goal::InShape(glm::vec2 point)
 	if (!face)
 		return 0;
 
+	*dir = curr_dir;
 	return face;
 }
 
@@ -154,4 +155,12 @@ void Goal::SaveModelData(glm::mat4 model)
 const int Goal::GetFaceVerCnt()
 {
 	return face_ver_cnt_;
+}
+
+void Goal::MakeFaceDirFlag()
+{
+	for (int i = 0; i < face_cnt_; i++)
+	{
+		face_dir_flag_[i] = 0;
+	}
 }

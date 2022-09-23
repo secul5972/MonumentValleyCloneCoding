@@ -19,6 +19,7 @@
     <ClCompile Include="Shape\Sphere.cpp" />
     <ClCompile Include="Shape\Shape.cpp" />
     <ClCompile Include="Face\Face.cpp" />
+    <ClCompile Include="Movement\Movement.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headerFile\AdditionalMathFunction.h" />
@@ -30,6 +31,7 @@
     <ClInclude Include="headerFile\Shader.h" />
     <ClInclude Include="headerFile\ClickArea.h" />
     <ClInclude Include="headerFile\Face.h" />
+    <ClInclude Include="headerFile\Movement.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />

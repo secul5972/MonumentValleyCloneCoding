@@ -2,18 +2,17 @@
 
 float* L_shape::base_face_vertex_;
 
-L_shape::L_shape() : Shape(L_SHAPE, true, true)
+L_shape::L_shape() : Shape(L_SHAPE, true, true), Movement(face_cnt_)
 {
 	base_face_vertex_ = new float[face_ver_size_];
 	curr_face_vertex_ = new float[face_ver_size_];
+	MakeFaceDirFlag();
 }
 
 L_shape::~L_shape()
 {
-	if (base_face_vertex_)
-		delete[] base_face_vertex_;
-	if (curr_face_vertex_)
-		delete[] curr_face_vertex_;
+	delete[] base_face_vertex_;
+	delete[] curr_face_vertex_;
 }
 
 void L_shape::MakeFaceVertex()
@@ -38,8 +37,7 @@ void L_shape::MakeFaceVertex()
 
 	for (int i = 0; i < 6; i++)
 	{
-		if (i == 3 || i == 5)
-			continue;
+		if (i == 3 || i == 5) continue;
 		for (int j = 0; j < 4; j++) {
 			base_face_vertex_[idx * 3] = cube_face_ver[i * 3 * face_ver_cnt_ + j * 3];
 			base_face_vertex_[idx * 3 + 1] = cube_face_ver[i * 3 * face_ver_cnt_ + j * 3 + 1];
@@ -52,8 +50,9 @@ void L_shape::MakeFaceVertex()
 	pre_model = glm::rotate(pre_model, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
 	pre_model = glm::scale(pre_model, glm::vec3(4.0f, 1.0f, 1.0f));
 
-	for (int i = 1; i < 6; i++)
+	for (int i = 0; i < 6; i++)
 	{
+		if (i == 3) continue;
 		for (int j = 0; j < 4; j++) {
 			glm::vec4 tmp(cube_face_ver[i * 3 * face_ver_cnt_ + j * 3], cube_face_ver[i * 3 * face_ver_cnt_ + j * 3 + 1], cube_face_ver[i * 3 * face_ver_cnt_ + j * 3 + 2], 1.0f);
 			tmp = pre_model * tmp;
@@ -85,18 +84,17 @@ void L_shape::Draw(glm::mat4 model)
 	cube.Draw(shapeModel);
 }
 
-float* L_shape::InShape(glm::vec2 point)
+float* L_shape::InShape(glm::vec2 point, int* dir)
 {
-	int size = face_ver_size_ / (face_ver_cnt_ * 3);
 	float* face = 0;
+	int curr_dir = -1;
 
-	for (int i = 0; i < size; i++)
+	for (int i = 0; i < face_cnt_; i++)
 	{
-		//check per face
-	//	printf("\nL_shape\n");
 		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
 		{
 			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
+			curr_dir = GetFaceDirFlag(i);
 			break;
 		}
 	}
@@ -105,6 +103,7 @@ float* L_shape::InShape(glm::vec2 point)
 	if (!face)
 		return 0;
 	
+	*dir = curr_dir;
 	return face;
 }
 
@@ -129,4 +128,36 @@ void L_shape::SaveModelData(glm::mat4 model)
 const int L_shape::GetFaceVerCnt()
 {
 	return face_ver_cnt_;
+}
+
+void L_shape::MakeFaceDirFlag()
+{	
+	// bottom
+	face_dir_flag_[0] = 1;
+	// right
+	face_dir_flag_[1] = 1;
+	// front
+	face_dir_flag_[2] = 0;
+	// up
+	face_dir_flag_[3] = 1;
+	// left
+	face_dir_flag_[4] = 1;
+	// back
+	face_dir_flag_[5] = 0;
+	// bottom
+	face_dir_flag_[6] = 0;
+	// right
+	face_dir_flag_[7] = 0;
+	// up
+	face_dir_flag_[8] = 0;
+	// back
+	face_dir_flag_[9] = 0;
+	// bottom
+	face_dir_flag_[10] = 1;
+	// right
+	face_dir_flag_[11] = 1;
+	// up
+	face_dir_flag_[12] = 1;
+	// left
+	face_dir_flag_[13] = 1;
 }
