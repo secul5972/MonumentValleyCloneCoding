@@ -59,6 +59,7 @@ public:
 	void SetIsFixed(bool isfixed);
 	void SetIsDirty(bool isdirty);
 	bool GetCanBeLocated();
+	int GetShapeType();
 	bool GetIsFixed();
 	bool GetIsDirty();
 
@@ -66,7 +67,7 @@ public:
 	virtual void MakeBuffer();
 	virtual void MakeFaceVertex();
 	virtual void FreeVertex();
-	virtual bool InShape(glm::vec2);
+	virtual float* InShape(glm::vec2);
 	virtual void SaveModelData(glm::mat4);
 };
 
@@ -94,7 +95,7 @@ public:
 	~Cube();
 	void Draw(glm::mat4);
 	void MakeBuffer();
-	bool InShape(glm::vec2);
+	float* InShape(glm::vec2);
 	void SaveModelData(glm::mat4);
 };
 
@@ -109,18 +110,26 @@ public:
 	~Goal();
 	void Draw(glm::mat4 model);
 	void MakeBuffer();
-	bool InShape(glm::vec2);
+	float* InShape(glm::vec2);
 	void SaveModelData(glm::mat4);
 };
 
-class L_shape :public Shape
+class L_shape :public Shape, public Face
 {
 private:
 	Cube cube;
+	static float* base_face_vertex_;
 public:
+	//size of cube_face_ver
+	static const GLuint l_shape_face_ver_size = 168;
+	//count of cube face(rectangle) vertex
+	static const GLuint l_shape_face_ver_cnt = 4;
 	L_shape();
+	~L_shape();
 	void MakeFaceVertex();
 	void Draw(glm::mat4 model);
+	float* InShape(glm::vec2);
+	void SaveModelData(glm::mat4);
 };
 
 class Slope :public Shape

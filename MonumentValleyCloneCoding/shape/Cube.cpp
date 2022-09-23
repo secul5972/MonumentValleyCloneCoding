@@ -68,19 +68,19 @@ float cube_line_ver[] = {
 };
 
 float cube_face_ver[] = {
-	// back
+	// back, x
 	-0.1f, -0.1f, -0.1f,
 	-0.1f, -0.1f,  0.1f,
 	-0.1f,  0.1f,  0.1f,
 	-0.1f,  0.1f, -0.1f,
 
-	// bottom
+	// bottom, y
 	 0.1f, -0.1f,  0.1f,
 	-0.1f, -0.1f,  0.1f,
 	-0.1f, -0.1f, -0.1f,
 	 0.1f, -0.1f, -0.1f,
 
-	//right
+	//right, z
 	 0.1f, -0.1f, -0.1f,
 	-0.1f, -0.1f, -0.1f,
 	-0.1f,  0.1f, -0.1f,
@@ -171,7 +171,7 @@ void Cube::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-bool Cube::InShape(glm::vec2 point)
+float* Cube::InShape(glm::vec2 point)
 {
 	int size = cube_face_ver_size / (cube_face_ver_cnt * 3);
 	float* face = 0;
@@ -190,9 +190,7 @@ bool Cube::InShape(glm::vec2 point)
 	if (!face)
 		return 0;
 
-	cout << kShapeTypeName[type_] << '\n';
-
-	return 1;
+	return face;
 }
 
 void Cube::SaveModelData(glm::mat4 model)

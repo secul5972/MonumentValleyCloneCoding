@@ -110,7 +110,7 @@ void Goal::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-bool Goal::InShape(glm::vec2 point)
+float* Goal::InShape(glm::vec2 point)
 {
 	int size = Cube::cube_face_ver_size / (Cube::cube_face_ver_cnt * 3);
 	float* face = 0;
@@ -118,7 +118,7 @@ bool Goal::InShape(glm::vec2 point)
 	for (int i = 0; i < size; i++)
 	{
 		//check per face
-		printf("\ngoal\n");
+		//printf("\ngoal\n");
 		if (OnFace(point, curr_face_vertex_ + i * Cube::cube_face_ver_cnt * 3, Cube::cube_face_ver_cnt))
 		{
 			face = curr_face_vertex_ + i * Cube::cube_face_ver_cnt * 3;
@@ -130,9 +130,7 @@ bool Goal::InShape(glm::vec2 point)
 	if (!face)
 		return 0;
 
-	cout << kShapeTypeName[type_] << '\n';
-
-	return 1;
+	return face;
 }
 
 void Goal::SaveModelData(glm::mat4 model)

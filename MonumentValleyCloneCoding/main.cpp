@@ -95,7 +95,7 @@ int main()
 	Goal goal;
 	Slope slope;
 	Circle circle;
-	L_shape d;
+	L_shape l_shape;
 
 	Cylinder cylinder;
 	Rotary_Knob rotary_knob;
@@ -112,6 +112,8 @@ int main()
 	cylinder.MakeBuffer();
 	corn.MakeBuffer();
 	sphere.MakeBuffer();
+
+	l_shape.MakeFaceVertex();
 
 	// light setting
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);

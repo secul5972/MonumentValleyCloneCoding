@@ -49,12 +49,14 @@ void Level1::Draw(glm::mat4 worldModel)
 	//l_shape
 	model = worldModel;
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
+	shapes[0]->SaveModelData(model);
 	shapes[0]->Draw(model);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(1.8f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
+	shapes[1]->SaveModelData(model);
 	shapes[1]->Draw(model);
 
 	//character
@@ -96,6 +98,7 @@ void Level1::Draw(glm::mat4 worldModel)
 	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
+	shapes[4]->SaveModelData(model);
 	shapes[4]->Draw(model);
 
 	//cube
@@ -124,12 +127,22 @@ void Level1::FindFace(double xpos, double ypos)
 {
 	int size = sizeof(shapes) / sizeof(Shape*);
 	glm::vec2 point(xpos, ypos);
+	float* face = 0;
+	int type = 0;
 
 	for (int i = 0; i < size; i++)
 	{
+		float* curr_face;
+
 		if (shapes[i]->GetCanBeLocated() == false) continue;
-		if (shapes[i]->InShape(point)) break;
+		if ((curr_face = shapes[i]->InShape(point)))
+		{
+			//if (curr_face[2] > face[2]) continue;
+			face = curr_face;
+			type = (int)shapes[i]->GetShapeType();
+		}
 	}
+	printf("%d\n", type);
 }
 
 Level1::~Level1()
