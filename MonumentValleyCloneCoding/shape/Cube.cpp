@@ -111,7 +111,7 @@ float* Cube::base_face_vertex_;
 
 Cube::Cube() : Shape(CUBE, true, true)
 {
-	curr_face_vertex_ = new float[cube_face_ver_size];
+	curr_face_vertex_ = new float[face_ver_size_];
 };
 
 Cube::~Cube()
@@ -173,15 +173,15 @@ void Cube::Draw(glm::mat4 model)
 
 float* Cube::InShape(glm::vec2 point)
 {
-	int size = cube_face_ver_size / (cube_face_ver_cnt * 3);
+	int size = face_ver_size_ / (face_ver_cnt_ * 3);
 	float* face = 0;
 
 	for (int i = 0; i < size; i++)
 	{
 		//check per face
-		if (OnFace(point, curr_face_vertex_ + i * cube_face_ver_cnt * 3, cube_face_ver_cnt))
+		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
 		{
-			face = curr_face_vertex_ + i * Cube::cube_face_ver_cnt * 3;
+			face = curr_face_vertex_ + i * Cube::face_ver_cnt_ * 3;
 			break;
 		}
 	}
@@ -200,7 +200,7 @@ void Cube::SaveModelData(glm::mat4 model)
 	model_ = model;
 
 	glm::mat4 matrix = viewport * projection * view * model;
-	for (int i = 0; i < cube_face_ver_size / 3; i++)
+	for (int i = 0; i < face_ver_size_ / 3; i++)
 	{
 		glm::vec3 prev, curr;
 		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
@@ -209,4 +209,9 @@ void Cube::SaveModelData(glm::mat4 model)
 		curr_face_vertex_[i * 3 + 1] = curr.y;
 		curr_face_vertex_[i * 3 + 2] = curr.z;
 	}
+}
+
+const int Cube::GetFaceVerCnt()
+{
+	return face_ver_cnt_;
 }

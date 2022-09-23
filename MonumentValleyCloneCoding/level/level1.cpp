@@ -125,24 +125,31 @@ void Level1::Draw(glm::mat4 worldModel)
 
 void Level1::FindFace(double xpos, double ypos)
 {
-	int size = sizeof(shapes) / sizeof(Shape*);
-	glm::vec2 point(xpos, ypos);
-	float* face = 0;
-	int type = 0;
+	int			size = sizeof(shapes) / sizeof(Shape*);
+	glm::vec2	point(xpos, ypos);
+	float*		face = 0;
+	float		depth = 1;
+	int			type = 0;
+	int			ver_cnt = 0;
 
 	for (int i = 0; i < size; i++)
 	{
-		float* curr_face;
+		float*	curr_face;
+		float	curr_depth;
 
 		if (shapes[i]->GetCanBeLocated() == false) continue;
 		if ((curr_face = shapes[i]->InShape(point)))
 		{
-			//if (curr_face[2] > face[2]) continue;
+			curr_depth = AverDepth(curr_face, shapes[i]->GetFaceVerCnt());
+			if (curr_depth > depth) continue;
 			face = curr_face;
+			depth = curr_depth;
+			ver_cnt = shapes[i]->GetFaceVerCnt();
 			type = (int)shapes[i]->GetShapeType();
 		}
 	}
-	printf("%d\n", type);
+	printf("type: %d\n", type);
+	PrintFace(face, ver_cnt);
 }
 
 Level1::~Level1()
@@ -159,7 +166,7 @@ void Level1::mouse_button_callback(GLFWwindow* window, int button, int action, i
 	{
 		left_mouse_button_down = true;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		printf("%f %f\n", xpos, SCR_HEIGHT - ypos);
+		printf("mousepos: %f %f\n", xpos, SCR_HEIGHT - ypos);
 		level1->FindFace((float)xpos, (float)(SCR_HEIGHT - ypos));
 		
 	}
@@ -179,5 +186,24 @@ void Level1::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double y
 		//rotate angle of rotary knob
 		l_shape_angle += ellipse_area->CheckClickAndRotateInArea((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
 		l_shape_angle = fmod(l_shape_angle + 360, (double)360);
+	}
+}
+
+float Level1::AverDepth(float* face, int ver_cnt)
+{
+	float ret = 0;
+
+	for (int i = 0; i < ver_cnt; i++)
+	{
+		ret += face[i * 3 + 2];
+	}
+	return ret / ver_cnt;
+}
+
+void Level1::PrintFace(float* face, int ver_cnt)
+{
+	for (int i = 0; i < ver_cnt; i++)
+	{
+		printf("point%d: %f %f %f\n",i , face[i * 3], face[i * 3 + 1], face[i * 3 + 2]);
 	}
 }

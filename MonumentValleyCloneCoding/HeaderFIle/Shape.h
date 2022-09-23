@@ -39,18 +39,18 @@ protected:
 		CHARACTER
 	};
 
-	ShapeType	type_;
-	bool		can_be_located_;
-	bool		isfixed_;
-	bool		issaved_ = false;
+	ShapeType		type_;
+	bool			can_be_located_;
+	bool			isfixed_;
+	bool			issaved_ = false;
 
 	//can be changed per render
-	bool		isdirty_ = true;
-	float		*curr_face_vertex_ = 0;
+	bool			isdirty_ = true;
+	float			*curr_face_vertex_ = 0;
 
-	glm::mat4 model_;
+	glm::mat4		model_;
 
-	static const string kShapeTypeName[];
+	static const	string kShapeTypeName[];
 
 public:
 	Shape(ShapeType type = DEFAULT, bool can_be_located = false, bool isfixed = true) : type_(type), can_be_located_(can_be_located), isfixed_(isfixed) {};
@@ -69,6 +69,7 @@ public:
 	virtual void FreeVertex();
 	virtual float* InShape(glm::vec2);
 	virtual void SaveModelData(glm::mat4);
+	virtual const int	GetFaceVerCnt();
 };
 
 class Axes :public Shape
@@ -83,53 +84,53 @@ public:
 class Cube :public Shape, public Face
 {
 private:
-
-	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
-	static float* base_face_vertex_;
+	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static float*		base_face_vertex_;
+	static const int	face_ver_size_ = 72;
+	static const int	face_ver_cnt_ = 4;
 public:
-	//size of cube_face_ver
-	static const GLuint cube_face_ver_size = 72;
-	//count of cube face(rectangle) vertex
-	static const GLuint cube_face_ver_cnt = 4;
 	Cube();
 	~Cube();
 	void Draw(glm::mat4);
 	void MakeBuffer();
 	float* InShape(glm::vec2);
 	void SaveModelData(glm::mat4);
+	const int	GetFaceVerCnt();
 };
 
 class Goal :public Shape, public Face
 {
 private:
-	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
-	static float* base_face_vertex_;
-	static glm::mat4 pre_model_;
+	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static float*		base_face_vertex_;
+	static const int	face_ver_size_ = 72;
+	static const int	face_ver_cnt_ = 4;
+	static glm::mat4	pre_model_;
 public:
 	Goal();
 	~Goal();
-	void Draw(glm::mat4 model);
-	void MakeBuffer();
-	float* InShape(glm::vec2);
-	void SaveModelData(glm::mat4);
+	void	Draw(glm::mat4 model);
+	void	MakeBuffer();
+	float*	InShape(glm::vec2);
+	void	SaveModelData(glm::mat4);
+	const int	GetFaceVerCnt();
 };
 
 class L_shape :public Shape, public Face
 {
 private:
-	Cube cube;
-	static float* base_face_vertex_;
+	Cube				cube;
+	static float*		base_face_vertex_;
+	static const int	face_ver_size_ = 168;
+	static const int	face_ver_cnt_ = 4;
 public:
-	//size of cube_face_ver
-	static const GLuint l_shape_face_ver_size = 168;
-	//count of cube face(rectangle) vertex
-	static const GLuint l_shape_face_ver_cnt = 4;
 	L_shape();
 	~L_shape();
-	void MakeFaceVertex();
-	void Draw(glm::mat4 model);
-	float* InShape(glm::vec2);
-	void SaveModelData(glm::mat4);
+	void		MakeFaceVertex();
+	void		Draw(glm::mat4 model);
+	float*		InShape(glm::vec2);
+	void		SaveModelData(glm::mat4);
+	const int	GetFaceVerCnt();
 };
 
 class Slope :public Shape

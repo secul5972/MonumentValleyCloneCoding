@@ -4,8 +4,8 @@ float* L_shape::base_face_vertex_;
 
 L_shape::L_shape() : Shape(L_SHAPE, true, true)
 {
-	base_face_vertex_ = new float[l_shape_face_ver_size];
-	curr_face_vertex_ = new float[l_shape_face_ver_size];
+	base_face_vertex_ = new float[face_ver_size_];
+	curr_face_vertex_ = new float[face_ver_size_];
 }
 
 L_shape::~L_shape()
@@ -27,7 +27,7 @@ void L_shape::MakeFaceVertex()
 	for (int i = 1; i < 6; i++)
 	{
 		for (int j = 0; j < 4; j++) {
-			glm::vec4 tmp(cube_face_ver[i * 3 * l_shape_face_ver_cnt + j * 3], cube_face_ver[i * 3 * l_shape_face_ver_cnt + j * 3 + 1], cube_face_ver[i * 3 * l_shape_face_ver_cnt + j * 3 + 2], 1.0f);
+			glm::vec4 tmp(cube_face_ver[i * 3 * face_ver_cnt_ + j * 3], cube_face_ver[i * 3 * face_ver_cnt_ + j * 3 + 1], cube_face_ver[i * 3 * face_ver_cnt_ + j * 3 + 2], 1.0f);
 			tmp = pre_model * tmp;
 			base_face_vertex_[idx * 3] = tmp.x;
 			base_face_vertex_[idx * 3 + 1] = tmp.y;
@@ -41,9 +41,9 @@ void L_shape::MakeFaceVertex()
 		if (i == 3 || i == 5)
 			continue;
 		for (int j = 0; j < 4; j++) {
-			base_face_vertex_[idx * 3] = cube_face_ver[i * 3 * l_shape_face_ver_cnt + j * 3];
-			base_face_vertex_[idx * 3 + 1] = cube_face_ver[i * 3 * l_shape_face_ver_cnt + j * 3 + 1];
-			base_face_vertex_[idx * 3 + 2] = cube_face_ver[i * 3 * l_shape_face_ver_cnt + j * 3 + 2];
+			base_face_vertex_[idx * 3] = cube_face_ver[i * 3 * face_ver_cnt_ + j * 3];
+			base_face_vertex_[idx * 3 + 1] = cube_face_ver[i * 3 * face_ver_cnt_ + j * 3 + 1];
+			base_face_vertex_[idx * 3 + 2] = cube_face_ver[i * 3 * face_ver_cnt_ + j * 3 + 2];
 			idx++;
 		}
 	}
@@ -55,7 +55,7 @@ void L_shape::MakeFaceVertex()
 	for (int i = 1; i < 6; i++)
 	{
 		for (int j = 0; j < 4; j++) {
-			glm::vec4 tmp(cube_face_ver[i * 3 * l_shape_face_ver_cnt + j * 3], cube_face_ver[i * 3 * l_shape_face_ver_cnt + j * 3 + 1], cube_face_ver[i * 3 * l_shape_face_ver_cnt + j * 3 + 2], 1.0f);
+			glm::vec4 tmp(cube_face_ver[i * 3 * face_ver_cnt_ + j * 3], cube_face_ver[i * 3 * face_ver_cnt_ + j * 3 + 1], cube_face_ver[i * 3 * face_ver_cnt_ + j * 3 + 2], 1.0f);
 			tmp = pre_model * tmp;
 			base_face_vertex_[idx * 3] = tmp.x;
 			base_face_vertex_[idx * 3 + 1] = tmp.y;
@@ -87,16 +87,16 @@ void L_shape::Draw(glm::mat4 model)
 
 float* L_shape::InShape(glm::vec2 point)
 {
-	int size = l_shape_face_ver_size / (l_shape_face_ver_cnt * 3);
+	int size = face_ver_size_ / (face_ver_cnt_ * 3);
 	float* face = 0;
 
 	for (int i = 0; i < size; i++)
 	{
 		//check per face
 	//	printf("\nL_shape\n");
-		if (OnFace(point, curr_face_vertex_ + i * l_shape_face_ver_cnt * 3, l_shape_face_ver_cnt))
+		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
 		{
-			face = curr_face_vertex_ + i * l_shape_face_ver_cnt * 3;
+			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
 			break;
 		}
 	}
@@ -115,7 +115,7 @@ void L_shape::SaveModelData(glm::mat4 model)
 	model_ = model;
 
 	glm::mat4 matrix = viewport * projection * view * model_;
-	for (int i = 0; i < l_shape_face_ver_size / 3; i++)
+	for (int i = 0; i < face_ver_size_ / 3; i++)
 	{
 		glm::vec3 prev, curr;
 		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
@@ -124,4 +124,9 @@ void L_shape::SaveModelData(glm::mat4 model)
 		curr_face_vertex_[i * 3 + 1] = curr.y;
 		curr_face_vertex_[i * 3 + 2] = curr.z;
 	}
+}
+
+const int L_shape::GetFaceVerCnt()
+{
+	return face_ver_cnt_;
 }

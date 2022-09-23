@@ -33,8 +33,10 @@ public:
 	void FindFace(double xpos, double ypos);
 	~Level1();
 
-	static void mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-	static void mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
+	static void	mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+	static void	mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
+	float AverDepth(float*, int);
+	void PrintFace(float*, int);
 };
 
 #endif
