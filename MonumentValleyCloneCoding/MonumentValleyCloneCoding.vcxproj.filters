@@ -22,6 +22,7 @@
     <ClCompile Include="Movement\Movement.cpp" />
     <ClCompile Include="Shape\Cuboid.cpp" />
     <ClCompile Include="Shape\Line.cpp" />
+    <ClCompile Include="Math\Math.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headerFile\AdditionalMathFunction.h" />
@@ -34,6 +35,7 @@
     <ClInclude Include="headerFile\ClickArea.h" />
     <ClInclude Include="headerFile\Face.h" />
     <ClInclude Include="headerFile\Movement.h" />
+    <ClInclude Include="headerFile\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />

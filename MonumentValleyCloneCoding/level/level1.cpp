@@ -173,7 +173,7 @@ void Level1::FindFace(double xpos, double ypos)
 	printf("direction: %d\n", direction);
 	printf("aligned_pos: %f %f\n", aligned_pos.x, aligned_pos.y);
 	PrintFace(face, face_ver_cnt);
-	printf("line\n%f %f %f\n%f %f %f\n", line_vertices[0][0], line_vertices[0][1], line_vertices[0][2], line_vertices[1][0], line_vertices[1][1], line_vertices[1][2]);
+	printf("line\n(%f, %f, %f)\n(%f, %f, %f)\n", line_vertices[0][0], line_vertices[0][1], line_vertices[0][2], line_vertices[1][0], line_vertices[1][1], line_vertices[1][2]);
 }
 
 Level1::~Level1()
@@ -228,6 +228,6 @@ void Level1::PrintFace(float* face, int ver_cnt)
 {
 	for (int i = 0; i < ver_cnt; i++)
 	{
-		printf("point%d: %f %f %f\n",i , face[i * 3], face[i * 3 + 1], face[i * 3 + 2]);
+		printf("point%d: (%f, %f, %f)\n",i , face[i * 3], face[i * 3 + 1], face[i * 3 + 2]);
 	}
 }

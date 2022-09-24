@@ -8,6 +8,8 @@
 
 #include <algorithm>
 
+#include "Math.h"
+
 class Face
 {
 protected:

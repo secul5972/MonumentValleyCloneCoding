@@ -160,7 +160,7 @@ void Cuboid::MakeFaceDirFlag()
 	face_dir_flag_[0] = 0;
 	face_dir_flag_[1] = 1;
 	face_dir_flag_[2] = 1;
-	face_dir_flag_[3] = 1;
+	face_dir_flag_[3] = 0;
 	face_dir_flag_[4] = 1;
-	face_dir_flag_[5] = 0;
+	face_dir_flag_[5] = 1;
 }

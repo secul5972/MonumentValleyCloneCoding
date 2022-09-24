@@ -44,7 +44,7 @@ glm::vec2	AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt
 	glm::vec2 direc, ortho;
 
 	if (direction == 0)
-		return glm::vec2(-1.0f, -1.0f);
+		return point;
 
 	direc = glm::vec2(face[3] - face[0], face[4] - face[1]);
 	ortho = glm::vec2(face[6] - face[3], face[7] - face[4]);
@@ -64,7 +64,42 @@ glm::vec2	AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt
 
 	glm::vec2 aligned_pos(0.0f, 0.0f);
 
-	aligned_pos.x = (ortho.y * direc.x * point.x - direc.y * ortho.x * center.x) / (ortho.y * direc.x - direc.y * ortho.x);
-	aligned_pos.y = (aligned_pos.x - center.x) * direc.y / direc.x + center.y;
+	if (direc.x == 0)
+	{
+		aligned_pos.x = center.x;
+		if (ortho.y == 0)
+			aligned_pos.y = point.y;
+		else
+			aligned_pos.y = LinearEquation(ortho, point, 1, aligned_pos.x);
+	}
+	else if (direc.y == 0)
+	{
+		aligned_pos.y = center.y;
+		if (ortho.x == 0)
+			aligned_pos.x = point.x;
+		else
+			aligned_pos.x = LinearEquation(ortho, point, 0, aligned_pos.y);
+	}
+	else
+	{
+		aligned_pos.x = (direc.x * ortho.x * (point.y - center.y) + (direc.y * ortho.x * center.x - ortho.y * direc.x * point.x))
+			/ (direc.y * ortho.x - ortho.y * direc.x);
+		if (ortho.x == 0)
+		{
+			aligned_pos.x = point.x;
+			aligned_pos.y = LinearEquation(direc, center, 1, aligned_pos.x);
+		}
+		else if (ortho.y == 0)
+		{
+			aligned_pos.y = point.y;
+			aligned_pos.x = LinearEquation(direc, center, 0, aligned_pos.y);
+		}
+		else
+		{
+			aligned_pos.x = (direc.x * ortho.x * (point.y - center.y) + (direc.y * ortho.x * center.x - ortho.y * direc.x * point.x))
+				/ (direc.y * ortho.x - ortho.y * direc.x);
+			aligned_pos.y = LinearEquation(ortho, point, 1, aligned_pos.x);
+		}
+	}
 	return aligned_pos;
 }
