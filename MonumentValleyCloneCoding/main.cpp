@@ -92,6 +92,7 @@ int main()
 	// prepare_shapes
 	Axes axes;
 	Cube cube;
+	Cuboid cuboid;
 	Goal goal;
 	Slope slope;
 	Circle circle;
@@ -106,6 +107,7 @@ int main()
 	level1 = new Level1;
 
 	cube.MakeBuffer();
+	cuboid.MakeBuffer();
 	goal.MakeBuffer();
 	slope.MakeBuffer();
 	circle.MakeBuffer();

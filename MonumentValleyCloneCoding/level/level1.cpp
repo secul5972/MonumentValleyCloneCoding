@@ -32,7 +32,7 @@ Level1::Level1()
 	shapes[4]->SetCanBeLocated(true);
 	shapes[4]->SetIsFixed(false);
 
-	shapes[5] = new Cube();
+	shapes[5] = new Cuboid();
 	shapes[5]->SetCanBeLocated(true);
 
 	shapes[6] = new Slope();
@@ -46,7 +46,7 @@ void Level1::Draw(glm::mat4 worldModel)
 {
 	glm::mat4 model;
 
-	//l_shape
+	// l_shape
 	model = worldModel;
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	shapes[0]->SaveModelData(model);
@@ -59,7 +59,7 @@ void Level1::Draw(glm::mat4 worldModel)
 	shapes[1]->SaveModelData(model);
 	shapes[1]->Draw(model);
 
-	//character
+	// character
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 0.1f, 0.0f));
 	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
@@ -78,7 +78,7 @@ void Level1::Draw(glm::mat4 worldModel)
 			l_shape_angle -= deltaTime * 60;
 	}
 
-	//rotary_knob
+	// rotary_knob
 	model = worldModel;
 	glm::mat4 model2 = worldModel;
 	model2 = glm::translate(model2, glm::vec3(1.9f, 1.8f, 0.0f));
@@ -93,7 +93,7 @@ void Level1::Draw(glm::mat4 worldModel)
 	if (225 < l_shape_angle && l_shape_angle < 315)
 		worldModel = glm::translate(worldModel, glm::vec3(-1.8f, -1.8f, -1.8f));
 
-	//l_shape
+	// l_shape
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
@@ -101,21 +101,20 @@ void Level1::Draw(glm::mat4 worldModel)
 	shapes[4]->SaveModelData(model);
 	shapes[4]->Draw(model);
 
-	//cube
+	// cuboid
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.25f, 1.0f, 1.0f));
-	model = glm::scale(model, glm::vec3(4.0f, 1.0f, 1.0f));
 	shapes[5]->SaveModelData(model);
 	shapes[5]->Draw(model);
 
-	//slope
+	// slope
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.0f, -0.2f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	shapes[6]->Draw(model);
 
-	//goal
+	// goal
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.3f, -1.1f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));

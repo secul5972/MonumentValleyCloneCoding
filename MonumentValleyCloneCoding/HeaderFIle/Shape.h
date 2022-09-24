@@ -16,10 +16,13 @@
 #include <iostream>
 using namespace std;
 
-extern glm::mat4 viewport, projection, view;
-extern float cube_tri_ver[];
-extern float cube_face_ver[];
-extern Shader* def_shader;
+extern glm::mat4	viewport, projection, view;
+extern float		cube_tri_ver[];
+extern float		cube_line_ver[];
+extern float		cube_face_ver[];
+extern int			cube_tri_ver_cnt;
+extern int			cube_line_ver_cnt;
+extern Shader*		def_shader;
 
 class Shape
 {
@@ -29,6 +32,7 @@ protected:
 		DEFAULT,
 		AXES,
 		CUBE,
+		CUBOID,
 		GOAL,
 		L_SHAPE,
 		SLOPE,
@@ -100,6 +104,26 @@ private:
 public:
 	Cube();
 	~Cube();
+	void		Draw(glm::mat4);
+	void		MakeBuffer();
+	float*		InShape(glm::vec2, int*);
+	void		SaveModelData(glm::mat4);
+	const int	GetFaceVerCnt();
+	void		MakeFaceDirFlag();
+};
+
+class Cuboid :public Shape, public Face, public Movement
+{
+private:
+	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static float*		base_face_vertex_;
+	static const int	face_ver_size_ = 72;
+	static const int	face_cnt_ = 6;
+	static const int	face_ver_cnt_ = 4;
+	static glm::mat4	pre_model_;
+public:
+	Cuboid();
+	~Cuboid();
 	void		Draw(glm::mat4);
 	void		MakeBuffer();
 	float*		InShape(glm::vec2, int*);

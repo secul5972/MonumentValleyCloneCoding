@@ -105,6 +105,9 @@ float cube_face_ver[] = {
 	-0.1f,  0.1f,  0.1f
 };
 
+int cube_tri_ver_cnt = 216;
+int cube_line_ver_cnt = 48;
+
 GLuint Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 
 float* Cube::base_face_vertex_;
@@ -181,7 +184,7 @@ float* Cube::InShape(glm::vec2 point, int* dir)
 	{
 		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
 		{
-			face = curr_face_vertex_ + i * Cube::face_ver_cnt_ * 3;
+			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
 			curr_dir = GetFaceDirFlag(i);
 			break;
 		}
@@ -201,7 +204,7 @@ void Cube::SaveModelData(glm::mat4 model)
 	if (!isfixed_ && !isdirty_) return;
 	model_ = model;
 
-	glm::mat4 matrix = viewport * projection * view * model;
+	glm::mat4 matrix = viewport * projection * view * model_;
 	for (int i = 0; i < face_ver_size_ / 3; i++)
 	{
 		glm::vec3 prev, curr;

@@ -4,6 +4,7 @@ const string Shape::kShapeTypeName[] = {
 	"DEFAULT",
 	"AXES",
 	"CUBE",
+	"CUBOID",
 	"GOAL",
 	"L_SHAPE",
 	"SLOPE",

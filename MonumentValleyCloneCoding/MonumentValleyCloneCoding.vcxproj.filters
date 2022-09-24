@@ -20,6 +20,7 @@
     <ClCompile Include="Shape\Shape.cpp" />
     <ClCompile Include="Face\Face.cpp" />
     <ClCompile Include="Movement\Movement.cpp" />
+    <ClCompile Include="Shape\Cuboid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headerFile\AdditionalMathFunction.h" />
