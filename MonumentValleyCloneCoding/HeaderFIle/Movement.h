@@ -10,6 +10,9 @@ using namespace std;
 class Movement
 {
 protected:
+	// 0 : don't move
+	// 1 : use 0, 1 idx
+	// 2 : use 1, 2 idx
 	int *face_dir_flag_;
 public:
 	Movement(int cnt);

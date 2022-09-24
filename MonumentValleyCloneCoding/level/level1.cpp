@@ -12,6 +12,9 @@ bool l_shape_moving_flag = false;
 glm::vec2 prev_mouse_pos_in_model;
 extern Level1* level1;
 
+glm::vec2 test_point;
+extern Shader* test_shader;
+
 Level1::Level1()
 {
 	ellipse_area = new EllipseArea;
@@ -129,30 +132,36 @@ void Level1::FindFace(double xpos, double ypos)
 	float*		face = 0;
 	float		depth = 1;
 	int			type = 0;
-	int			ver_cnt = 0;
-	int			dir = 0;
+	int			face_ver_cnt = 0;
+	int			direction = 0;
 
 	for (int i = 0; i < size; i++)
 	{
 		float*	curr_face;
 		float	curr_depth;
-		int		curr_dir;
+		int		curr_direction;
 
 		if (shapes[i]->GetCanBeLocated() == false) continue;
-		if ((curr_face = shapes[i]->InShape(point, &curr_dir)))
+		if ((curr_face = shapes[i]->InShape(point, &curr_direction)))
 		{
 			curr_depth = AverDepth(curr_face, shapes[i]->GetFaceVerCnt());
 			if (curr_depth > depth) continue;
 			face = curr_face;
 			depth = curr_depth;
-			dir = curr_dir;
-			ver_cnt = shapes[i]->GetFaceVerCnt();
+			direction = curr_direction;
+			face_ver_cnt = shapes[i]->GetFaceVerCnt();
 			type = (int)shapes[i]->GetShapeType();
 		}
 	}
+
+	glm::vec2 aligned_pos = AlignPos(face, direction, point, face_ver_cnt);
+	test_point = aligned_pos;
 	printf("type: %d\n", type);
-	printf("dir: %d\n", dir);
-	PrintFace(face, ver_cnt);
+	printf("direction: %d\n", direction);
+	printf("aligned_pos: %f %f\n", aligned_pos.x, aligned_pos.y);
+	PrintFace(face, face_ver_cnt);
+
+
 }
 
 Level1::~Level1()

@@ -41,7 +41,8 @@ glm::mat4 viewport, projection, view, worldModel;
 glm::vec3 lightPos, lightColor;
 
 // shader
-Shader *def_shader;
+Shader* def_shader;
+Shader* test_shader;
 
 bool left_mouse_button_down = false;
 
@@ -85,6 +86,7 @@ int main()
 
 	// build and compile shaders
 	def_shader = new Shader("shader/default.vert", "shader/default.frag");
+	test_shader = new Shader("shader/test.vert", "shader/test.frag");
 
 	// viewport matrix
 	MakeViewportMatrix();

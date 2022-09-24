@@ -38,3 +38,33 @@ bool Face::InPolygon(glm::vec2 point, float* face, GLuint face_vertex_cnt) {
 	}
 	return in_poly;
 }
+
+glm::vec2	AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt)
+{
+	glm::vec2 direc, ortho;
+
+	if (direction == 0)
+		return glm::vec2(-1.0f, -1.0f);
+
+	direc = glm::vec2(face[3] - face[0], face[4] - face[1]);
+	ortho = glm::vec2(face[6] - face[3], face[7] - face[4]);
+	
+	if (direction == 2)
+		std::swap(direc, ortho);
+
+	glm::vec2 center(0.0f, 0.0f);
+
+	for (int i = 0; i < face_ver_cnt; i++)
+	{
+		center.x += face[i * 3];
+		center.y += face[i * 3 + 1];
+	}
+	center.x /= face_ver_cnt;
+	center.y /= face_ver_cnt;
+
+	glm::vec2 aligned_pos(0.0f, 0.0f);
+
+	aligned_pos.x = (ortho.y * direc.x * point.x - direc.y * ortho.x * center.x) / (ortho.y * direc.x - direc.y * ortho.x);
+	aligned_pos.y = (aligned_pos.x - center.x) * direc.y / direc.x + center.y;
+	return aligned_pos;
+}
