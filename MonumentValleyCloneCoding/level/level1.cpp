@@ -153,6 +153,7 @@ void Level1::FindFace(double xpos, double ypos)
 		}
 	}
 
+	//for debug
 	glm::vec2 aligned_pos = AlignPos(face, direction, point, face_ver_cnt);
 	line_vertices[0][0] = aligned_pos.x;
 	line_vertices[0][1] = aligned_pos.y;
@@ -211,17 +212,6 @@ void Level1::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double y
 		l_shape_angle += ellipse_area->CheckClickAndRotateInArea((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
 		l_shape_angle = fmod(l_shape_angle + 360, (double)360);
 	}
-}
-
-float Level1::AverDepth(float* face, int ver_cnt)
-{
-	float ret = 0;
-
-	for (int i = 0; i < ver_cnt; i++)
-	{
-		ret += face[i * 3 + 2];
-	}
-	return ret / ver_cnt;
 }
 
 void Level1::PrintFace(float* face, int ver_cnt)

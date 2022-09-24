@@ -39,7 +39,7 @@ bool Face::InPolygon(glm::vec2 point, float* face, GLuint face_vertex_cnt) {
 	return in_poly;
 }
 
-glm::vec2	AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt)
+glm::vec2 AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt)
 {
 	glm::vec2 direc, ortho;
 

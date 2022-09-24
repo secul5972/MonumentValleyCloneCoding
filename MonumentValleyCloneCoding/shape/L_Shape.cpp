@@ -86,16 +86,22 @@ void L_shape::Draw(glm::mat4 model)
 
 float* L_shape::InShape(glm::vec2 point, int* dir)
 {
-	float* face = 0;
-	int curr_dir = -1;
+	float*	face = 0;
+	float	depth = 1;
+	int		new_dir = -1;
+
 
 	for (int i = 0; i < face_cnt_; i++)
 	{
 		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
 		{
+			float	curr_depth;
+
+			curr_depth = AverDepth(curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_);
+			if (curr_depth > depth)continue;
+			depth = curr_depth;
 			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
-			curr_dir = GetFaceDirFlag(i);
-			break;
+			new_dir = GetFaceDirFlag(i);
 		}
 	}
 
@@ -103,7 +109,7 @@ float* L_shape::InShape(glm::vec2 point, int* dir)
 	if (!face)
 		return 0;
 	
-	*dir = curr_dir;
+	*dir = new_dir;
 	return face;
 }
 
