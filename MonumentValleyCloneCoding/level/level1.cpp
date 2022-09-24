@@ -12,8 +12,7 @@ bool l_shape_moving_flag = false;
 glm::vec2 prev_mouse_pos_in_model;
 extern Level1* level1;
 
-glm::vec2 test_point;
-extern Shader* test_shader;
+extern float line_vertices[2][3];
 
 Level1::Level1()
 {
@@ -155,13 +154,26 @@ void Level1::FindFace(double xpos, double ypos)
 	}
 
 	glm::vec2 aligned_pos = AlignPos(face, direction, point, face_ver_cnt);
-	test_point = aligned_pos;
+	line_vertices[0][0] = aligned_pos.x;
+	line_vertices[0][1] = aligned_pos.y;
+	line_vertices[0][2] = 0.0f;
+	line_vertices[1][0] = point.x;
+	line_vertices[1][1] = point.y;
+	line_vertices[1][2] = 0.0f;
+	for (int i = 0; i < 2; i++)
+	{
+		glm::vec4 tmp(line_vertices[i][0], line_vertices[i][1], line_vertices[i][2], 1.0f);
+		tmp = glm::inverse(viewport) * tmp;
+		line_vertices[i][0] = tmp.x;
+		line_vertices[i][1] = tmp.y;
+		line_vertices[i][2] = tmp.z;
+	}
+
 	printf("type: %d\n", type);
 	printf("direction: %d\n", direction);
 	printf("aligned_pos: %f %f\n", aligned_pos.x, aligned_pos.y);
 	PrintFace(face, face_ver_cnt);
-
-
+	printf("line\n%f %f %f\n%f %f %f\n", line_vertices[0][0], line_vertices[0][1], line_vertices[0][2], line_vertices[1][0], line_vertices[1][1], line_vertices[1][2]);
 }
 
 Level1::~Level1()

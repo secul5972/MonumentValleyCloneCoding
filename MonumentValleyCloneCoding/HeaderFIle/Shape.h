@@ -248,4 +248,13 @@ public:
 	void Draw(glm::mat4 model);
 };
 
+class Line :public Shape
+{
+private:
+	static GLuint line_VAO, line_VBO;
+public:
+	Line();
+	void Draw(glm::mat4);
+};
+
 #endif

@@ -105,6 +105,7 @@ int main()
 	Corn corn;
 	Character character;
 	Sphere sphere;
+	Line line;
 
 	level1 = new Level1;
 
@@ -168,7 +169,7 @@ int main()
 		//m.Draw(defaultShader, worldModel);
 		//n.Draw(defaultShader, worldModel);
 		//o.Draw(defaultShader, worldModel);
-		
+		line.Draw(worldModel);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
