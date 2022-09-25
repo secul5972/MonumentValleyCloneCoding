@@ -178,6 +178,7 @@ int main()
 	if (def_shader)
 		delete def_shader;
 
+	l_shape.DelFaceVertex();
 	slope.FreeVertex();
 	circle.FreeVertex();
 	sphere.FreeVertex();

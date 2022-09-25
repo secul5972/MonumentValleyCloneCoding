@@ -39,12 +39,12 @@ bool Face::InPolygon(glm::vec2 point, float* face, GLuint face_vertex_cnt) {
 	return in_poly;
 }
 
-glm::vec2 AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt)
+glm::vec3 AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt)
 {
 	glm::vec2 direc, ortho;
 
 	if (direction == 0)
-		return point;
+		return glm::vec3(point, 0.0f);
 
 	direc = glm::vec2(face[3] - face[0], face[4] - face[1]);
 	ortho = glm::vec2(face[6] - face[3], face[7] - face[4]);
@@ -62,8 +62,9 @@ glm::vec2 AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt
 	center.x /= face_ver_cnt;
 	center.y /= face_ver_cnt;
 
-	glm::vec2 aligned_pos(0.0f, 0.0f);
+	glm::vec3 aligned_pos(0.0f, 0.0f, 0.0f);
 
+	//find x, y using Linear Equation
 	if (direc.x == 0)
 	{
 		aligned_pos.x = center.x;
@@ -101,5 +102,10 @@ glm::vec2 AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt
 			aligned_pos.y = LinearEquation(ortho, point, 1, aligned_pos.x);
 		}
 	}
+
+	//find z from x, y using equation of a plane
+	glm::vec3 normal = glm::cross(glm::vec3(face[3] - face[0], face[4] - face[1], face[5] - face[2]), glm::vec3(face[6] - face[0], face[7] - face[1], face[8] - face[2]));
+	aligned_pos.z = -(normal.x * (aligned_pos.x - face[0]) + normal.y * (aligned_pos.y - face[1])) / normal.z + face[2];
+
 	return aligned_pos;
 }

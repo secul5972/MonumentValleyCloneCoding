@@ -19,7 +19,7 @@ public:
 	bool InPolygon(glm::vec2 point, float* face, GLuint face_vertex_cnt);
 };
 
-glm::vec2	AlignPos(float* face, int direction, glm::vec2 point, int ver_cnt);
+glm::vec3	AlignPos(float* face, int direction, glm::vec2 point, int ver_cnt);
 
 
 #endif

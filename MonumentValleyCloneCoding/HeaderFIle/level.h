@@ -27,6 +27,9 @@ class Level1
 {
 private:
 	Shape* shapes[8];
+	glm::vec3 aligned_pos;
+	glm::vec3 character_pos;
+	bool character_move_flag = false;
 public:
 	Level1();
 	void Draw(glm::mat4 worldModel);

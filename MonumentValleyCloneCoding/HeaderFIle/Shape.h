@@ -78,7 +78,7 @@ public:
 	virtual void		Draw(glm::mat4);
 	virtual void		MakeBuffer();
 	virtual void		MakeFaceVertex();
-	virtual void		FreeVertex();
+	virtual void		DelFaceVertex();
 	virtual float*		InShape(glm::vec2, int *);
 	virtual void		SaveModelData(glm::mat4);
 	virtual const int	GetFaceVerCnt();
@@ -164,6 +164,7 @@ public:
 	L_shape();
 	~L_shape();
 	void		MakeFaceVertex();
+	void		DelFaceVertex();
 	void		Draw(glm::mat4 model);
 	float*		InShape(glm::vec2, int*);
 	void		SaveModelData(glm::mat4);

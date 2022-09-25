@@ -42,6 +42,8 @@ Level1::Level1()
 
 	shapes[7] = new Goal();
 	shapes[7]->SetCanBeLocated(true);
+
+	character_pos = glm::vec3(0.0f, -0.3f, 1.2f);
 }
 
 void Level1::Draw(glm::mat4 worldModel)
@@ -62,8 +64,13 @@ void Level1::Draw(glm::mat4 worldModel)
 	shapes[1]->Draw(model);
 
 	// character
+	if (character_move_flag)
+	{
+		character_pos += deltaTime * (aligned_pos - character_pos);
+	}
+
 	model = worldModel;
-	model = glm::translate(model, glm::vec3(0.0f, 0.1f, 0.0f));
+	model = glm::translate(model, character_pos - glm::vec3(0.0f, -0.4f, 1.2f));
 	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 	shapes[2]->Draw(model);
 
@@ -153,28 +160,28 @@ void Level1::FindFace(double xpos, double ypos)
 		}
 	}
 
-	//for debug
-	glm::vec2 aligned_pos = AlignPos(face, direction, point, face_ver_cnt);
-	line_vertices[0][0] = aligned_pos.x;
-	line_vertices[0][1] = aligned_pos.y;
-	line_vertices[0][2] = 0.0f;
-	line_vertices[1][0] = point.x;
-	line_vertices[1][1] = point.y;
-	line_vertices[1][2] = 0.0f;
-	for (int i = 0; i < 2; i++)
-	{
-		glm::vec4 tmp(line_vertices[i][0], line_vertices[i][1], line_vertices[i][2], 1.0f);
-		tmp = glm::inverse(viewport) * tmp;
-		line_vertices[i][0] = tmp.x;
-		line_vertices[i][1] = tmp.y;
-		line_vertices[i][2] = tmp.z;
-	}
-
 	printf("type: %d\n", type);
 	printf("direction: %d\n", direction);
+
+	aligned_pos = AlignPos(face, direction, point, face_ver_cnt);
+
 	printf("aligned_pos: %f %f\n", aligned_pos.x, aligned_pos.y);
 	PrintFace(face, face_ver_cnt);
-	printf("line\n(%f, %f, %f)\n(%f, %f, %f)\n", line_vertices[0][0], line_vertices[0][1], line_vertices[0][2], line_vertices[1][0], line_vertices[1][1], line_vertices[1][2]);
+
+	aligned_pos = glm::vec3(glm::inverse(viewport) * glm::vec4(aligned_pos, 1.0f));
+	glm::vec3 tmp = projection * view * glm::vec4(character_pos, 1.0f);
+
+	character_move_flag = true;
+
+	//for debug
+	line_vertices[0][0] = aligned_pos.x;
+	line_vertices[0][1] = aligned_pos.y;
+	line_vertices[0][2] = aligned_pos.z;
+	line_vertices[1][0] = tmp.x;
+	line_vertices[1][1] = tmp.y;
+	line_vertices[1][2] = tmp.z;
+
+	aligned_pos = glm::vec3(glm::inverse(projection * view) * glm::vec4(aligned_pos, 1.0f));
 }
 
 Level1::~Level1()

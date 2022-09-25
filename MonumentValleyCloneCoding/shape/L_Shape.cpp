@@ -4,14 +4,12 @@ float* L_shape::base_face_vertex_;
 
 L_shape::L_shape() : Shape(L_SHAPE, true, true), Movement(face_cnt_)
 {
-	base_face_vertex_ = new float[face_ver_size_];
 	curr_face_vertex_ = new float[face_ver_size_];
 	MakeFaceDirFlag();
 }
 
 L_shape::~L_shape()
 {
-	delete[] base_face_vertex_;
 	delete[] curr_face_vertex_;
 }
 
@@ -19,6 +17,8 @@ void L_shape::MakeFaceVertex()
 {
 	int idx = 0;
 	glm::mat4 pre_model;
+
+	base_face_vertex_ = new float[face_ver_size_];
 
 	pre_model = glm::translate(glm::mat4(1.0f), glm::vec3(0.5f, 0.0f, 0.0f));
 	pre_model = glm::scale(pre_model, glm::vec3(4.0f, 1.0f, 1.0f));
@@ -62,6 +62,11 @@ void L_shape::MakeFaceVertex()
 			idx++;
 		}
 	}
+}
+
+void L_shape::DelFaceVertex()
+{
+	delete[] base_face_vertex_;
 }
 
 void L_shape::Draw(glm::mat4 model)
