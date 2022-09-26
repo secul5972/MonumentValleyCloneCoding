@@ -7,6 +7,8 @@
 #include <glm/glm.hpp>
 
 #include <algorithm>
+#include <queue>
+#include <vector>
 
 #include "Math.h"
 
@@ -19,7 +21,7 @@ public:
 	bool InPolygon(glm::vec2 point, float* face, GLuint face_vertex_cnt);
 };
 
-glm::vec3	AlignPos(float* face, int direction, glm::vec2 point, int ver_cnt);
-
+glm::vec3			AlignPos(float* face, int direction, glm::vec2 point, int ver_cnt);
+std::vector<int>	FindPath(int start, int end, int size);
 
 #endif

@@ -109,3 +109,39 @@ glm::vec3 AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt
 
 	return aligned_pos;
 }
+
+// bfs
+std::vector<int> FindPath(int start, int end, int size)
+{
+	std::queue<int>	qu;
+	bool			visited[20];
+	int				curr;
+
+	std::fill(visited, visited + size, -1);
+
+	qu.push(start);
+	while (!qu.empty())
+	{
+		curr = qu.front();
+		qu.pop();
+
+		for (int i = 0; i < size; i++)
+		{
+			if (i == end) break;
+			if (visited[i] != -1)continue;
+			visited[i] = curr;
+			qu.push(i);
+		}
+	}
+
+	std::vector<int> ret;
+
+	curr = end;
+	while (curr != start)
+	{
+		ret.push_back(curr);
+		curr = visited[curr];
+	}
+	ret.push_back(curr);
+	return ret;
+}

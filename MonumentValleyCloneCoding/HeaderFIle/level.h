@@ -7,6 +7,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 
 #include "Shape.h"
 #include "ClickArea.h"
@@ -30,6 +31,7 @@ private:
 	glm::vec3 aligned_pos;
 	glm::vec3 character_pos;
 	bool character_move_flag = false;
+	bool edge[8][8] = { };
 public:
 	Level1();
 	void Draw(glm::mat4 worldModel);

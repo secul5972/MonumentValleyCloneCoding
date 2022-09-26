@@ -14,7 +14,7 @@ extern Level1* level1;
 
 extern float line_vertices[2][3];
 
-Level1::Level1()
+Level1::Level1(): aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), character_pos(glm::vec3(0.0f, -0.3f, 1.2f))
 {
 	ellipse_area = new EllipseArea;
 	prev_mouse_pos_in_model.x = -1;
@@ -43,7 +43,16 @@ Level1::Level1()
 	shapes[7] = new Goal();
 	shapes[7]->SetCanBeLocated(true);
 
-	character_pos = glm::vec3(0.0f, -0.3f, 1.2f);
+	edge[0][1] = 1;
+	edge[1][0] = 1;
+	edge[1][4] = 1;
+	edge[4][1] = 1;
+	edge[4][5] = 1;
+	edge[5][4] = 1;
+	edge[5][6] = 1;
+	edge[6][5] = 1;
+	edge[6][7] = 1;
+	edge[7][6] = 1;
 }
 
 void Level1::Draw(glm::mat4 worldModel)
@@ -85,6 +94,28 @@ void Level1::Draw(glm::mat4 worldModel)
 			l_shape_angle += deltaTime * 60;
 		else
 			l_shape_angle -= deltaTime * 60;
+	}
+
+	if (l_shape_angle == 270)
+	{
+		edge[1][4] = 0;
+		edge[4][1] = 0;
+		edge[0][4] = 1;
+		edge[4][0] = 1;
+	}
+	else if (l_shape_angle == 0)
+	{
+		edge[1][4] = 1;
+		edge[4][1] = 1;
+		edge[0][4] = 0;
+		edge[4][0] = 0;
+	}
+	else if (l_shape_angle == 90 || l_shape_angle == 180)
+	{
+		edge[1][4] = 0;
+		edge[4][1] = 0;
+		edge[0][4] = 0;
+		edge[4][0] = 0;
 	}
 
 	// rotary_knob
