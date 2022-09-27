@@ -82,6 +82,7 @@ public:
 	virtual float*		InShape(glm::vec2, int *);
 	virtual void		SaveModelData(glm::mat4);
 	virtual const int	GetFaceVerCnt();
+	//virtual void		aa(int start, int end);
 };
 
 class Axes :public Shape

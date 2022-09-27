@@ -48,9 +48,13 @@ public:
 	void FindFace(double xpos, double ypos);
 	~Level1();
 
-	static void	mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
-	static void	mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
-	void PrintFace(float*, int);
+	static void				mouse_button_callback(GLFWwindow* window, int button, int action, int mods);
+	static void				mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos);
+	void					PrintFace(float*, int);
+
+	glm::vec3				AlignPos(float* face, int direction, glm::vec2 point, int ver_cnt);
+	std::vector<int>		FindPath(int start, int end, int size, bool** edge);
+	std::vector<glm::vec3>	PathIdxToCoord(glm::vec3 start, glm::vec3 end, vector<int> path_idx);
 };
 
 #endif

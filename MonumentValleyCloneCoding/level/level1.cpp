@@ -4,7 +4,6 @@ double rotateStartTime = 0;
 double rotateEndTime = -1;
 double rotateCurrTime = 0;
 double l_shape_angle = 0;
-int shape = 0;
 
 EllipseArea* ellipse_area;
 glm::mat4 ellipse_area_model;
@@ -177,7 +176,7 @@ void Level1::FindFace(double xpos, double ypos)
 	glm::vec2	point(xpos, ypos);
 	float		start_depth = 1;
 	float		end_depth = 1;
-	glm::vec2	viewport_char_pos = viewport * projection * view * glm::vec4(character_pos, 1.0f);
+	glm::vec3	viewport_char_pos = viewport * projection * view * glm::vec4(character_pos, 1.0f);
 
 	// find face clicked
 	for (int i = 0; i < size; i++)
@@ -213,12 +212,12 @@ void Level1::FindFace(double xpos, double ypos)
 
 	if (start_shape_idx == -1 || end_shape_idx == -1) return;
 
-	vector<int> path = FindPath(start_shape_idx, end_shape_idx, shape_cnt, Level1::edge);
-
 	printf("type: %d\n", (int)shapes[start_shape_idx]->GetShapeType());
 	printf("direction: %d\n", start_face_direc);
 
 	aligned_pos = AlignPos(start_face, start_face_direc, point, shapes[start_shape_idx]->GetFaceVerCnt());
+
+	vector<glm::vec3> path = PathIdxToCoord(viewport_char_pos, aligned_pos, FindPath(start_shape_idx, end_shape_idx, shape_cnt, Level1::edge));
 
 	printf("aligned_pos: %f %f\n", aligned_pos.x, aligned_pos.y);
 	PrintFace(start_face, shapes[start_shape_idx]->GetFaceVerCnt());
@@ -282,4 +281,138 @@ void Level1::PrintFace(float* face, int ver_cnt)
 	{
 		printf("point%d: (%f, %f, %f)\n",i , face[i * 3], face[i * 3 + 1], face[i * 3 + 2]);
 	}
+}
+
+glm::vec3 Level1::AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt)
+{
+	glm::vec2 direc, ortho;
+
+	if (direction == 0)
+		return glm::vec3(point, 0.0f);
+
+	direc = glm::vec2(face[3] - face[0], face[4] - face[1]);
+	ortho = glm::vec2(face[6] - face[3], face[7] - face[4]);
+
+	if (direction == 2)
+		std::swap(direc, ortho);
+
+	glm::vec2 center(0.0f, 0.0f);
+
+	for (int i = 0; i < face_ver_cnt; i++)
+	{
+		center.x += face[i * 3];
+		center.y += face[i * 3 + 1];
+	}
+	center.x /= face_ver_cnt;
+	center.y /= face_ver_cnt;
+
+	glm::vec3 aligned_pos(0.0f, 0.0f, 0.0f);
+
+	//find x, y using Linear Equation
+	if (direc.x == 0)
+	{
+		aligned_pos.x = center.x;
+		if (ortho.y == 0)
+			aligned_pos.y = point.y;
+		else
+			aligned_pos.y = LinearEquation(ortho, point, 1, aligned_pos.x);
+	}
+	else if (direc.y == 0)
+	{
+		aligned_pos.y = center.y;
+		if (ortho.x == 0)
+			aligned_pos.x = point.x;
+		else
+			aligned_pos.x = LinearEquation(ortho, point, 0, aligned_pos.y);
+	}
+	else
+	{
+		aligned_pos.x = (direc.x * ortho.x * (point.y - center.y) + (direc.y * ortho.x * center.x - ortho.y * direc.x * point.x))
+			/ (direc.y * ortho.x - ortho.y * direc.x);
+		if (ortho.x == 0)
+		{
+			aligned_pos.x = point.x;
+			aligned_pos.y = LinearEquation(direc, center, 1, aligned_pos.x);
+		}
+		else if (ortho.y == 0)
+		{
+			aligned_pos.y = point.y;
+			aligned_pos.x = LinearEquation(direc, center, 0, aligned_pos.y);
+		}
+		else
+		{
+			aligned_pos.x = (direc.x * ortho.x * (point.y - center.y) + (direc.y * ortho.x * center.x - ortho.y * direc.x * point.x))
+				/ (direc.y * ortho.x - ortho.y * direc.x);
+			aligned_pos.y = LinearEquation(ortho, point, 1, aligned_pos.x);
+		}
+	}
+
+	//find z from x, y using equation of a plane
+	glm::vec3 normal = glm::cross(glm::vec3(face[3] - face[0], face[4] - face[1], face[5] - face[2]), glm::vec3(face[6] - face[0], face[7] - face[1], face[8] - face[2]));
+	aligned_pos.z = -(normal.x * (aligned_pos.x - face[0]) + normal.y * (aligned_pos.y - face[1])) / normal.z + face[2];
+
+	return aligned_pos;
+}
+
+// bfs
+std::vector<int> Level1::FindPath(int start, int end, int size, bool** edge)
+{
+	std::queue<int>	qu;
+	int				visited[20];
+	int				curr;
+
+	std::fill(visited, visited + size, -1);
+
+	visited[start] = 0;
+
+	qu.push(start);
+	while (!qu.empty())
+	{
+		curr = qu.front();
+		qu.pop();
+
+		for (int i = 0; i < size; i++)
+		{
+			if (visited[i] != -1)continue;
+			if (edge[curr][i] == 0)continue;
+			visited[i] = curr;
+			if (i == end) break;
+			qu.push(i);
+		}
+	}
+
+	std::vector<int> ret;
+
+	curr = end;
+	while (curr != start)
+	{
+		ret.push_back(curr);
+		curr = visited[curr];
+	}
+	ret.push_back(curr);
+	return ret;
+}
+
+std::vector<glm::vec3>	Level1::PathIdxToCoord(glm::vec3 start, glm::vec3 end, vector<int> path_idx)
+{
+	vector<glm::vec3> path_coord;
+	int size = (int)path_idx.size();
+
+	path_coord.push_back(start);
+
+	// error
+	if (size == 0) return path_coord;
+
+	// start shape == end shape
+	if (size == 1)
+	{
+	
+	}
+
+	for (int i = 1; i < size; i++)
+	{
+
+	}
+	
+	return path_coord;
 }
