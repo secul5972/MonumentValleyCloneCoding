@@ -27,12 +27,22 @@ public:
 class Level1
 {
 private:
-	Shape* shapes[8];
-	glm::vec3 aligned_pos;
-	glm::vec3 character_pos;
-	bool character_move_flag = false;
-	bool edge[8][8] = { };
+	int			shape_cnt;
+	Shape*		shapes[8];
+	glm::vec3	aligned_pos;
+	glm::vec3	character_pos;
+	bool		character_move_flag = false;
+
+	//data for character moving
+	float*		start_face = 0;
+	int			start_shape_idx = -1;
+	int			start_face_direc = 0;
+	float*		end_face = 0;
+	int			end_shape_idx = -1;
+	int			end_face_direction = 0;
 public:
+	bool**		edge;
+
 	Level1();
 	void Draw(glm::mat4 worldModel);
 	void FindFace(double xpos, double ypos);

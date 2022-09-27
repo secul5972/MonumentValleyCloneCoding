@@ -16,6 +16,8 @@ extern float line_vertices[2][3];
 
 Level1::Level1(): aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), character_pos(glm::vec3(0.0f, -0.3f, 1.2f))
 {
+	shape_cnt = 8;
+
 	ellipse_area = new EllipseArea;
 	prev_mouse_pos_in_model.x = -1;
 	prev_mouse_pos_in_model.y = -1;
@@ -42,6 +44,13 @@ Level1::Level1(): aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), character_pos(glm::v
 
 	shapes[7] = new Goal();
 	shapes[7]->SetCanBeLocated(true);
+
+	edge = new bool*[shape_cnt];
+	for (int i = 0; i < shape_cnt; i++)
+	{
+		edge[i] = new bool[shape_cnt];
+		memset(edge[i], 0, sizeof(bool) * shape_cnt);
+	}
 
 	edge[0][1] = 1;
 	edge[1][0] = 1;
@@ -166,42 +175,57 @@ void Level1::FindFace(double xpos, double ypos)
 {
 	int			size = sizeof(shapes) / sizeof(Shape*);
 	glm::vec2	point(xpos, ypos);
-	float*		face = 0;
-	float		depth = 1;
-	int			type = 0;
-	int			face_ver_cnt = 0;
-	int			direction = 0;
+	float		start_depth = 1;
+	float		end_depth = 1;
+	glm::vec2	viewport_char_pos = viewport * projection * view * glm::vec4(character_pos, 1.0f);
 
+	// find face clicked
 	for (int i = 0; i < size; i++)
 	{
-		float*	curr_face;
-		float	curr_depth;
-		int		curr_direction;
+		float*	curr_start_face;
+		float	curr_start_depth;
+		int		curr_start_direc;
+		float*	curr_end_face;
+		float	curr_end_depth;
+		int		curr_end_direc;
 
 		if (shapes[i]->GetCanBeLocated() == false) continue;
-		if ((curr_face = shapes[i]->InShape(point, &curr_direction)))
+		if ((curr_start_face = shapes[i]->InShape(viewport_char_pos, &curr_start_direc)))
 		{
-			curr_depth = AverDepth(curr_face, shapes[i]->GetFaceVerCnt());
-			if (curr_depth > depth) continue;
-			face = curr_face;
-			depth = curr_depth;
-			direction = curr_direction;
-			face_ver_cnt = shapes[i]->GetFaceVerCnt();
-			type = (int)shapes[i]->GetShapeType();
+			curr_start_depth = AverDepth(curr_start_face, shapes[i]->GetFaceVerCnt());
+			if (curr_start_depth > start_depth) continue;
+			start_face = curr_start_face;
+			start_depth = curr_start_depth;
+			start_shape_idx = i;
+			start_face_direc = curr_start_direc;
+		}
+
+		if ((curr_end_face = shapes[i]->InShape(point, &curr_end_direc)))
+		{
+			curr_end_depth = AverDepth(curr_end_face, shapes[i]->GetFaceVerCnt());
+			if (curr_end_depth > end_depth) continue;
+			end_face = curr_end_face;
+			end_depth = curr_end_depth;
+			end_shape_idx = i;
+			end_face_direction = curr_end_direc;
 		}
 	}
 
-	printf("type: %d\n", type);
-	printf("direction: %d\n", direction);
+	if (start_shape_idx == -1 || end_shape_idx == -1) return;
 
-	aligned_pos = AlignPos(face, direction, point, face_ver_cnt);
+	vector<int> path = FindPath(start_shape_idx, end_shape_idx, shape_cnt, Level1::edge);
+
+	printf("type: %d\n", (int)shapes[start_shape_idx]->GetShapeType());
+	printf("direction: %d\n", start_face_direc);
+
+	aligned_pos = AlignPos(start_face, start_face_direc, point, shapes[start_shape_idx]->GetFaceVerCnt());
 
 	printf("aligned_pos: %f %f\n", aligned_pos.x, aligned_pos.y);
-	PrintFace(face, face_ver_cnt);
+	PrintFace(start_face, shapes[start_shape_idx]->GetFaceVerCnt());
 
 	aligned_pos = glm::vec3(glm::inverse(viewport) * glm::vec4(aligned_pos, 1.0f));
 	glm::vec3 tmp = projection * view * glm::vec4(character_pos, 1.0f);
-
+	
 	character_move_flag = true;
 
 	//for debug

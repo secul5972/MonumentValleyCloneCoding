@@ -22,6 +22,6 @@ public:
 };
 
 glm::vec3			AlignPos(float* face, int direction, glm::vec2 point, int ver_cnt);
-std::vector<int>	FindPath(int start, int end, int size);
+std::vector<int>	FindPath(int start, int end, int size, bool** edge);
 
 #endif
