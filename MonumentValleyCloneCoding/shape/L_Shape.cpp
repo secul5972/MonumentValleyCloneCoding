@@ -1,6 +1,7 @@
 #include "../headerFile/Shape.h"
 
 float* L_shape::base_face_vertex_;
+const int	L_shape::face_shape_cnt_[3] = { 5, 4, 5 };
 
 L_shape::L_shape() : Shape(L_SHAPE, true, true), Movement(face_cnt_)
 {
@@ -89,32 +90,38 @@ void L_shape::Draw(glm::mat4 model)
 	cube.Draw(shapeModel);
 }
 
-float* L_shape::InShape(glm::vec2 point, int* dir)
+float* L_shape::InShape(glm::vec2 point, int* dir, int *in_shape_idx)
 {
 	float*	face = 0;
 	float	depth = 1;
 	int		new_dir = -1;
+	int		idx = -1;
+	float*	face_ver = curr_face_vertex_;
 
-
-	for (int i = 0; i < face_cnt_; i++)
+	for (int i = 0; i < 3; i++)
 	{
-		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
+		for (int j = 0; j < face_shape_cnt_[i]; j++)
 		{
-			float	curr_depth;
+			if (OnFace(point, face_ver + j * face_ver_cnt_ * 3, face_ver_cnt_))
+			{
+				float	curr_depth;
 
-			curr_depth = AverDepth(curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_);
-			if (curr_depth > depth)continue;
-			depth = curr_depth;
-			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
-			new_dir = GetFaceDirFlag(i);
+				curr_depth = AverDepth(face_ver + j * face_ver_cnt_ * 3, face_ver_cnt_);
+				if (curr_depth > depth)continue;
+				depth = curr_depth;
+				face = face_ver + j * face_ver_cnt_ * 3;
+				new_dir = GetFaceDirFlag(j);
+				idx = i;
+			}
 		}
+		face_ver += face_shape_cnt_[i] * face_ver_cnt_ * 3;
 	}
-
 	//if face == 0, point is not in shape
 	if (!face)
 		return 0;
 	
 	*dir = new_dir;
+	*in_shape_idx = idx;
 	return face;
 }
 
@@ -171,4 +178,9 @@ void L_shape::MakeFaceDirFlag()
 	face_dir_flag_[12] = 1;
 	// left
 	face_dir_flag_[13] = 1;
+}
+
+int L_shape::WGetFaceDirFlag(int idx)
+{
+	return GetFaceDirFlag(idx);
 }

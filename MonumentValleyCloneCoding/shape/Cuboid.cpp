@@ -109,7 +109,7 @@ void Cuboid::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Cuboid::InShape(glm::vec2 point, int* dir)
+float* Cuboid::InShape(glm::vec2 point, int* dir, int *in_shape_idx)
 {
 	float* face = 0;
 	int curr_dir = -1;
@@ -129,6 +129,7 @@ float* Cuboid::InShape(glm::vec2 point, int* dir)
 		return 0;
 
 	*dir = curr_dir;
+	*in_shape_idx = 0;
 	return face;
 }
 
@@ -163,4 +164,9 @@ void Cuboid::MakeFaceDirFlag()
 	face_dir_flag_[3] = 0;
 	face_dir_flag_[4] = 1;
 	face_dir_flag_[5] = 1;
+}
+
+int Cuboid::WGetFaceDirFlag(int idx)
+{
+	return GetFaceDirFlag(idx);
 }

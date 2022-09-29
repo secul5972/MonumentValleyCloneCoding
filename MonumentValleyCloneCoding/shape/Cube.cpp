@@ -175,7 +175,7 @@ void Cube::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Cube::InShape(glm::vec2 point, int* dir)
+float* Cube::InShape(glm::vec2 point, int* dir, int *in_shape_idx)
 {
 	float* face = 0;
 	int curr_dir = -1;
@@ -195,6 +195,7 @@ float* Cube::InShape(glm::vec2 point, int* dir)
 		return 0;
 
 	*dir = curr_dir;
+	*in_shape_idx = 0;
 	return face;
 }
 
@@ -227,4 +228,9 @@ void Cube::MakeFaceDirFlag()
 	{
 		face_dir_flag_[i] = 0;
 	}
+}
+
+int Cube::WGetFaceDirFlag(int idx)
+{
+	return GetFaceDirFlag(idx);
 }

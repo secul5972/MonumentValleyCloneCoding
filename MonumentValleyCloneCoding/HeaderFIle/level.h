@@ -28,6 +28,8 @@ class Level1
 {
 private:
 	int			shape_cnt;
+	int			single_shape_cnt;
+	int			edge_size;
 	Shape*		shapes[8];
 	glm::vec3	aligned_pos;
 	glm::vec3	character_pos;
@@ -36,10 +38,12 @@ private:
 	//data for character moving
 	float*		start_face = 0;
 	int			start_shape_idx = -1;
+	int			start_edge_idx = -1;
 	int			start_face_direc = 0;
 	float*		end_face = 0;
 	int			end_shape_idx = -1;
-	int			end_face_direction = 0;
+	int			end_edge_idx = -1;
+	int			end_face_direc = 0;
 public:
 	bool**		edge;
 
@@ -54,7 +58,7 @@ public:
 
 	glm::vec3				AlignPos(float* face, int direction, glm::vec2 point, int ver_cnt);
 	std::vector<int>		FindPath(int start, int end, int size, bool** edge);
-	std::vector<glm::vec3>	PathIdxToCoord(glm::vec3 start, glm::vec3 end, vector<int> path_idx);
+	std::vector<glm::vec3>	PathIdxToCoord(glm::vec3 start, glm::vec3 end, float* start_face, float* end_face, int start_face_direc, vector<int> path_idx);
 };
 
 #endif

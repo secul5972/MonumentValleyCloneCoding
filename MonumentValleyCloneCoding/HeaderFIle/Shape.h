@@ -74,14 +74,16 @@ public:
 	int					GetShapeType();
 	bool				GetIsFixed();
 	bool				GetIsDirty();
+	float*				GetCurrFaceVer();
 
 	virtual void		Draw(glm::mat4);
 	virtual void		MakeBuffer();
 	virtual void		MakeFaceVertex();
 	virtual void		DelFaceVertex();
-	virtual float*		InShape(glm::vec2, int *);
+	virtual float*		InShape(glm::vec2, int *, int *);
 	virtual void		SaveModelData(glm::mat4);
 	virtual const int	GetFaceVerCnt();
+	virtual int			WGetFaceDirFlag(int);
 	//virtual void		aa(int start, int end);
 };
 
@@ -107,10 +109,11 @@ public:
 	~Cube();
 	void		Draw(glm::mat4);
 	void		MakeBuffer();
-	float*		InShape(glm::vec2, int*);
+	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
 	const int	GetFaceVerCnt();
 	void		MakeFaceDirFlag();
+	int			WGetFaceDirFlag(int);
 };
 
 class Cuboid :public Shape, public Face, public Movement
@@ -127,10 +130,11 @@ public:
 	~Cuboid();
 	void		Draw(glm::mat4);
 	void		MakeBuffer();
-	float*		InShape(glm::vec2, int*);
+	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
 	const int	GetFaceVerCnt();
 	void		MakeFaceDirFlag();
+	int			WGetFaceDirFlag(int);
 };
 
 class Goal :public Shape, public Face, public Movement
@@ -147,10 +151,11 @@ public:
 	~Goal();
 	void		Draw(glm::mat4 model);
 	void		MakeBuffer();
-	float*		InShape(glm::vec2, int*);
+	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
 	const int	GetFaceVerCnt();
 	void		MakeFaceDirFlag();
+	int			WGetFaceDirFlag(int);
 };
 
 class L_shape :public Shape, public Face, public Movement
@@ -160,6 +165,7 @@ private:
 	static float*		base_face_vertex_;
 	static const int	face_ver_size_ = 168;
 	static const int	face_cnt_ = 14;
+	static const int	face_shape_cnt_[3];
 	static const int	face_ver_cnt_ = 4;
 public:
 	L_shape();
@@ -167,10 +173,11 @@ public:
 	void		MakeFaceVertex();
 	void		DelFaceVertex();
 	void		Draw(glm::mat4 model);
-	float*		InShape(glm::vec2, int*);
+	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
 	const int	GetFaceVerCnt();
 	void		MakeFaceDirFlag();
+	int			WGetFaceDirFlag(int);
 };
 
 class Slope :public Shape
