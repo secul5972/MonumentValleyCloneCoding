@@ -33,5 +33,6 @@ void		Shape::MakeFaceVertex() { cout << kShapeTypeName[type_] << " don't MakeFac
 void		Shape::DelFaceVertex() { cout << kShapeTypeName[type_] << " don't need DelFaceVertex\n"; }
 float*		Shape::InShape(glm::vec2, int*, int*) { /*cout << kShapeTypeName[type_] << " don't use InShape\n";*/ return 0; }
 void		Shape::SaveModelData(glm::mat4) { cout << kShapeTypeName[type_] << " don't use SaveModelData\n"; }
-const int	Shape::GetFaceVerCnt() { cout << kShapeTypeName[type_] << " don't use GetFaceVerCnt\n"; return 0; };
+int			Shape::GetFaceVerCnt() { cout << kShapeTypeName[type_] << " don't use GetFaceVerCnt\n"; return 0; };
+int			Shape::GetFaceCnt() { cout << kShapeTypeName[type_] << " don't use GetFaceCnt\n"; return 0; };
 int			Shape::WGetFaceDirFlag(int) { cout << kShapeTypeName[type_] << " don't use WGetFaceDirFlag\n"; return 0; };

@@ -217,9 +217,14 @@ void Cube::SaveModelData(glm::mat4 model)
 	}
 }
 
-const int Cube::GetFaceVerCnt()
+int Cube::GetFaceVerCnt()
 {
 	return face_ver_cnt_;
+}
+
+int Cube::GetFaceCnt()
+{
+	return face_cnt_;
 }
 
 void Cube::MakeFaceDirFlag()

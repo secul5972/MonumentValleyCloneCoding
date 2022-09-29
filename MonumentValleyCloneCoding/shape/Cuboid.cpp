@@ -151,9 +151,14 @@ void Cuboid::SaveModelData(glm::mat4 model)
 	}
 }
 
-const int Cuboid::GetFaceVerCnt()
+int Cuboid::GetFaceVerCnt()
 {
 	return face_ver_cnt_;
+}
+
+int Cuboid::GetFaceCnt()
+{
+	return face_cnt_;
 }
 
 void Cuboid::MakeFaceDirFlag()

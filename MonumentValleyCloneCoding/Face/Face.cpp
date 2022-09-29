@@ -1,6 +1,6 @@
 #include "../headerFile/Face.h"
 
-bool Face::OnFace(glm::vec2 point, float* face, GLuint face_vertex_cnt)
+bool OnFace(glm::vec2 point, float* face, GLuint face_vertex_cnt)
 {
 	glm::vec3 vecA(face[0], face[1], 0.0f);
 	glm::vec3 vecB(face[3], face[4], 0.0f);
@@ -21,7 +21,7 @@ bool Face::OnFace(glm::vec2 point, float* face, GLuint face_vertex_cnt)
 }
 
 
-bool Face::InPolygon(glm::vec2 point, float* face, GLuint face_vertex_cnt) {
+bool InPolygon(glm::vec2 point, float* face, GLuint face_vertex_cnt) {
 
 	bool in_poly = false;
 	glm::vec2 prev_poly(face[(face_vertex_cnt - 1) * 3], face[(face_vertex_cnt - 1) * 3 + 1]);

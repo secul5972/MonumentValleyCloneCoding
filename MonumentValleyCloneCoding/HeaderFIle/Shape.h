@@ -74,7 +74,7 @@ public:
 	int					GetShapeType();
 	bool				GetIsFixed();
 	bool				GetIsDirty();
-	float*				GetCurrFaceVer();
+	
 
 	virtual void		Draw(glm::mat4);
 	virtual void		MakeBuffer();
@@ -82,9 +82,11 @@ public:
 	virtual void		DelFaceVertex();
 	virtual float*		InShape(glm::vec2, int *, int *);
 	virtual void		SaveModelData(glm::mat4);
-	virtual const int	GetFaceVerCnt();
+	virtual int			GetFaceVerCnt();
+	virtual int			GetFaceCnt();
 	virtual int			WGetFaceDirFlag(int);
-	//virtual void		aa(int start, int end);
+	float*				GetCurrFaceVer();
+	float*		GetCurrFaceVer(int);
 };
 
 class Axes :public Shape
@@ -111,7 +113,8 @@ public:
 	void		MakeBuffer();
 	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
-	const int	GetFaceVerCnt();
+	int			GetFaceVerCnt();
+	int			GetFaceCnt();
 	void		MakeFaceDirFlag();
 	int			WGetFaceDirFlag(int);
 };
@@ -132,7 +135,8 @@ public:
 	void		MakeBuffer();
 	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
-	const int	GetFaceVerCnt();
+	int			GetFaceVerCnt();
+	int			GetFaceCnt();
 	void		MakeFaceDirFlag();
 	int			WGetFaceDirFlag(int);
 };
@@ -153,7 +157,8 @@ public:
 	void		MakeBuffer();
 	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
-	const int	GetFaceVerCnt();
+	int			GetFaceVerCnt();
+	int			GetFaceCnt();
 	void		MakeFaceDirFlag();
 	int			WGetFaceDirFlag(int);
 };
@@ -175,9 +180,11 @@ public:
 	void		Draw(glm::mat4 model);
 	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
-	const int	GetFaceVerCnt();
+	int			GetFaceVerCnt();
+	int			GetFaceCnt();
 	void		MakeFaceDirFlag();
 	int			WGetFaceDirFlag(int);
+	float*		GetCurrFaceVer(int);
 };
 
 class Slope :public Shape

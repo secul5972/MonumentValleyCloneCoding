@@ -40,6 +40,8 @@ private:
 	int			start_shape_idx = -1;
 	int			start_edge_idx = -1;
 	int			start_face_direc = 0;
+	int			start_face_cnt = 0;
+	int			start_face_ver_cnt = 0;
 	float*		end_face = 0;
 	int			end_shape_idx = -1;
 	int			end_edge_idx = -1;
@@ -58,7 +60,9 @@ public:
 
 	glm::vec3				AlignPos(float* face, int direction, glm::vec2 point, int ver_cnt);
 	std::vector<int>		FindPath(int start, int end, int size, bool** edge);
-	std::vector<glm::vec3>	PathIdxToCoord(glm::vec3 start, glm::vec3 end, float* start_face, float* end_face, int start_face_direc, vector<int> path_idx);
+	std::vector<glm::vec3>	PathIdxToCoord(glm::vec3 start, vector<int> path_idx);
+	glm::vec3 FindCoord(float** curr_face, int next, glm::vec3 start, int* curr_direc_ptr, int* curr_face_cnt_ptr, int* curr_face_ver_cnt_ptr, vector<glm::vec3>* path_coord);
+	std::vector<glm::vec3> FindOverlappingLine(int curr_face_cnt, float* curr_face, int next_face_cnt, float* next_face);
 };
 
 #endif

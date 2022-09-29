@@ -143,9 +143,14 @@ void L_shape::SaveModelData(glm::mat4 model)
 	}
 }
 
-const int L_shape::GetFaceVerCnt()
+int L_shape::GetFaceVerCnt()
 {
 	return face_ver_cnt_;
+}
+
+int L_shape::GetFaceCnt()
+{
+	return face_cnt_;
 }
 
 void L_shape::MakeFaceDirFlag()
@@ -184,3 +189,13 @@ int L_shape::WGetFaceDirFlag(int idx)
 {
 	return GetFaceDirFlag(idx);
 }
+
+float* L_shape::GetCurrFaceVer(int idx)
+{
+	float* ret = curr_face_vertex_;
+	for (int i = 0; i <= idx; i++)
+	{
+		ret += face_shape_cnt_[idx] * face_ver_cnt_ * 3;
+	}
+	return ret;
+};

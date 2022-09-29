@@ -153,9 +153,14 @@ void Goal::SaveModelData(glm::mat4 model)
 	}
 }
 
-const int Goal::GetFaceVerCnt()
+int Goal::GetFaceVerCnt()
 {
 	return face_ver_cnt_;
+}
+
+int Goal::GetFaceCnt()
+{
+	return face_cnt_;
 }
 
 void Goal::MakeFaceDirFlag()

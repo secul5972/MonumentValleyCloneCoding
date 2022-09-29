@@ -25,3 +25,8 @@ float AverDepth(float* face, int ver_cnt)
 	}
 	return ret / ver_cnt;
 }
+
+float	PlaneEquation(glm::vec3 normal, glm::vec3 point, glm::vec2 val)
+{
+	return -(normal.x * (val.x - point.x) + normal.y * (val.y - point.y)) / normal.z + point.z;
+}

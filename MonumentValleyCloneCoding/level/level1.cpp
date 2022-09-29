@@ -212,6 +212,8 @@ void Level1::FindFace(double xpos, double ypos)
 			start_depth = curr_start_depth;
 			start_shape_idx = i;
 			start_face_direc = curr_start_direc;
+			start_face_cnt = shapes[i]->GetFaceCnt();
+			start_face_ver_cnt = shapes[i]->GetFaceVerCnt();
 			if (i >= single_shape_cnt)
 				start_edge_idx = single_shape_cnt + (i - single_shape_cnt ? i - single_shape_cnt : 0) * 3 + in_shape_idx;
 			else start_edge_idx = i;
@@ -238,7 +240,7 @@ void Level1::FindFace(double xpos, double ypos)
 
 	aligned_pos = AlignPos(end_face, end_face_direc, point, shapes[start_shape_idx]->GetFaceVerCnt());
 
-	vector<glm::vec3> path = PathIdxToCoord(viewport_char_pos, aligned_pos, start_face, end_face, start_face_direc, FindPath(start_edge_idx, end_edge_idx, edge_size, Level1::edge));
+	//vector<glm::vec3> path = PathIdxToCoord(viewport_char_pos, FindPath(start_edge_idx, end_edge_idx, edge_size, Level1::edge));
 
 	//printf("aligned_pos: %f %f %f\n", aligned_pos.x, aligned_pos.y, aligned_pos.z);
 	//PrintFace(end_face, shapes[end_shape_idx]->GetFaceVerCnt());
@@ -332,18 +334,18 @@ glm::vec3 Level1::AlignPos(float* face, int direction, glm::vec2 point, int face
 	glm::vec3 aligned_pos(0.0f, 0.0f, 0.0f);
 
 	//find x, y using Linear Equation
-	if (direc.x == 0)
+	if (abs(direc.x) < 0.000001)
 	{
 		aligned_pos.x = center.x;
-		if (ortho.y == 0)
+		if (abs(ortho.y) < 0.00001)
 			aligned_pos.y = point.y;
 		else
 			aligned_pos.y = LinearEquation(ortho, point, 1, aligned_pos.x);
 	}
-	else if (direc.y == 0)
+	else if (abs(direc.y) < 0.00001)
 	{
 		aligned_pos.y = center.y;
-		if (ortho.x == 0)
+		if (abs(ortho.x) < 0.00001)
 			aligned_pos.x = point.x;
 		else
 			aligned_pos.x = LinearEquation(ortho, point, 0, aligned_pos.y);
@@ -352,12 +354,12 @@ glm::vec3 Level1::AlignPos(float* face, int direction, glm::vec2 point, int face
 	{
 		aligned_pos.x = (direc.x * ortho.x * (point.y - center.y) + (direc.y * ortho.x * center.x - ortho.y * direc.x * point.x))
 			/ (direc.y * ortho.x - ortho.y * direc.x);
-		if (ortho.x == 0)
+		if (abs(ortho.x) < 0.00001)
 		{
 			aligned_pos.x = point.x;
 			aligned_pos.y = LinearEquation(direc, center, 1, aligned_pos.x);
 		}
-		else if (ortho.y == 0)
+		else if (abs(ortho.y) < 0.00001)
 		{
 			aligned_pos.y = point.y;
 			aligned_pos.x = LinearEquation(direc, center, 0, aligned_pos.y);
@@ -371,9 +373,9 @@ glm::vec3 Level1::AlignPos(float* face, int direction, glm::vec2 point, int face
 	}
 
 	//find z from x, y using equation of a plane
-	glm::vec3 normal = glm::cross(glm::vec3(face[3] - face[0], face[4] - face[1], face[5] - face[2]), glm::vec3(face[6] - face[0], face[7] - face[1], face[8] - face[2]));
-	aligned_pos.z = -(normal.x * (aligned_pos.x - face[0]) + normal.y * (aligned_pos.y - face[1])) / normal.z + face[2];
-
+	aligned_pos.z = PlaneEquation(glm::cross(glm::vec3(face[3] - face[0], face[4] - face[1], face[5] - face[2]), glm::vec3(face[6] - face[0], face[7] - face[1], face[8] - face[2])),
+		glm::vec3(face[0], face[1], face[2]), aligned_pos);
+	
 	return aligned_pos;
 }
 
@@ -416,20 +418,195 @@ std::vector<int> Level1::FindPath(int start, int end, int size, bool** edge)
 	return ret;
 }
 
-std::vector<glm::vec3>	Level1::PathIdxToCoord(glm::vec3 start, glm::vec3 end, float* start_face, float* end_face, int start_face_direc, vector<int> path_idx)
+std::vector<glm::vec3>	Level1::PathIdxToCoord(glm::vec3 start, vector<int> path_idx)
 {
 	vector<glm::vec3> path_coord;
-	int size = (int)path_idx.size();
+	int	size = (int)path_idx.size();
+	int curr_direc = start_face_direc;
+	float* curr_face = start_face;
+	int curr_face_cnt = start_face_cnt;
+	int curr_face_ver_cnt = start_face_ver_cnt;
 
 	path_coord.push_back(start);
 
-	for (int i = 0; i < size; i++)
+	if (size == 1) return path_coord;
+	else
 	{
-		//curr face와 next face dir 비교
-		//같으면 면이 만나는 경계로 바로 이동
-		//다르면 두 직선(각각의 중심점을 지나는 직선) 교점이 내부이면 교점으로 이동후 next face dir을 따라 경계로 이동
-		//외부이면 교점으로만 이동
+		glm::vec3 curr = start;
+		for (int i = 0; i < size - 1; i++)
+		{
+			FindCoord(&curr_face, path_idx[i + 1], curr, &curr_direc, &curr_face_cnt, &curr_face_ver_cnt, &path_coord);
+		}
+		//마지막 face에서 aligned pos로 이동이 필요
 	}
-	
+
 	return path_coord;
+}
+
+glm::vec3 Level1::FindCoord(float** curr_face_ptr, int next, glm::vec3 curr_pos, int* curr_direc_ptr, int* curr_face_cnt_ptr, int* curr_face_ver_cnt_ptr, vector<glm::vec3>* path_coord_ptr)
+{
+	float* curr_face = *curr_face_ptr;
+	float* next_face;
+	int curr_face_cnt = *curr_face_cnt_ptr;
+	int curr_face_ver_cnt = *curr_face_ver_cnt_ptr;
+	int next_face_ver_cnt;
+	int next_face_cnt;
+	int next_shape_idx;
+
+
+	if (next > single_shape_cnt)
+		next_shape_idx = single_shape_cnt + (next - single_shape_cnt) / 3 + 1;
+	else
+		next_shape_idx = next;
+
+	next_face = shapes[next_shape_idx]->GetCurrFaceVer();
+	next_face_ver_cnt = shapes[next_shape_idx]->GetFaceVerCnt();
+	next_face_cnt = shapes[next_shape_idx]->GetFaceCnt();
+
+	glm::vec3 curr_normal = glm::normalize(glm::cross(glm::vec3(curr_face[3] - curr_face[0], curr_face[4] - curr_face[1], curr_face[5] - curr_face[2])
+		, glm::vec3(curr_face[6] - curr_face[0], curr_face[7] - curr_face[1], curr_face[8] - curr_face[2])));
+	glm::vec3 next_normal(0.0f, 0.0f, 0.0f);
+
+	int curr_direc = *curr_direc_ptr;
+	int next_direc = 0;
+	float vdot;
+	for (int i = 0; i < next_face_cnt; i++)
+	{
+		next_normal = glm::normalize(glm::cross(glm::vec3(next_face[3] - next_face[0], next_face[4] - next_face[1], next_face[5] - next_face[2])
+			, glm::vec3(next_face[6] - next_face[0], next_face[7] - next_face[1], next_face[8] - next_face[2])));
+		vdot = glm::dot(curr_normal, next_normal);
+		if (abs(1.0f - vdot) < 0.000001)
+		{
+			next_direc = shapes[next_shape_idx]->WGetFaceDirFlag(i);
+			break; 
+		}
+		next_normal += 3 * next_face_ver_cnt;
+	}
+
+	glm::vec3 curr_direc_vec;
+	glm::vec3 next_direc_vec;
+
+	if (curr_direc == 1)
+		curr_direc_vec = glm::vec3(curr_face[3] - curr_face[0], curr_face[4] - curr_face[1], curr_face[5] - curr_face[2]);
+	else
+		curr_direc_vec = glm::vec3(curr_face[6] - curr_face[3], curr_face[7] - curr_face[4], curr_face[8] - curr_face[5]);
+
+	if (next_direc == 1)
+		next_direc_vec = glm::vec3(next_face[3] - next_face[0], next_face[4] - next_face[1], next_face[5] - next_face[2]);
+	else
+		next_direc_vec = glm::vec3(next_face[6] - next_face[3], next_face[7] - next_face[4], next_face[8] - next_face[5]);
+
+
+
+
+	// curr and next vec
+	vdot = glm::dot(glm::vec2(curr_direc_vec.x, curr_direc_vec.y), glm::vec2(next_direc_vec.x, next_direc_vec.y));
+	if (abs(1.0f - vdot) < 0.000001 || abs(-1.0f - vdot) < 0.000001)
+	{
+		vector<glm::vec3> over_line = FindOverlappingLine(curr_face_cnt, curr_face, next_face_cnt, next_face);
+
+		*curr_direc_ptr = next_direc;
+		*curr_face_cnt_ptr = next_face_cnt;
+		*curr_face_ptr = next_face;
+		path_coord_ptr->push_back(glm::vec3((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2));
+		return; 
+	}
+	else
+	{
+		//direc 직선 교점 구하기
+
+		glm::vec3 curr_center_pos(0.0f, 0.0f, 0.0f);
+		glm::vec3 next_center_pos(0.0f, 0.0f, 0.0f);
+
+		for (int i = 0; i < curr_face_ver_cnt; i++)
+		{
+			curr_center_pos.x += curr_face[0];
+			curr_center_pos.y += curr_face[1];
+			curr_center_pos.z += curr_face[2];
+		}
+
+		for (int i = 0; i < next_face_ver_cnt; i++)
+		{
+			next_center_pos.x += next_face[0];
+			next_center_pos.y += next_face[1];
+			next_center_pos.z += next_face[2];
+		}
+
+		glm::vec3 inter_pos;
+		if (abs(curr_direc_vec.x) < 0.000001)
+		{
+			inter_pos.x = curr_center_pos.x;
+			if (abs(next_direc_vec.y) < 0.000001)
+				inter_pos.y = curr_center_pos.y;
+			else
+				inter_pos.y = LinearEquation(next_direc_vec, next_center_pos, 1, inter_pos.x);
+		}
+		else if (abs(curr_direc_vec.y) < 0.000001)
+		{
+			inter_pos.y = curr_center_pos.y;
+			if (abs(next_direc_vec.x) < 0.000001)
+				inter_pos.x = curr_center_pos.x;
+			else
+				inter_pos.x = LinearEquation(next_direc_vec, next_center_pos, 0, inter_pos.y);
+		}
+		if (OnFace(inter_pos, curr_face, curr_face_ver_cnt))
+		{
+			inter_pos.z = PlaneEquation(curr_normal, curr_center_pos, inter_pos);
+			vector<glm::vec3> over_line = FindOverlappingLine(curr_face_cnt, curr_face, next_face_cnt, next_face);
+
+			path_coord_ptr->push_back(inter_pos);
+			path_coord_ptr->push_back(glm::vec3((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2));
+		}
+		else
+		{
+			inter_pos.z = PlaneEquation(next_normal, next_center_pos, inter_pos);
+			path_coord_ptr->push_back(inter_pos);
+		}
+		*curr_direc_ptr = next_direc;
+		*curr_face_cnt_ptr = next_face_cnt;
+		*curr_face_ptr = next_face;
+	}
+}
+
+std::vector<glm::vec3> Level1::FindOverlappingLine(int curr_face_cnt, float* curr_face, int next_face_cnt, float* next_face)
+{
+	int curr_line_fidx = 0;
+	int next_line_fidx = 0;
+	vector<glm::vec3> ret;
+
+	for (curr_line_fidx = 0; curr_line_fidx < curr_face_cnt; curr_line_fidx++)
+	{
+		int curr_line_sidx = (curr_line_fidx + 1) % curr_face_cnt;
+
+		glm::vec3 curr_vec(curr_face[curr_line_fidx * 3] - curr_face[curr_line_sidx * 3],
+			curr_face[curr_line_fidx * 3 + 1] - curr_face[curr_line_sidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2] - curr_face[curr_line_sidx * 3 + 2]);
+		for (next_line_fidx = 0; next_line_fidx < next_face_cnt; next_line_fidx++)
+		{
+			int next_line_sidx = (next_line_fidx + 1) % next_face_cnt;
+			glm::vec3 next_vec(next_face[next_line_fidx * 3] - next_face[next_line_sidx * 3],
+				next_face[next_line_fidx * 3 + 1] - next_face[next_line_sidx * 3 + 1], next_face[next_line_fidx * 3 + 2] - next_face[next_line_sidx * 3 + 2]);
+			float vdot = glm::dot(curr_vec, next_vec);
+			if (abs(1.0f - vdot) < 0.000001 || abs(-1.0f - vdot) < 0.000001)
+			{
+				float curr_vec_size = glm::length(curr_vec);
+				float next_vec_size = glm::length(next_vec);
+				
+				if (curr_vec_size < next_vec_size)
+				{
+					ret.push_back(glm::vec3(curr_face[curr_line_fidx * 3], curr_face[curr_line_fidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2]));
+					ret.push_back(glm::vec3(curr_face[curr_line_sidx * 3], curr_face[curr_line_sidx * 3 + 1], curr_face[curr_line_sidx * 3 + 2]));
+				
+				}
+				else
+				{
+					ret.push_back(glm::vec3(next_face[next_line_fidx * 3], next_face[next_line_fidx * 3 + 1], next_face[next_line_fidx * 3 + 2]));
+					ret.push_back(glm::vec3(next_face[next_line_sidx * 3], next_face[next_line_sidx * 3 + 1], next_face[next_line_sidx * 3 + 2]));
+				}
+				return ret;
+			}
+		}
+	}
+
+	//there is no overlapping line segments, error
+	return ret;
 }
