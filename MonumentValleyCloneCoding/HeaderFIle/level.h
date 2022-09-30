@@ -25,20 +25,26 @@ private:
 	int					moving_shape_cnt_;
 	
 	//data for character moving
-	glm::vec3			aligned_pos;
-	glm::vec3			character_pos;
-	bool				character_move_flag = false;
+	glm::vec3			vp_aligned_pos;
+	glm::vec3			wd_char_pos;
+	bool				char_move_flag = false;
 	vector<glm::vec3>	path_coord;
 	bool				path_coord_idx = 0;
+
 	float*				start_face = 0;
 	int					start_shape_idx = -1;
 	int					start_face_direc = 0;
+	glm::vec3			start_normal_vec;
 	int					start_face_cnt = 0;
 	int					start_face_ver_cnt = 0;
+
 	float*				end_face = 0;
 	int					end_shape_idx = -1;
 	int					end_face_direc = 0;
+	glm::vec3			end_normal_vec;
 
+	glm::vec3			dist_vec;
+	glm::vec3			wd_aligned_pos;
 	Line				line;
 public:
 	bool**		edge;
@@ -57,6 +63,7 @@ public:
 	void					PathIdxToCoord(glm::vec3 start, vector<int> path_idx);
 	void					FindCoord(float** curr_face, int next, glm::vec3 start, int* curr_direc_ptr, int* curr_face_cnt_ptr, int* curr_face_ver_cnt_ptr);
 	std::vector<glm::vec3>	FindOverlappingLine(int curr_face_cnt, float* curr_face, int next_face_cnt, float* next_face);
+	glm::vec3				FindCenterPos(float* points, int ver_cnt);
 };
 
 #endif

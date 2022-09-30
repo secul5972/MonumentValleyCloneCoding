@@ -105,22 +105,34 @@ float cube_face_ver[] = {
 	-0.1f,  0.1f,  0.1f
 };
 
+float cube_normal_vec[] = {
+	-1.0f,  0.0f,  0.0f,
+	 0.0f, -1.0f,  0.0f,
+	 0.0f,  0.0f, -1.0f,
+	 1.0f,  0.0f,  0.0f,
+	 0.0f,  1.0f,  0.0f,
+	 0.0f,  0.0f,  1.0f
+};
+
 int cube_tri_ver_cnt = 216;
 int cube_line_ver_cnt = 48;
 
 GLuint Cube::tri_VAO, Cube::tri_VBO, Cube::line_VAO, Cube::line_VBO;
 
 float* Cube::base_face_vertex_;
+float* Cube::base_normal_vec_;
 
 Cube::Cube() : Shape(CUBE, true, true), Movement(face_cnt_)
 {
 	curr_face_vertex_ = new float[face_ver_size_];
+	curr_normal_vec_ = new float[normal_vec_size_];
 	MakeFaceDirFlag();
 };
 
 Cube::~Cube()
 {
 	delete[] curr_face_vertex_;
+	delete[] curr_normal_vec_;
 }
 
 void Cube::MakeBuffer()
@@ -151,6 +163,7 @@ void Cube::MakeBuffer()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 	base_face_vertex_ = cube_face_ver;
+	base_normal_vec_ = cube_normal_vec;
 }
 
 void Cube::Draw(glm::mat4 model)
@@ -175,7 +188,7 @@ void Cube::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Cube::InShape(glm::vec2 point, int* dir)
+float* Cube::InShape(glm::vec2 point, int* dir, int* idx)
 {
 	float* face = 0;
 	int curr_dir = -1;
@@ -186,6 +199,7 @@ float* Cube::InShape(glm::vec2 point, int* dir)
 		{
 			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
 			curr_dir = GetFaceDirFlag(i);
+			*idx = i;
 			break;
 		}
 	}
@@ -204,16 +218,27 @@ void Cube::SaveModelData(glm::mat4 model)
 	if (!isfixed_ && !isdirty_) return;
 	model_ = model;
 
-	glm::mat4 matrix = viewport * projection * view * model_;
+	glm::vec3 prev, curr;
+	glm::mat4 matrix = vpvp_mat * model_;
+	
 	for (int i = 0; i < face_ver_size_ / 3; i++)
 	{
-		glm::vec3 prev, curr;
 		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
 		curr = matrix * glm::vec4(prev, 1.0f);
 		curr_face_vertex_[i * 3] = curr.x;
 		curr_face_vertex_[i * 3 + 1] = curr.y;
 		curr_face_vertex_[i * 3 + 2] = curr.z;
 	}
+
+	for (int i = 0; i < face_cnt_; i++)
+	{
+		prev = glm::vec3(base_normal_vec_[i * 3], base_normal_vec_[i * 3 + 1], base_normal_vec_[i * 3 + 2]);
+		curr = model_ * glm::vec4(prev, 0.0f);
+		curr_normal_vec_[i * 3] = float(curr.x > 0 ? int(curr.x + 0.5) : int(curr.x - 0.5));
+		curr_normal_vec_[i * 3 + 1] = float(curr.y > 0 ? int(curr.y + 0.5) : int(curr.y - 0.5));
+		curr_normal_vec_[i * 3 + 2] = float(curr.z > 0 ? int(curr.z + 0.5) : int(curr.z - 0.5));
+	}
+
 	if (isfixed_)
 		issaved_ = true;
 	else
@@ -241,4 +266,9 @@ void Cube::MakeFaceDirFlag()
 int Cube::WGetFaceDirFlag(int idx)
 {
 	return GetFaceDirFlag(idx);
+}
+
+glm::vec3 Cube::GetNormalVec(int idx)
+{
+	return glm::vec3(curr_normal_vec_[idx * 3], curr_normal_vec_[idx * 3 + 1], curr_normal_vec_[idx * 3 + 2]);
 }

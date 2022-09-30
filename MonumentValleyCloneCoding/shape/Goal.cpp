@@ -111,7 +111,7 @@ void Goal::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Goal::InShape(glm::vec2 point, int* dir)
+float* Goal::InShape(glm::vec2 point, int* dir, int* idx)
 {
 	float* face = 0;
 	int curr_dir = -1;
@@ -122,6 +122,7 @@ float* Goal::InShape(glm::vec2 point, int* dir)
 		{
 			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
 			curr_dir = GetFaceDirFlag(i);
+			*idx = i;
 			break;
 		}
 	}
@@ -173,4 +174,9 @@ void Goal::MakeFaceDirFlag()
 int Goal::WGetFaceDirFlag(int idx)
 {
 	return GetFaceDirFlag(idx);
+}
+
+glm::vec3 Goal::GetNormalVec(int idx)
+{
+	return glm::vec3(curr_normal_vec_[idx * 3], curr_normal_vec_[idx * 3 + 1], curr_normal_vec_[idx * 3 + 2]);
 }

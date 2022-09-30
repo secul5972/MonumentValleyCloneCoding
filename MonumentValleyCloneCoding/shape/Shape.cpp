@@ -32,8 +32,9 @@ void		Shape::Draw(glm::mat4 model) { cout << kShapeTypeName[type_] << " don't Dr
 void		Shape::MakeBuffer() { cout << kShapeTypeName[type_] << " don't MakeBuffer\n"; }
 void		Shape::MakeFaceVertex() { cout << kShapeTypeName[type_] << " don't MakeFaceVertex\n"; }
 void		Shape::DelFaceVertex() { cout << kShapeTypeName[type_] << " don't need DelFaceVertex\n"; }
-float*		Shape::InShape(glm::vec2, int*) { /*cout << kShapeTypeName[type_] << " don't use InShape\n";*/ return 0; }
+float*		Shape::InShape(glm::vec2, int*, int*) { /*cout << kShapeTypeName[type_] << " don't use InShape\n";*/ return 0; }
 void		Shape::SaveModelData(glm::mat4) { cout << kShapeTypeName[type_] << " don't use SaveModelData\n"; }
 int			Shape::GetFaceVerCnt() { cout << kShapeTypeName[type_] << " don't use GetFaceVerCnt\n"; return 0; };
 int			Shape::GetFaceCnt() { cout << kShapeTypeName[type_] << " don't use GetFaceCnt\n"; return 0; };
 int			Shape::WGetFaceDirFlag(int) { cout << kShapeTypeName[type_] << " don't use WGetFaceDirFlag\n"; return 0; };
+glm::vec3	Shape::GetNormalVec(int) { cout << kShapeTypeName[type_] << " don't use GetNormalVec\n"; return glm::vec3(0.0f, 0.0f, 0.0f); };

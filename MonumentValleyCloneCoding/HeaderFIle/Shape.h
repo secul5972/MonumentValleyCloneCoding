@@ -17,9 +17,11 @@
 using namespace std;
 
 extern glm::mat4	viewport, projection, view;
+extern glm::mat4	vpvp_mat;
 extern float		cube_tri_ver[];
 extern float		cube_line_ver[];
 extern float		cube_face_ver[];
+extern float		cube_normal_vec[];
 extern int			cube_tri_ver_cnt;
 extern int			cube_line_ver_cnt;
 extern Shader*		def_shader;
@@ -60,9 +62,12 @@ protected:
 	//need to update face vertex position
 	bool			isdirty_ = true;
 	//current face vertex position
-	float			*curr_face_vertex_ = 0;
+	float*			curr_face_vertex_ = 0;
 	//current model matrix
 	glm::mat4		model_;
+
+	float*			curr_normal_vec_ = 0;
+	const int		normal_vec_size_ = 18;
 
 public:
 	Shape();
@@ -81,13 +86,14 @@ public:
 	virtual void		MakeBuffer();
 	virtual void		MakeFaceVertex();
 	virtual void		DelFaceVertex();
-	virtual float*		InShape(glm::vec2, int *);
+	virtual float*		InShape(glm::vec2, int*, int*);
 	virtual void		SaveModelData(glm::mat4);
 	virtual int			GetFaceVerCnt();
 	virtual int			GetFaceCnt();
 	virtual int			WGetFaceDirFlag(int);
 	float*				GetCurrFaceVer();
-	float*		GetCurrFaceVer(int);
+	float*				GetCurrFaceVer(int);
+	virtual glm::vec3	GetNormalVec(int);
 };
 
 class Axes :public Shape
@@ -104,6 +110,7 @@ class Cube :public Shape, public Face, public Movement
 private:
 	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
 	static float*		base_face_vertex_;
+	static float*		base_normal_vec_;
 	static const int	face_ver_size_ = 72;
 	static const int	face_cnt_ = 6;
 	static const int	face_ver_cnt_ = 4;
@@ -112,12 +119,13 @@ public:
 	~Cube();
 	void		Draw(glm::mat4);
 	void		MakeBuffer();
-	float*		InShape(glm::vec2, int*);
+	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
 	int			GetFaceCnt();
 	void		MakeFaceDirFlag();
 	int			WGetFaceDirFlag(int);
+	glm::vec3	GetNormalVec(int);
 };
 
 class Cuboid :public Shape, public Face, public Movement
@@ -125,6 +133,7 @@ class Cuboid :public Shape, public Face, public Movement
 private:
 	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
 	static float*		base_face_vertex_;
+	static float*		base_normal_vec_;
 	static const int	face_ver_size_ = 72;
 	static const int	face_cnt_ = 6;
 	static const int	face_ver_cnt_ = 4;
@@ -134,12 +143,13 @@ public:
 	~Cuboid();
 	void		Draw(glm::mat4);
 	void		MakeBuffer();
-	float*		InShape(glm::vec2, int*);
+	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
 	int			GetFaceCnt();
 	void		MakeFaceDirFlag();
 	int			WGetFaceDirFlag(int);
+	glm::vec3	GetNormalVec(int);
 };
 
 class Goal :public Shape, public Face, public Movement
@@ -156,12 +166,13 @@ public:
 	~Goal();
 	void		Draw(glm::mat4 model);
 	void		MakeBuffer();
-	float*		InShape(glm::vec2, int*);
+	float*		InShape(glm::vec2, int*, int *);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
 	int			GetFaceCnt();
 	void		MakeFaceDirFlag();
 	int			WGetFaceDirFlag(int);
+	glm::vec3	GetNormalVec(int);
 };
 
 class L_shape :public Shape, public Face, public Movement
