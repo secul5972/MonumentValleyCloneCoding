@@ -2,6 +2,7 @@
 
 GLuint Goal::tri_VAO, Goal::tri_VBO, Goal::line_VAO, Goal::line_VBO;
 float* Goal::base_face_vertex_;
+float* Goal::base_normal_vec_;
 glm::mat4 Goal::pre_model_;
 
 extern float cube_face_ver[];
@@ -138,19 +139,25 @@ float* Goal::InShape(glm::vec2 point, int* dir, int* idx)
 void Goal::SaveModelData(glm::mat4 model)
 {
 	if (isfixed_ && issaved_) return;
+	if (!isfixed_ && !isdirty_) return;
 	model_ =  model * pre_model_;
 
+	glm::vec3 prev, curr;
 	glm::mat4 matrix = viewport * projection * view * model_;
+
 	for (int i = 0; i < face_ver_size_ / 3; i++)
 	{
-		glm::vec3 prev, curr;
 		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
 		curr = matrix * glm::vec4(prev, 1.0f);
 		curr_face_vertex_[i * 3] = curr.x;
 		curr_face_vertex_[i * 3 + 1] = curr.y;
 		curr_face_vertex_[i * 3 + 2] = curr.z;
 	}
-	issaved_ = true;
+
+	if (isfixed_)
+		issaved_ = true;
+	else
+		isdirty_ = false;
 }
 
 int Goal::GetFaceVerCnt()

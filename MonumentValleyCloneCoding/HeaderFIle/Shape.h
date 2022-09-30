@@ -157,6 +157,7 @@ class Goal :public Shape, public Face, public Movement
 private:
 	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
 	static float*		base_face_vertex_;
+	static float*		base_normal_vec_;
 	static const int	face_ver_size_ = 72;
 	static const int	face_cnt_ = 6;
 	static const int	face_ver_cnt_ = 4;

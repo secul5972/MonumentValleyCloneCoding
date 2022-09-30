@@ -8,6 +8,7 @@ float l_shape_angle = 0;
 EllipseArea* ellipse_area;
 glm::mat4 ellipse_area_model;
 bool l_shape_moving_flag = false;
+bool adjust_angle_flag = false;
 glm::vec2 prev_mouse_pos_in_model;
 
 extern glm::mat4 vpvp_mat, inv_vp;
@@ -167,16 +168,25 @@ void Level::Draw(glm::mat4 worldModel)
 
 	// adjust angle
 	float tmp_angle = (float)fmod(l_shape_angle, 90);
-	if (!l_shape_moving_flag)
+	if (!l_shape_moving_flag && adjust_angle_flag)
 	{
 		if (tmp_angle < 0.5)
+		{
 			l_shape_angle = float(int(l_shape_angle / 90) * 90);
+			adjust_angle_flag = false;
+		}
 		else if (tmp_angle > 90 - 0.5)
+		{
 			l_shape_angle = float((int(l_shape_angle / 90) + 1) % 4 * 90);
+			adjust_angle_flag = false;
+		}
 		else if (tmp_angle > 45.0f)
 			l_shape_angle += deltaTime * 60;
 		else
 			l_shape_angle -= deltaTime * 60;
+		level->shapes_[9]->SetIsDirty(true);
+		level->shapes_[10]->SetIsDirty(true);
+		level->shapes_[11]->SetIsDirty(true);
 	}
 
 	// update edge
@@ -334,6 +344,7 @@ void Level::mouse_button_callback(GLFWwindow* window, int button, int action, in
 	{
 		left_mouse_button_down = false;
 		l_shape_moving_flag = false;
+		adjust_angle_flag = true;
 		prev_mouse_pos_in_model.x = -1;
 		prev_mouse_pos_in_model.y = -1;
 	}
@@ -558,7 +569,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 	{
 		next_normal = shapes_[next_idx]->GetNormalVec(i);
 		vdot = glm::dot(curr_normal, next_normal);
-		if (abs(1.0f - vdot) < 0.01)
+		if (abs(1.0f - vdot) < 0.0001)
 		{
 			next_direc = shapes_[next_idx]->WGetFaceDirFlag(i);
 			break; 
@@ -607,7 +618,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 
 	// Check to is parallel
 	vdot = glm::dot(glm::normalize(glm::vec2(curr_direc_vec.x, curr_direc_vec.y)), glm::normalize(glm::vec2(next_direc_vec.x, next_direc_vec.y)));
-	if (abs(1.0f - vdot) < 0.01 || abs(-1.0f - vdot) < 0.01)
+	if (abs(1.0f - vdot) < 0.000001 || abs(-1.0f - vdot) < 0.000001)
 	{
 		// When two direc_vec are parallel
 		vector<glm::vec3> over_line = FindOverlappingLine(curr_face_ver_cnt, curr_face, next_face_ver_cnt, next_face);

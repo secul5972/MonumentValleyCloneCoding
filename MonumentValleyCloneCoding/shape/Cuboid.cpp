@@ -158,7 +158,7 @@ void Cuboid::SaveModelData(glm::mat4 model)
 	for (int i = 0; i < face_cnt_; i++)
 	{
 		prev = glm::vec3(base_normal_vec_[i * 3], base_normal_vec_[i * 3 + 1], base_normal_vec_[i * 3 + 2]);
-		curr = model_ * glm::vec4(prev, 0.0f);
+		curr = model * glm::vec4(prev, 0.0f);
 		curr_normal_vec_[i * 3] = float(curr.x > 0 ? int(curr.x + 0.5) : int(curr.x - 0.5));
 		curr_normal_vec_[i * 3 + 1] = float(curr.y > 0 ? int(curr.y + 0.5) : int(curr.y - 0.5));
 		curr_normal_vec_[i * 3 + 2] = float(curr.z > 0 ? int(curr.z + 0.5) : int(curr.z - 0.5));
