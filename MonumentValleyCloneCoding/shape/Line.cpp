@@ -35,3 +35,13 @@ void Line::Draw(glm::mat4 model)
 	glBindVertexArray(0);
 	test_shader->unuse();
 }
+
+void Line::SetLine(glm::vec3 start, glm::vec3 end)
+{
+	line_vertices[0][0] = start.x;
+	line_vertices[0][1] = start.y;
+	line_vertices[0][2] = start.z;
+	line_vertices[1][0] = end.x;
+	line_vertices[1][1] = end.y;
+	line_vertices[1][2] = end.z;
+}

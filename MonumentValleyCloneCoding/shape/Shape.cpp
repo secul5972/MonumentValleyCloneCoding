@@ -16,6 +16,7 @@ const string Shape::kShapeTypeName[] = {
 	"CHARACTER"
 };
 
+Shape::Shape() : type_(DEFAULT), can_be_located_(false), isfixed_(true) {};
 Shape::Shape(ShapeType type = DEFAULT, bool can_be_located = false, bool isfixed = true) : type_(type), can_be_located_(can_be_located), isfixed_(isfixed), model_(glm::mat4(1.0f)) {};
 
 void		Shape::SetCanBeLocated(bool can_be_located) { can_be_located_ = can_be_located; }
@@ -31,7 +32,7 @@ void		Shape::Draw(glm::mat4 model) { cout << kShapeTypeName[type_] << " don't Dr
 void		Shape::MakeBuffer() { cout << kShapeTypeName[type_] << " don't MakeBuffer\n"; }
 void		Shape::MakeFaceVertex() { cout << kShapeTypeName[type_] << " don't MakeFaceVertex\n"; }
 void		Shape::DelFaceVertex() { cout << kShapeTypeName[type_] << " don't need DelFaceVertex\n"; }
-float*		Shape::InShape(glm::vec2, int*, int*) { /*cout << kShapeTypeName[type_] << " don't use InShape\n";*/ return 0; }
+float*		Shape::InShape(glm::vec2, int*) { /*cout << kShapeTypeName[type_] << " don't use InShape\n";*/ return 0; }
 void		Shape::SaveModelData(glm::mat4) { cout << kShapeTypeName[type_] << " don't use SaveModelData\n"; }
 int			Shape::GetFaceVerCnt() { cout << kShapeTypeName[type_] << " don't use GetFaceVerCnt\n"; return 0; };
 int			Shape::GetFaceCnt() { cout << kShapeTypeName[type_] << " don't use GetFaceCnt\n"; return 0; };

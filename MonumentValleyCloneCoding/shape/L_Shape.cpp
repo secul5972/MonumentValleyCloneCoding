@@ -90,40 +90,40 @@ void L_shape::Draw(glm::mat4 model)
 	cube.Draw(shapeModel);
 }
 
-float* L_shape::InShape(glm::vec2 point, int* dir, int *in_shape_idx)
-{
-	float*	face = 0;
-	float	depth = 1;
-	int		new_dir = -1;
-	int		idx = -1;
-	float*	face_ver = curr_face_vertex_;
-
-	for (int i = 0; i < 3; i++)
-	{
-		for (int j = 0; j < face_shape_cnt_[i]; j++)
-		{
-			if (OnFace(point, face_ver + j * face_ver_cnt_ * 3, face_ver_cnt_))
-			{
-				float	curr_depth;
-
-				curr_depth = AverDepth(face_ver + j * face_ver_cnt_ * 3, face_ver_cnt_);
-				if (curr_depth > depth)continue;
-				depth = curr_depth;
-				face = face_ver + j * face_ver_cnt_ * 3;
-				new_dir = GetFaceDirFlag(j);
-				idx = i;
-			}
-		}
-		face_ver += face_shape_cnt_[i] * face_ver_cnt_ * 3;
-	}
-	//if face == 0, point is not in shape
-	if (!face)
-		return 0;
-	
-	*dir = new_dir;
-	*in_shape_idx = idx;
-	return face;
-}
+//float* L_shape::InShape(glm::vec2 point, int* dir, int *in_shape_idx)
+//{
+//	float*	face = 0;
+//	float	depth = 1;
+//	int		new_dir = -1;
+//	int		idx = -1;
+//	float*	face_ver = curr_face_vertex_;
+//
+//	for (int i = 0; i < 3; i++)
+//	{
+//		for (int j = 0; j < face_shape_cnt_[i]; j++)
+//		{
+//			if (OnFace(point, face_ver + j * face_ver_cnt_ * 3, face_ver_cnt_))
+//			{
+//				float	curr_depth;
+//
+//				curr_depth = AverDepth(face_ver + j * face_ver_cnt_ * 3, face_ver_cnt_);
+//				if (curr_depth > depth)continue;
+//				depth = curr_depth;
+//				face = face_ver + j * face_ver_cnt_ * 3;
+//				new_dir = GetFaceDirFlag(j);
+//				idx = i;
+//			}
+//		}
+//		face_ver += face_shape_cnt_[i] * face_ver_cnt_ * 3;
+//	}
+//	//if face == 0, point is not in shape
+//	if (!face)
+//		return 0;
+//	
+//	*dir = new_dir;
+//	*in_shape_idx = idx;
+//	return face;
+//}
 
 void L_shape::SaveModelData(glm::mat4 model)
 {
@@ -137,6 +137,7 @@ void L_shape::SaveModelData(glm::mat4 model)
 		glm::vec3 prev, curr;
 		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
 		curr = matrix * glm::vec4(prev, 1.0f);
+		glm::vec3 tmp = model_ * glm::vec4(prev, 1.0f);
 		curr_face_vertex_[i * 3] = curr.x;
 		curr_face_vertex_[i * 3 + 1] = curr.y;
 		curr_face_vertex_[i * 3 + 2] = curr.z;

@@ -150,7 +150,7 @@
     <ClCompile Include="clickArea\EllipseArea.cpp" />
     <ClCompile Include="Face\Face.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="level\level1.cpp" />
+    <ClCompile Include="level\level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
     <ClCompile Include="Math\Math.cpp" />

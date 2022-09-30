@@ -65,6 +65,7 @@ protected:
 	glm::mat4		model_;
 
 public:
+	Shape();
 	Shape(ShapeType, bool, bool);
 
 	void				SetCanBeLocated(bool can_be_located);
@@ -80,7 +81,7 @@ public:
 	virtual void		MakeBuffer();
 	virtual void		MakeFaceVertex();
 	virtual void		DelFaceVertex();
-	virtual float*		InShape(glm::vec2, int *, int *);
+	virtual float*		InShape(glm::vec2, int *);
 	virtual void		SaveModelData(glm::mat4);
 	virtual int			GetFaceVerCnt();
 	virtual int			GetFaceCnt();
@@ -111,7 +112,7 @@ public:
 	~Cube();
 	void		Draw(glm::mat4);
 	void		MakeBuffer();
-	float*		InShape(glm::vec2, int*, int*);
+	float*		InShape(glm::vec2, int*);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
 	int			GetFaceCnt();
@@ -133,7 +134,7 @@ public:
 	~Cuboid();
 	void		Draw(glm::mat4);
 	void		MakeBuffer();
-	float*		InShape(glm::vec2, int*, int*);
+	float*		InShape(glm::vec2, int*);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
 	int			GetFaceCnt();
@@ -155,7 +156,7 @@ public:
 	~Goal();
 	void		Draw(glm::mat4 model);
 	void		MakeBuffer();
-	float*		InShape(glm::vec2, int*, int*);
+	float*		InShape(glm::vec2, int*);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
 	int			GetFaceCnt();
@@ -178,7 +179,7 @@ public:
 	void		MakeFaceVertex();
 	void		DelFaceVertex();
 	void		Draw(glm::mat4 model);
-	float*		InShape(glm::vec2, int*, int*);
+	//float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
 	int			GetFaceCnt();
@@ -271,6 +272,7 @@ private:
 public:
 	Line();
 	void Draw(glm::mat4);
+	void SetLine(glm::vec3, glm::vec3);
 };
 
 #endif

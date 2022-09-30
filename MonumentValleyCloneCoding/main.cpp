@@ -35,7 +35,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // matrix
-glm::mat4 viewport, projection, view, worldModel;
+glm::mat4 viewport, projection, view, worldModel, vpvp_mat;
 
 // light
 glm::vec3 lightPos, lightColor;
@@ -46,7 +46,7 @@ Shader* test_shader;
 
 bool left_mouse_button_down = false;
 
-Level1* level1;
+Level* level;
 
 int main()
 {
@@ -105,9 +105,9 @@ int main()
 	Corn corn;
 	Character character;
 	Sphere sphere;
-	Line line;
+	
 
-	level1 = new Level1;
+	level = new Level(14);
 
 	cube.MakeBuffer();
 	cuboid.MakeBuffer();
@@ -153,6 +153,7 @@ int main()
 		worldModel = glm::mat4(1.0f);
 		worldModel = glm::translate(worldModel, glm::vec3(0.0f, -0.4f, 1.2f));
 
+		vpvp_mat = viewport * projection * view;
 		// draw_shapes
 		axes.Draw(worldModel);
 		//cube.Draw(worldModel);
@@ -162,14 +163,13 @@ int main()
 		//e.Draw(defaultShader, worldModel);
 		//f.Draw(defaultShader, worldModel);
 		//g.Draw(defaultShader, worldModel);
-		glfwSetMouseButtonCallback(window, &Level1::mouse_button_callback);
-		glfwSetCursorPosCallback(window, &Level1::mouse_cursor_pos_callback);
-		level1->Draw(worldModel);
+		glfwSetMouseButtonCallback(window, &Level::mouse_button_callback);
+		glfwSetCursorPosCallback(window, &Level::mouse_cursor_pos_callback);
+		level->Draw(worldModel);
 		//h.Draw(defaultShader, worldModel);
 		//m.Draw(defaultShader, worldModel);
 		//n.Draw(defaultShader, worldModel);
 		//o.Draw(defaultShader, worldModel);
-		line.Draw(worldModel);
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		glfwSwapBuffers(window);
 		glfwPollEvents();

@@ -27,7 +27,7 @@ class ClickArea
 {
 public:
 	virtual bool CheckClickInArea(float xpos, float ypos, glm::mat4 model) = 0;
-	virtual float CheckClickAndRotateInArea(float xpos, float ypos, glm::mat4 model) = 0;
+	virtual float CheckClickAndFindAngle(float xpos, float ypos, glm::mat4 model) = 0;
 };
 
 class EllipseArea :ClickArea
@@ -35,7 +35,7 @@ class EllipseArea :ClickArea
 public:
 	EllipseArea();
 	bool CheckClickInArea(float xpos, float ypos, glm::mat4 model);
-	float CheckClickAndRotateInArea(float xpos, float ypos, glm::mat4 model);
+	float CheckClickAndFindAngle(float xpos, float ypos, glm::mat4 model);
 };
 
 #endif

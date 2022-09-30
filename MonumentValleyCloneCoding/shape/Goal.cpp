@@ -111,7 +111,7 @@ void Goal::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Goal::InShape(glm::vec2 point, int* dir, int *in_shape_idx)
+float* Goal::InShape(glm::vec2 point, int* dir)
 {
 	float* face = 0;
 	int curr_dir = -1;
@@ -131,14 +131,12 @@ float* Goal::InShape(glm::vec2 point, int* dir, int *in_shape_idx)
 		return 0;
 
 	*dir = curr_dir;
-	*in_shape_idx = 0;
 	return face;
 }
 
 void Goal::SaveModelData(glm::mat4 model)
 {
 	if (isfixed_ && issaved_) return;
-	if (!isfixed_ && !isdirty_) return;
 	model_ =  model * pre_model_;
 
 	glm::mat4 matrix = viewport * projection * view * model_;
@@ -151,6 +149,7 @@ void Goal::SaveModelData(glm::mat4 model)
 		curr_face_vertex_[i * 3 + 1] = curr.y;
 		curr_face_vertex_[i * 3 + 2] = curr.z;
 	}
+	issaved_ = true;
 }
 
 int Goal::GetFaceVerCnt()

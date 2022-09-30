@@ -175,7 +175,7 @@ void Cube::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Cube::InShape(glm::vec2 point, int* dir, int *in_shape_idx)
+float* Cube::InShape(glm::vec2 point, int* dir)
 {
 	float* face = 0;
 	int curr_dir = -1;
@@ -195,7 +195,6 @@ float* Cube::InShape(glm::vec2 point, int* dir, int *in_shape_idx)
 		return 0;
 
 	*dir = curr_dir;
-	*in_shape_idx = 0;
 	return face;
 }
 
@@ -215,6 +214,10 @@ void Cube::SaveModelData(glm::mat4 model)
 		curr_face_vertex_[i * 3 + 1] = curr.y;
 		curr_face_vertex_[i * 3 + 2] = curr.z;
 	}
+	if (isfixed_)
+		issaved_ = true;
+	else
+		isdirty_ = false;
 }
 
 int Cube::GetFaceVerCnt()
