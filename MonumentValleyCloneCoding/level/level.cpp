@@ -505,9 +505,8 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 
 	path_coord.clear();
 	path_coord.push_back(inv_vp * glm::vec4(vp_start, 1.0f));
-
-	if (size == 1) return false;
-	else
+	
+	if (size != 1 || size == 1 && curr_direc != 0)
 	{
 		glm::vec3 curr = vp_start;
 		for (int i = 0; i < size - 1; i++)
@@ -536,9 +535,7 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 
 		if (curr_direc_vec.x == 0)
 		{
-			if (recent_pos.x == vp_end.x)
-				path_coord.push_back(inv_vp * glm::vec4(vp_end, 1.0f));
-			else
+			if (recent_pos.x != vp_end.x)
 			{
 				// curr_direc_vec.x == 0 && curr_ortho_vec.x == 0 불가능
 				additional_pos.x = vp_end.x;
@@ -550,7 +547,7 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 				}
 				else
 				{
-					additional_pos.y = LinearEquation(curr_ortho_vec, recent_pos, 1, vp_end.x);
+					additional_pos.y = LinearEquation(curr_ortho_vec, recent_pos, 1, additional_pos.x);
 					additional_pos.z = PlaneEquation(vpvp_mat * glm::vec4(curr_normal_vec, 0.0f), vp_end, additional_pos);
 					path_coord.push_back(inv_vp * glm::vec4(additional_pos, 1.0f));
 				}
@@ -558,9 +555,7 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 		}
 		else if (curr_direc_vec.y == 0)
 		{
-			if (recent_pos.y == vp_end.y)
-				path_coord.push_back(inv_vp * glm::vec4(vp_end, 1.0f));
-			else
+			if (recent_pos.y != vp_end.y)
 			{
 				//curr_direc_vec.x == 0 && curr_direc_vec.y == 0 이미 처리함
 				additional_pos.y = vp_end.y;
@@ -572,12 +567,18 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 		else
 		{
 			//direc, ortho 교점 구하기
+			additional_pos.x = (curr_ortho_vec.x * curr_direc_vec.x * (recent_pos.y - vp_end.y) + curr_direc_vec.y * curr_ortho_vec.x * vp_end.x - curr_ortho_vec.y * curr_direc_vec.x * recent_pos.x)
+				/ (curr_ortho_vec.x * curr_direc_vec.y - curr_direc_vec.x * curr_ortho_vec.y);
+			additional_pos.y = LinearEquation(curr_ortho_vec, recent_pos, 1, additional_pos.x);
+			additional_pos.z = PlaneEquation(vpvp_mat * glm::vec4(curr_normal_vec, 0.0f), vp_end, additional_pos);
+			path_coord.push_back(inv_vp * glm::vec4(additional_pos, 1.0f));
 		}
-
+		path_coord.push_back(inv_vp * glm::vec4(vp_end, 1.0f));
 		char_move_flag = true;
 		path_coord_idx = 0;
 		return true;
 	}
+	return false;
 }
 
 void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, int* curr_direc_ptr, int* curr_face_cnt_ptr, int* curr_face_ver_cnt_ptr)
