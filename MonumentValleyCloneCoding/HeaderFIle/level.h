@@ -32,14 +32,12 @@ private:
 	bool				path_coord_idx = 0;
 
 	float*				start_face = 0;
-	int					start_shape_idx = -1;
 	int					start_face_direc = 0;
 	glm::vec3			start_normal_vec;
 	int					start_face_cnt = 0;
 	int					start_face_ver_cnt = 0;
 
 	float*				end_face = 0;
-	int					end_shape_idx = -1;
 	int					end_face_direc = 0;
 	glm::vec3			end_normal_vec;
 

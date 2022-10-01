@@ -271,7 +271,8 @@ void Level::FindPathCoord(double xpos, double ypos)
 	float		start_depth = 1;
 	float		end_depth = 1;
 	glm::vec3	vp_char_pos = vpvp_mat * glm::vec4(wd_char_pos, 1.0f);
-
+	int			start_shape_idx = -1;
+	int			end_shape_idx = -1;
 	// find the clicked face and face with character
 	for (int i = 0; i < shape_cnt_; i++)
 	{
@@ -314,8 +315,13 @@ void Level::FindPathCoord(double xpos, double ypos)
 	// align mouse_pos
 	vp_aligned_pos = AlignPos(end_face, end_face_direc, mouse_pos, shapes_[start_shape_idx]->GetFaceVerCnt());
 	vp_aligned_pos = inv_vp * glm::vec4(vp_aligned_pos, 1.0f);
+	cout << vp_aligned_pos << "\nidx" << start_shape_idx << " "<<end_shape_idx;
 	// find idx path and convert to coord path
-	PathIdxToCoord(vp_char_pos, FindPath(start_shape_idx, end_shape_idx, moving_shape_cnt_, Level::edge));
+	vector<int> path_idx = FindPath(start_shape_idx, end_shape_idx, moving_shape_cnt_, Level::edge);
+	//if (path_idx.size() == 0)
+	//	return ;
+
+	PathIdxToCoord(vp_char_pos, path_idx);
 	wd_aligned_pos = glm::inverse(projection * view) * glm::vec4(vp_aligned_pos, 1.0f);
 	dist_vec = glm::normalize(wd_aligned_pos - wd_char_pos);
 	printf("dist_vec:%f %f %f\nwd_aligned_pos:%f %f %f", dist_vec.x, dist_vec.y, dist_vec.z, wd_aligned_pos.x, wd_aligned_pos.y, wd_aligned_pos.z);
