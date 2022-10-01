@@ -29,7 +29,7 @@ private:
 	glm::vec3			wd_char_pos;
 	bool				char_move_flag = false;
 	vector<glm::vec3>	path_coord;
-	bool				path_coord_idx = 0;
+	int					path_coord_idx = 0;
 
 	float*				start_face = 0;
 	int					start_face_direc = 0;

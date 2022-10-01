@@ -27,6 +27,8 @@ Line::Line() : Shape(DEFAULT, false, true)
 void Line::Draw(glm::mat4 model)
 {
 	test_shader->use();
+	test_shader->setMat4("view", view);
+	test_shader->setMat4("projection", projection);
 	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(line_vertices), &line_vertices[0][0]);
 	glBindVertexArray(line_VAO);

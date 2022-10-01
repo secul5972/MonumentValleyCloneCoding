@@ -11,7 +11,7 @@ bool l_shape_moving_flag = false;
 bool adjust_angle_flag = false;
 glm::vec2 prev_mouse_pos_in_model;
 
-extern glm::mat4 vpvp_mat, inv_vp;
+extern glm::mat4 vpvp_mat, inv_vp, inv_vpvp;
 extern Level* level;
 extern float line_vertices[2][3];
 
@@ -148,16 +148,17 @@ void Level::Draw(glm::mat4 worldModel)
 		wd_char_pos += deltaTime * dist_vec;
 		for (int i = 0; i < path_coord.size() - 1; i++)
 		{
-			line.SetLine(glm::vec3(path_coord[i].x, path_coord[i].y, -1.0f), glm::vec3(path_coord[i + 1].x, path_coord[i + 1].y, -1.0f));
+			line.SetLine(path_coord[i], path_coord[i + 1]);
 			line.Draw(worldModel);
 		}
-		//line.SetLine(projection * view * glm::vec4(wd_char_pos, 1.0f), vp_aligned_pos);
-		//line.Draw(worldModel);
-		if (glm::length(wd_char_pos - wd_aligned_pos) < 0.01)
+		if (glm::length(wd_char_pos - path_coord[path_coord_idx]) < 0.01)
 		{
-			char_move_flag = false;
-			wd_char_pos = wd_aligned_pos;
-			printf("aa\n");
+			wd_char_pos = path_coord[path_coord_idx];
+			path_coord_idx++;
+			if (path_coord_idx == path_coord.size())
+				char_move_flag = false;
+			else
+				dist_vec = glm::normalize(path_coord[path_coord_idx] - path_coord[path_coord_idx - 1]);
 		}
 	}
 
@@ -320,10 +321,12 @@ void Level::FindPathCoord(double xpos, double ypos)
 	//if (path_idx.size() == 0)
 	//	return ;
 
-	PathIdxToCoord(vp_char_pos, vp_aligned_pos, path_idx);
-	wd_aligned_pos = glm::inverse(viewport * projection * view) * glm::vec4(vp_aligned_pos, 1.0f);
-	dist_vec = glm::normalize(wd_aligned_pos - wd_char_pos);
-	printf("dist_vec:%f %f %f\nwd_aligned_pos:%f %f %f", dist_vec.x, dist_vec.y, dist_vec.z, wd_aligned_pos.x, wd_aligned_pos.y, wd_aligned_pos.z);
+	if (!PathIdxToCoord(vp_char_pos, vp_aligned_pos, path_idx)) return;
+	//wd_aligned_pos = inv_vpvp * glm::vec4(vp_aligned_pos, 1.0f);
+	char_move_flag = true;
+	path_coord_idx = 1;
+	dist_vec = glm::normalize(path_coord[1] - path_coord[0]);
+	//dist_vec = glm::normalize(wd_aligned_pos - wd_char_pos);
 }
 
 Level::~Level()
@@ -357,13 +360,13 @@ void Level::mouse_button_callback(GLFWwindow* window, int button, int action, in
 
 void Level::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	if (left_mouse_button_down)
+	if (left_mouse_button_down && level->char_move_flag == false)
 	{
 		//rotate angle of rotary knob
 		float angle = ellipse_area->CheckClickAndFindAngle((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
 		if (abs(angle) < 0.000001) return;
 		l_shape_angle += angle;
-		l_shape_angle = (float)fmod(l_shape_angle + 360, (double)360);
+		l_shape_angle = (float)fmod(l_shape_angle + 360, (double)360); 
 		level->shapes_[9]->SetIsDirty(true);
 		level->shapes_[10]->SetIsDirty(true);
 		level->shapes_[11]->SetIsDirty(true);
@@ -501,10 +504,11 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 	float* curr_face = start_face;
 	int curr_face_cnt = start_face_cnt;
 	int curr_face_ver_cnt = start_face_ver_cnt;
+
 	curr_normal_vec = start_normal_vec;
 
 	path_coord.clear();
-	path_coord.push_back(inv_vp * glm::vec4(vp_start, 1.0f));
+	path_coord.push_back(inv_vpvp * glm::vec4(vp_start, 1.0f));
 	
 	if (size != 1 || size == 1 && curr_direc != 0)
 	{
@@ -516,17 +520,13 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 		if (abs(1.0f - vdot) > 0.000001) return false;
 
 		//curr_direc_vec와 aligned pos를 지나는 직선위에 last pos가 놓여 있다.
-		glm::vec3 recent_pos = viewport * glm::vec4(path_coord[path_coord.size() - 1], 1.0f);
+		glm::vec3 recent_pos = vpvp_mat * glm::vec4(path_coord[path_coord.size() - 1], 1.0f);
 		glm::vec3 curr_direc_vec;
 		glm::vec3 curr_ortho_vec;
 		glm::vec3 additional_pos;
 
 		if (curr_direc == 0)
-		{
-			char_move_flag = true;
-			path_coord_idx = 0;
 			return true;
-		}
 
 		curr_direc_vec = glm::vec3(curr_face[3] - curr_face[0], curr_face[4] - curr_face[1], curr_face[5] - curr_face[2]);
 		curr_ortho_vec = glm::vec3(curr_face[6] - curr_face[3], curr_face[7] - curr_face[4], curr_face[8] - curr_face[5]);
@@ -543,13 +543,13 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 				{
 					additional_pos.y = recent_pos.y;
 					additional_pos.z = PlaneEquation(vpvp_mat * glm::vec4(curr_normal_vec, 0.0f), vp_end, additional_pos);
-					path_coord.push_back(inv_vp * glm::vec4(additional_pos, 1.0f));
+					path_coord.push_back(inv_vpvp * glm::vec4(additional_pos, 1.0f));
 				}
 				else
 				{
 					additional_pos.y = LinearEquation(curr_ortho_vec, recent_pos, 1, additional_pos.x);
 					additional_pos.z = PlaneEquation(vpvp_mat * glm::vec4(curr_normal_vec, 0.0f), vp_end, additional_pos);
-					path_coord.push_back(inv_vp * glm::vec4(additional_pos, 1.0f));
+					path_coord.push_back(inv_vpvp * glm::vec4(additional_pos, 1.0f));
 				}
 			}
 		}
@@ -561,21 +561,23 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 				additional_pos.y = vp_end.y;
 				additional_pos.x = LinearEquation(curr_ortho_vec, recent_pos, 0, additional_pos.y);
 				additional_pos.z = PlaneEquation(vpvp_mat * glm::vec4(curr_normal_vec, 0.0f), vp_end, additional_pos);
-				path_coord.push_back(inv_vp * glm::vec4(additional_pos, 1.0f));
+				path_coord.push_back(inv_vpvp * glm::vec4(additional_pos, 1.0f));
 			}
 		}
 		else
 		{
-			//direc, ortho 교점 구하기
-			additional_pos.x = (curr_ortho_vec.x * curr_direc_vec.x * (recent_pos.y - vp_end.y) + curr_direc_vec.y * curr_ortho_vec.x * vp_end.x - curr_ortho_vec.y * curr_direc_vec.x * recent_pos.x)
-				/ (curr_ortho_vec.x * curr_direc_vec.y - curr_direc_vec.x * curr_ortho_vec.y);
-			additional_pos.y = LinearEquation(curr_ortho_vec, recent_pos, 1, additional_pos.x);
-			additional_pos.z = PlaneEquation(vpvp_mat * glm::vec4(curr_normal_vec, 0.0f), vp_end, additional_pos);
-			path_coord.push_back(inv_vp * glm::vec4(additional_pos, 1.0f));
+			float aa = LinearEquation(curr_direc_vec, vp_aligned_pos, 1, recent_pos.x);
+			if (abs(recent_pos.y - LinearEquation(curr_direc_vec, vp_aligned_pos, 1, recent_pos.x)) > 0.01)
+			{
+				//direc, ortho 교점 구하기
+				additional_pos.x = (curr_ortho_vec.x * curr_direc_vec.x * (recent_pos.y - vp_end.y) + curr_direc_vec.y * curr_ortho_vec.x * vp_end.x - curr_ortho_vec.y * curr_direc_vec.x * recent_pos.x)
+					/ (curr_ortho_vec.x * curr_direc_vec.y - curr_direc_vec.x * curr_ortho_vec.y);
+					additional_pos.y = LinearEquation(curr_ortho_vec, recent_pos, 1, additional_pos.x);
+					additional_pos.z = PlaneEquation(glm::cross(curr_direc_vec, curr_ortho_vec), vp_end, additional_pos);
+					path_coord.push_back(inv_vpvp * glm::vec4(additional_pos, 1.0f));
+			}
 		}
-		path_coord.push_back(inv_vp * glm::vec4(vp_end, 1.0f));
-		char_move_flag = true;
-		path_coord_idx = 0;
+		path_coord.push_back(inv_vpvp * glm::vec4(vp_end, 1.0f));
 		return true;
 	}
 	return false;
@@ -629,7 +631,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 	// Direc = 2 : find direc vector with face_vertex[1] and face_vertex[2] (face is rectangular)
 	if (next_direc == 0)
 	{
-		path_coord.push_back(inv_vp * glm::vec4(FindCenterPos(next_face, next_face_ver_cnt), 1.0f));
+		path_coord.push_back(inv_vpvp * glm::vec4(FindCenterPos(next_face, next_face_ver_cnt), 1.0f));
 		return;
 	}
 	if (curr_direc == 0)
@@ -637,7 +639,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 		// Find intersection line
 		vector<glm::vec3> over_line = FindOverlappingLine(curr_face_ver_cnt, curr_face, next_face_ver_cnt, next_face);
 		// Midpoint of line
-		path_coord.push_back(inv_vp * glm::vec4((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2, 1.0f));
+		path_coord.push_back(inv_vpvp * glm::vec4((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2, 1.0f));
 		return;
 	}
 
@@ -658,7 +660,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 		// When two direc_vec are parallel
 		vector<glm::vec3> over_line = FindOverlappingLine(curr_face_ver_cnt, curr_face, next_face_ver_cnt, next_face);
 		// Midpoint of overlapping line
-		path_coord.push_back(inv_vp * glm::vec4((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2, 1.0f));
+		path_coord.push_back(inv_vpvp * glm::vec4((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2, 1.0f));
 		return; 
 	}
 	else
@@ -694,13 +696,13 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 			inter_pos.z = PlaneEquation(vpvp_mat * glm::vec4(curr_normal, 0.0f), curr_center_pos, inter_pos);
 			vector<glm::vec3> over_line = FindOverlappingLine(curr_face_ver_cnt, curr_face, next_face_ver_cnt, next_face);
 
-			path_coord.push_back(inv_vp * glm::vec4(inter_pos, 1.0f));
-			path_coord.push_back(inv_vp * glm::vec4((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2, 1.0f));
+			path_coord.push_back(inv_vpvp * glm::vec4(inter_pos, 1.0f));
+			path_coord.push_back(inv_vpvp * glm::vec4((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2, 1.0f));
 		}
 		else
 		{
 			inter_pos.z = PlaneEquation(vpvp_mat * glm::vec4(next_normal, 0.0f), next_center_pos, inter_pos);
-			path_coord.push_back(inv_vp * glm::vec4(inter_pos, 1.0f));
+			path_coord.push_back(inv_vpvp * glm::vec4(inter_pos, 1.0f));
 		}
 		*curr_direc_ptr = next_direc;
 		*curr_face_cnt_ptr = next_face_cnt;

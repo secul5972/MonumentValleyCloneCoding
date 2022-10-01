@@ -36,8 +36,8 @@ float lastFrame = 0.0f;
 
 // matrix
 glm::mat4 viewport, projection, view, worldModel;
-glm::mat4 vpvp_mat, inv_vp;
-
+glm::mat4 vpvp_mat;
+glm::mat4 inv_vp, inv_vpvp;
 // light
 glm::vec3 lightPos, lightColor;
 
@@ -156,6 +156,7 @@ int main()
 
 		vpvp_mat = viewport * projection * view;
 		inv_vp = glm::inverse(viewport);
+		inv_vpvp = glm::inverse(vpvp_mat);
 		// draw_shapes
 		axes.Draw(worldModel);
 		//cube.Draw(worldModel);
