@@ -30,6 +30,9 @@ private:
 	int					acg_cnt_;
 	int					orna_cnt_;
 
+	//world model matrix
+	glm::mat4			world_model_;
+
 	//data for acter moving
 	glm::vec3			vp_aligned_pos;
 	glm::vec3			wd_acter_pos;
@@ -53,9 +56,9 @@ private:
 public:
 	bool** edge;
 
-	Level(int acg_cnt, int actg_cnt);
+	Level(int acg_cnt, int actg_cnt, glm::mat4 world_model);
 	~Level();
-	void					Draw(glm::mat4 worldModel);
+	void					Draw();
 	void					FindPathCoord(double xpos, double ypos);
 
 	static void				mouse_button_callback(GLFWwindow* window, int button, int action, int mods);

@@ -15,8 +15,9 @@ extern glm::mat4 vpvp_mat, inv_vp, inv_vpvp;
 extern Level* level;
 extern float line_vertices[2][3];
 
-Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_acter_pos(glm::vec3(0.0f, -0.3f, 1.2f))
+Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_acter_pos(glm::vec3(0.0f, -0.3f, 1.2f))
 {
+	world_model_ = world_model;
 	acg_object_ = new ActerCanGoObject * [acg_cnt_];
 	ornaments_ = new Ornament * [orna_cnt_];
 
@@ -26,9 +27,11 @@ Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt)
 
 	acg_object_[0] = new Cuboid();
 	acg_object_[0]->SetCanBeLocated(true);
+	acg_object_[0]->SetIsFixed(false);
 
 	acg_object_[1] = new Goal();
 	acg_object_[1]->SetCanBeLocated(true);
+	acg_object_[1]->SetIsFixed(false);
 
 	acg_object_[2] = new Cuboid();
 	acg_object_[2]->SetCanBeLocated(true);
@@ -68,6 +71,7 @@ Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt)
 
 	acg_object_[11] = new Cuboid();
 	acg_object_[11]->SetCanBeLocated(true);
+	acg_object_[11]->SetIsFixed(false);
 
 	ornaments_[0] = new Acter();
 	ornaments_[1] = new Rotary_Knob();
@@ -103,13 +107,13 @@ Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt)
 	edge[11][1] = 1;
 }
 
-void Level::Draw(glm::mat4 worldModel)
+void Level::Draw()
 {
 	glm::mat4 model;
 	glm::mat4 model2;
 
 	// draw l_shape
-	model = worldModel;
+	model = world_model_;
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 	acg_object_[2]->SaveModelData(model2);
@@ -124,7 +128,7 @@ void Level::Draw(glm::mat4 worldModel)
 	acg_object_[4]->Draw(model2);
 
 	// draw l_shape
-	model = worldModel;
+	model = world_model_;
 	model = glm::translate(model, glm::vec3(1.8f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -143,11 +147,11 @@ void Level::Draw(glm::mat4 worldModel)
 	// acter
 	if (acter_move_flag)
 	{
-		wd_acter_pos += deltaTime * dist_vec;
+		wd_acter_pos += 0.013f * dist_vec;
 		for (int i = 0; i < path_coord.size() - 1; i++)
 		{
 			line.SetLine(path_coord[i], path_coord[i + 1]);
-			line.Draw(worldModel);
+			line.Draw(world_model_);
 		}
 		if (glm::length(wd_acter_pos - path_coord[path_coord_idx]) < 0.01)
 		{
@@ -160,7 +164,7 @@ void Level::Draw(glm::mat4 worldModel)
 		}
 	}
 
-	model = worldModel;
+	model = world_model_;
 	model = glm::translate(model, wd_acter_pos - glm::vec3(0.0f, -0.4f, 1.2f));
 	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 	ornaments_[0]->Draw(model);
@@ -183,9 +187,9 @@ void Level::Draw(glm::mat4 worldModel)
 			l_shape_angle += deltaTime * 60;
 		else
 			l_shape_angle -= deltaTime * 60;
-		level->acg_object_[8]->SetIsDirty(true);
-		level->acg_object_[9]->SetIsDirty(true);
-		level->acg_object_[10]->SetIsDirty(true);
+		acg_object_[8]->SetIsDirty(true);
+		acg_object_[9]->SetIsDirty(true);
+		acg_object_[10]->SetIsDirty(true);
 	}
 
 	// update edge
@@ -212,22 +216,23 @@ void Level::Draw(glm::mat4 worldModel)
 	}
 
 	// draw rotary_knob
-	model = worldModel;
-	model2 = worldModel;
+	model = world_model_;
+	model2 = world_model_;
 	model2 = glm::translate(model2, glm::vec3(1.9f, 1.8f, 0.0f));
 	model2 = glm::rotate(model2, glm::radians(float(l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	ornaments_[1]->Draw(model2);
 
-	model = worldModel;
+	model = world_model_;
 	model = glm::translate(model, glm::vec3(2.15f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.0f, 3.0f, 3.0f));
 	ellipse_area_model = model;
 
+	glm::mat4 opt_world_model_ = world_model_;
 	if (225 < l_shape_angle && l_shape_angle < 315)
-		worldModel = glm::translate(worldModel, glm::vec3(-1.8f, -1.8f, -1.8f));
+		opt_world_model_ = glm::translate(world_model_, glm::vec3(-1.8f, -1.8f, -1.8f));
 
 	// draw l_shape
-	model = worldModel;
+	model = opt_world_model_;
 	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
@@ -244,21 +249,21 @@ void Level::Draw(glm::mat4 worldModel)
 	acg_object_[10]->Draw(model2);
 
 	// draw cuboid
-	model = worldModel;
+	model = opt_world_model_;
 	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.25f, 1.0f, 1.0f));
 	acg_object_[0]->SaveModelData(model);
 	acg_object_[0]->Draw(model);
 
 	// draw cuboid
-	model = worldModel;
+	model = opt_world_model_;
 	model = glm::translate(model, glm::vec3(0.0f, 1.8f, -0.5f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	acg_object_[11]->SaveModelData(model);
 	acg_object_[11]->Draw(model);
 
 	// draw goal
-	model = worldModel;
+	model = opt_world_model_;
 	model = glm::translate(model, glm::vec3(0.0f, 1.9f, -0.9f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	acg_object_[1]->SaveModelData(model);
@@ -790,16 +795,16 @@ std::vector<glm::vec3> Level::FindOverlappingLine(int curr_face_ver_cnt, float* 
 				small_y = long_spos.y;
 				if (big_y < small_y)
 					swap(big_y, small_y);
-				big_y += 0.001;
-				small_y -= 0.001;
+				big_y += 0.001f;
+				small_y -= 0.001f;
 				if (!(small_y <= short_fpos.y && short_fpos.y <= big_y && small_y <= short_spos.y && short_spos.y <= big_y)) continue;
 
 				big_x = long_fpos.x;
 				small_x = long_spos.x;
 				if (big_x < small_x)
 					swap(big_x, small_x);
-				big_x += 0.001;
-				small_x -= 0.001;
+				big_x += 0.001f;
+				small_x -= 0.001f;
 
 				if (!(small_x <= short_fpos.x && short_fpos.x <= big_x && small_x <= short_spos.x && short_spos.x <= big_x)) continue;
 

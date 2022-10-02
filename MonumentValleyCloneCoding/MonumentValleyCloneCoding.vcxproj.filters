@@ -22,7 +22,6 @@
     <ClCompile Include="Object\Ornament.cpp" />
     <ClCompile Include="Object\Rotary_Knob.cpp" />
     <ClCompile Include="Object\Shape.cpp" />
-    <ClCompile Include="Object\Slope.cpp" />
     <ClCompile Include="Object\Sphere.cpp" />
     <ClCompile Include="Object\CanBeLocated.cpp" />
     <ClCompile Include="Object\Rotatable.cpp" />

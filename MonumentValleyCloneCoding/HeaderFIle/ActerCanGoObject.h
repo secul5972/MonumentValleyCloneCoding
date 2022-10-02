@@ -114,32 +114,4 @@ public:
 	int					WGetFaceDrcFlag(int);
 };
 
-class Slope :public ActerCanGoObject, public MoveDrc
-{
-private:
-	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
-	static float* base_face_vertex_;
-	static float* base_normal_vec_;
-	static const int	kFaceVerSize = 72;
-	static const int	kFaceCnt = 6;
-	static const int	kFaceVerCnt = 4;
-	static glm::mat4	pre_model_;
-public:
-	Slope();
-	~Slope();
-
-	static void			MakeBuffer();
-
-	// virtual
-	void				Draw(glm::mat4 model);
-	float* InShape(glm::vec2, int*, int*);
-	void				SaveModelData(glm::mat4);
-	void				MakeFaceDrcFlag();
-	int					GetFaceVerCnt();
-	int					GetFaceCnt();
-
-	// wrapper
-	int					WGetFaceDrcFlag(int);
-};
-
 #endif

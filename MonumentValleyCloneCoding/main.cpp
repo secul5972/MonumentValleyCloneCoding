@@ -34,7 +34,7 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // matrix
-glm::mat4 viewport, projection, view, worldModel;
+glm::mat4 viewport, projection, view;
 glm::mat4 vpvp_mat;
 glm::mat4 inv_vp, inv_vpvp;
 // light
@@ -88,7 +88,11 @@ int main()
 
 	Axes axes;
 
-	level = new Level(12, 2);
+	// base translate
+	glm::mat4 world_model = glm::mat4(1.0f);
+	world_model = glm::translate(world_model, glm::vec3(0.0f, -0.4f, 1.2f));
+
+	level = new Level(12, 2, world_model);
 
 	// light setting
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -100,8 +104,7 @@ int main()
 
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
-	Slope s;
-	s.MakeBuffer();
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic
@@ -120,21 +123,15 @@ int main()
 		projection = glm::ortho(-2.0f,2.0f, -2.0f, 2.0f, 0.0f, 100.0f);
 		view = camera.GetViewMatrix();
 
-		// base translate
-		worldModel = glm::mat4(1.0f);
-		worldModel = glm::translate(worldModel, glm::vec3(0.0f, -0.4f, 1.2f));
-
 		vpvp_mat = viewport * projection * view;
 		inv_vp = glm::inverse(viewport);
 		inv_vpvp = glm::inverse(vpvp_mat);
 
 		// draw_shapes
-		axes.Draw(worldModel);
-		//s.Draw(worldModel);
-		//s.Draw(glm::rotate(worldModel, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f)));
+		axes.Draw(world_model);
 		glfwSetMouseButtonCallback(window, &Level::mouse_button_callback);
 		glfwSetCursorPosCallback(window, &Level::mouse_cursor_pos_callback);
-		level->Draw(worldModel);
+		level->Draw();
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		glfwSwapBuffers(window);
@@ -176,7 +173,6 @@ void PrepareShapeBuffer()
 	Cube::MakeBuffer();
 	Cuboid::MakeBuffer();
 	Goal::MakeBuffer();
-	Slope::MakeBuffer();
 	Circle::MakeBuffer();
 	Cylinder::MakeBuffer();
 	Corn::MakeBuffer();
