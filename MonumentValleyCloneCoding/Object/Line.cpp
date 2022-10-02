@@ -1,4 +1,4 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/Ornament.h"
 
 GLuint Line::line_VAO_, Line::line_VBO_;
 
@@ -7,7 +7,7 @@ GLfloat line_vertices[2][3] = {
 };
 
 extern Shader* line_shader;
-Line::Line() : Shape(DEFAULT, false, true)
+Line::Line() : Ornament(DEFAULT, false)
 {
 	glGenBuffers(1, &line_VBO_);
 

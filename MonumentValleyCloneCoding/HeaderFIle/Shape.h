@@ -58,17 +58,12 @@ protected:
 	ShapeType		type_;
 	//player can be located on shape
 	bool			can_be_located_;
-	//this shape do not rotate
-	bool			isfixed_;
-	bool			issaved_ = false;
-
 public:
 	Shape();
 	Shape(ShapeType, bool);
 
 	void				SetCanBeLocated(bool can_be_located);
 	bool				GetCanBeLocated();
-	void				SetIsFixed(bool isfixed);
 	virtual void		Draw(glm::mat4) = 0;
 };
 

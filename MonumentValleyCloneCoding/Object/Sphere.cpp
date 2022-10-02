@@ -1,4 +1,4 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/Ornament.h"
 
 GLuint Sphere::tri_VAO_, Sphere::tri_VBO_;
 
@@ -6,7 +6,7 @@ float* sphere_ver;
 int sphere_ver_cnt;
 int circle_cnt;
 
-Sphere::Sphere() : Shape(SPHERE, false, true) {};
+Sphere::Sphere() : Ornament(SPHERE, false) {};
 
 void Sphere::MakeBuffer()
 {

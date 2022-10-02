@@ -11,7 +11,7 @@
     <ClCompile Include="Math\Math.cpp" />
     <ClCompile Include="Object\ActerCanGoObject.cpp" />
     <ClCompile Include="Object\Axes.cpp" />
-    <ClCompile Include="Object\Character.cpp" />
+    <ClCompile Include="Object\Acter.cpp" />
     <ClCompile Include="Object\Circle.cpp" />
     <ClCompile Include="Object\Corn.cpp" />
     <ClCompile Include="Object\Cube.cpp" />
@@ -25,6 +25,7 @@
     <ClCompile Include="Object\Slope.cpp" />
     <ClCompile Include="Object\Sphere.cpp" />
     <ClCompile Include="Object\CanBeLocated.cpp" />
+    <ClCompile Include="Object\Rotatable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headerFile\AdditionalMathFunction.h" />

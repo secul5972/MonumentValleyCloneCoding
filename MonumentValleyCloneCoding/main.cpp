@@ -88,7 +88,7 @@ int main()
 
 	Axes axes;
 
-	level = new Level(14);
+	level = new Level(11, 3);
 
 	// light setting
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);

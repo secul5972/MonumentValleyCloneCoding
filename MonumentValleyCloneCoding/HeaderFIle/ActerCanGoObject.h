@@ -16,14 +16,19 @@ extern const int	cube_line_ver_cnt;
 extern Shader*		def_shader;
 
 class ActerCanGoObject :public Shape, public Rotatable, public CanBeLocated
-{
-private:
+{ 
+protected:
+	//this shape do not rotate
+	bool			isfixed_;
+	bool			issaved_ = false;
 public:
 	ActerCanGoObject(ShapeType shape_type, bool can_be_located_);
 	~ActerCanGoObject();
 	virtual int			GetFaceVerCnt() = 0;
 	virtual int			GetFaceCnt() = 0;
-	virtual int			WGetFaceDirFlag(int);
+	virtual int			WGetFaceDrcFlag(int) = 0;
+
+	void				SetIsFixed(bool isfixed);
 };
 
 class Cube :public ActerCanGoObject, public MoveDrc

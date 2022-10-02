@@ -67,9 +67,7 @@ Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt)
 	acg_object_[10]->SetIsFixed(false);
 
 	ornaments_[0] = new Acter();
-
 	ornaments_[1] = new Rotary_Knob();
-
 	ornaments_[2] = new Slope();
 
 	edge = new bool* [acg_cnt_];
@@ -79,9 +77,9 @@ Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt)
 		memset(edge[i], 0, sizeof(bool) * acg_cnt_);
 	}
 
-	edge[0][2] = 1;
-	edge[0][9] = 1;
-	edge[2][0] = 1;
+	edge[0][1] = 1;
+	edge[0][8] = 1;
+	edge[1][0] = 1;
 	edge[2][3] = 1;
 	edge[3][2] = 1;
 	edge[3][4] = 1;
@@ -94,11 +92,11 @@ Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt)
 	edge[7][6] = 1;
 	edge[7][10] = 1;
 	edge[8][0] = 1;
-	edge[8][10] = 1;
-	edge[9][9] = 1;
-	edge[9][11] = 1;
-	edge[10][8] = 1;
-	edge[10][10] = 1;
+	edge[8][9] = 1;
+	edge[9][8] = 1;
+	edge[9][10] = 1;
+	edge[10][7] = 1;
+	edge[10][9] = 1;
 }
 
 void Level::Draw(glm::mat4 worldModel)
@@ -110,16 +108,16 @@ void Level::Draw(glm::mat4 worldModel)
 	model = worldModel;
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-	acg_object_[3]->SaveModelData(model2);
-	acg_object_[3]->Draw(model2);
+	acg_object_[2]->SaveModelData(model2);
+	acg_object_[2]->Draw(model2);
 
-	acg_object_[4]->SaveModelData(model);
-	acg_object_[4]->Draw(model);
+	acg_object_[3]->SaveModelData(model);
+	acg_object_[3]->Draw(model);
 
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[5]->SaveModelData(model2);
-	acg_object_[5]->Draw(model2);
+	acg_object_[4]->SaveModelData(model2);
+	acg_object_[4]->Draw(model2);
 
 	// draw l_shape
 	model = worldModel;
@@ -127,16 +125,16 @@ void Level::Draw(glm::mat4 worldModel)
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-	acg_object_[6]->SaveModelData(model2);
-	acg_object_[6]->Draw(model2);
+	acg_object_[5]->SaveModelData(model2);
+	acg_object_[5]->Draw(model2);
 
-	acg_object_[7]->SaveModelData(model);
-	acg_object_[7]->Draw(model);
+	acg_object_[6]->SaveModelData(model);
+	acg_object_[6]->Draw(model);
 
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[8]->SaveModelData(model2);
-	acg_object_[8]->Draw(model2);
+	acg_object_[7]->SaveModelData(model2);
+	acg_object_[7]->Draw(model2);
 
 	// acter
 	if (acter_move_flag)
@@ -161,7 +159,7 @@ void Level::Draw(glm::mat4 worldModel)
 	model = worldModel;
 	model = glm::translate(model, wd_acter_pos - glm::vec3(0.0f, -0.4f, 1.2f));
 	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-	acg_object_[12]->Draw(model);
+	ornaments_[0]->Draw(model);
 
 	// adjust angle
 	float tmp_angle = (float)fmod(l_shape_angle, 90);
@@ -181,32 +179,32 @@ void Level::Draw(glm::mat4 worldModel)
 			l_shape_angle += deltaTime * 60;
 		else
 			l_shape_angle -= deltaTime * 60;
+		level->acg_object_[8]->SetIsDirty(true);
 		level->acg_object_[9]->SetIsDirty(true);
 		level->acg_object_[10]->SetIsDirty(true);
-		level->acg_object_[11]->SetIsDirty(true);
 	}
 
 	// update edge
 	if (l_shape_angle == 270)
 	{
-		edge[8][11] = 0;
-		edge[11][8] = 0;
-		edge[3][11] = 1;
-		edge[11][3] = 1;
+		edge[7][10] = 0;
+		edge[10][7] = 0;
+		edge[2][10] = 1;
+		edge[10][2] = 1;
 	}
 	else if (l_shape_angle == 0)
 	{
-		edge[8][11] = 1;
-		edge[11][8] = 1;
-		edge[3][11] = 0;
-		edge[11][3] = 0;
+		edge[7][10] = 1;
+		edge[10][7] = 1;
+		edge[2][10] = 0;
+		edge[10][2] = 0;
 	}
 	else if (l_shape_angle == 90 || l_shape_angle == 180)
 	{
-		edge[8][11] = 0;
-		edge[11][8] = 0;
-		edge[3][11] = 0;
-		edge[11][3] = 0;
+		edge[7][10] = 0;
+		edge[10][7] = 0;
+		edge[2][10] = 0;
+		edge[10][2] = 0;
 	}
 
 	// draw rotary_knob
@@ -214,7 +212,7 @@ void Level::Draw(glm::mat4 worldModel)
 	model2 = worldModel;
 	model2 = glm::translate(model2, glm::vec3(1.9f, 1.8f, 0.0f));
 	model2 = glm::rotate(model2, glm::radians(float(l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
-	acg_object_[13]->Draw(model2);
+	ornaments_[1]->Draw(model2);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(2.15f, 1.8f, 0.0f));
@@ -230,16 +228,16 @@ void Level::Draw(glm::mat4 worldModel)
 	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-	acg_object_[9]->SaveModelData(model2);
-	acg_object_[9]->Draw(model2);
+	acg_object_[8]->SaveModelData(model2);
+	acg_object_[8]->Draw(model2);
 
-	acg_object_[10]->SaveModelData(model);
-	acg_object_[10]->Draw(model);
+	acg_object_[9]->SaveModelData(model);
+	acg_object_[9]->Draw(model);
 
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[11]->SaveModelData(model2);
-	acg_object_[11]->Draw(model2);;
+	acg_object_[10]->SaveModelData(model2);
+	acg_object_[10]->Draw(model2);;
 
 	// draw cuboid
 	model = worldModel;
@@ -248,18 +246,18 @@ void Level::Draw(glm::mat4 worldModel)
 	acg_object_[0]->SaveModelData(model);
 	acg_object_[0]->Draw(model);
 
-	// draw slope
-	model = worldModel;
-	model = glm::translate(model, glm::vec3(0.0f, 2.0f, -0.2f));
-	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[1]->Draw(model);
-
 	// draw goal
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.3f, -1.1f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[2]->SaveModelData(model);
-	acg_object_[2]->Draw(model);
+	acg_object_[1]->SaveModelData(model);
+	acg_object_[1]->Draw(model);
+
+	// draw slope
+	model = worldModel;
+	model = glm::translate(model, glm::vec3(0.0f, 2.0f, -0.2f));
+	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
+	ornaments_[2]->Draw(model);
 }
 
 void Level::FindPathCoord(double xpos, double ypos)
@@ -363,9 +361,9 @@ void Level::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double yp
 		if (abs(angle) < 0.000001) return;
 		l_shape_angle += angle;
 		l_shape_angle = (float)fmod(l_shape_angle + 360, (double)360);
+		level->acg_object_[8]->SetIsDirty(true);
 		level->acg_object_[9]->SetIsDirty(true);
 		level->acg_object_[10]->SetIsDirty(true);
-		level->acg_object_[11]->SetIsDirty(true);
 	}
 }
 
@@ -604,7 +602,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 		vdot = glm::dot(curr_normal, next_normal);
 		if (abs(1.0f - vdot) < 0.0001)
 		{
-			next_direc = acg_object_[next_idx]->WGetFaceDirFlag(i);
+			next_direc = acg_object_[next_idx]->WGetFaceDrcFlag(i);
 			break;
 		}
 		next_face += 3 * next_face_ver_cnt;

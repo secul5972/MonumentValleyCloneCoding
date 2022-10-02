@@ -6,8 +6,6 @@ int slope_face_ver_cnt;
 
 Slope::Slope() : Ornament(SLOPE, true) {}
 
-Goal::~Goal() {}
-
 void Slope::MakeBuffer()
 {
 	float* slope_tri_ver;

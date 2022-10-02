@@ -1,4 +1,4 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/Ornament.h"
 
 GLuint Axes::line_VAO_, Axes::line_VBO_;
 
@@ -8,7 +8,7 @@ GLfloat axes_vertices[6][3] = {
 };
 GLfloat axes_color[3][3] = { { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f, 0.0f, 1.0f } };
 
-Axes::Axes() : Shape(AXES, false, true)
+Axes::Axes() : Ornament(AXES, false)
 {
 	glGenBuffers(1, &line_VBO_);
 

@@ -1,6 +1,6 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/Ornament.h"
 
-Rotary_Knob::Rotary_Knob() : Shape(RORTARY_KNOB, false, false) {}
+Rotary_Knob::Rotary_Knob() : Ornament(RORTARY_KNOB, false) {}
 
 void Rotary_Knob::Draw(glm::mat4 model)
 {

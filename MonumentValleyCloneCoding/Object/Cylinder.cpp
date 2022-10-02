@@ -1,11 +1,11 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/Ornament.h"
 
 GLuint Cylinder::line_VAO_, Cylinder::line_VBO_;
 
 extern float* circle_ver;
 extern int circle_ver_cnt;
 
-Cylinder::Cylinder() : Shape(CYLINDER, false, true) {};
+Cylinder::Cylinder() : Ornament(CYLINDER, false) {};
 
 void Cylinder::MakeBuffer()
 {

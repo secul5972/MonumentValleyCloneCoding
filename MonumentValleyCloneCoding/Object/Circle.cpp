@@ -1,10 +1,10 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/Ornament.h"
 
 GLuint Circle::tri_VAO_, Circle::tri_VBO_;
 float* circle_ver;
 int circle_ver_cnt;
 
-Circle::Circle() : Shape(CIRCLE, false, true) {};
+Circle::Circle() : Ornament(CIRCLE, false) {};
 
 void Circle::MakeBuffer()
 {

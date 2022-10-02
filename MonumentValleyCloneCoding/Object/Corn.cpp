@@ -1,11 +1,11 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/Ornament.h"
 
 GLuint Corn::tri_VAO_, Corn::tri_VBO_;
 
 extern float* circle_ver;
 extern int circle_ver_cnt;
 
-Corn::Corn() : Shape(CORN, false, true) {};
+Corn::Corn() : Ornament(CORN, false) {};
 
 void Corn::MakeBuffer()
 {

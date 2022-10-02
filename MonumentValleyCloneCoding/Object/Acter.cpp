@@ -1,6 +1,6 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/Ornament.h"
 
-Acter::Acter() : Shape(ACTER, false, true) {}
+Acter::Acter() : Ornament(ACTER, false) {}
 
 void Acter::Draw(glm::mat4 model)
 {
