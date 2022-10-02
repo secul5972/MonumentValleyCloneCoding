@@ -126,6 +126,8 @@ Cube::Cube() : ActerCanGoObject(CUBE, true), MoveDrc(kFaceCnt)
 {
 	curr_face_vertex_ = new float[kFaceVerSize];
 	curr_normal_vec_ = new float[kNrmVecSize];
+	disable_face_ = new bool[kFaceCnt];
+	fill(disable_face_, disable_face_ + kFaceCnt, false);
 	MakeFaceDrcFlag();
 };
 
@@ -133,6 +135,7 @@ Cube::~Cube()
 {
 	delete[] curr_face_vertex_;
 	delete[] curr_normal_vec_;
+	delete[] disable_face_;
 }
 
 void Cube::MakeBuffer()

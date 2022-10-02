@@ -268,6 +268,12 @@ void Level::Draw()
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	acg_object_[1]->SaveModelData(model);
 	acg_object_[1]->Draw(model);
+
+	if (one_flag == false)
+	{
+		CheckDisableFace();
+		one_flag = true;
+	}
 }
 
 void Level::FindPathCoord(double xpos, double ypos)
@@ -383,18 +389,7 @@ void Level::PrintFace(float* face, int ver_cnt)
 
 glm::vec3 Level::AlignPos(float* face, int direction, glm::vec2 point, int face_ver_cnt)
 {
-	glm::vec3 center(0.0f, 0.0f, 0.0f);
-
-	// make center
-	for (int i = 0; i < face_ver_cnt; i++)
-	{
-		center.x += face[i * 3];
-		center.y += face[i * 3 + 1];
-		center.z += face[i * 3 + 2];
-	}
-	center.x /= face_ver_cnt;
-	center.y /= face_ver_cnt;
-	center.z /= face_ver_cnt;
+	glm::vec3 center = FindCenterPos(face, face_ver_cnt);
 
 	if (direction == 0)
 		return center;
@@ -459,9 +454,10 @@ glm::vec3 Level::AlignPos(float* face, int direction, glm::vec2 point, int face_
 std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 {
 	std::queue<int>	qu;
-	int				visited[20];
+	int*			visited;
 	int				curr;
 
+	visited = new int[size];
 	std::fill(visited, visited + size, -1);
 
 	visited[start] = 0;
@@ -481,6 +477,7 @@ std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 			qu.push(i);
 		}
 	}
+	
 
 	std::vector<int> ret;
 
@@ -492,6 +489,7 @@ std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 	}
 	ret.push_back(curr);
 	std::reverse(ret.begin(), ret.end());
+	delete[] visited;
 	return ret;
 }
 
@@ -514,7 +512,8 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 	{
 		glm::vec3 curr = vp_start;
 		for (int i = 0; i < size - 1; i++)
-			FindCoord(&curr_face, path_idx[i + 1], curr, &curr_direc, &curr_face_cnt, &curr_face_ver_cnt);
+			if (FindCoord(&curr_face, path_idx[i + 1], curr, &curr_direc, &curr_face_cnt, &curr_face_ver_cnt) == false)
+				return false;
 
 		float vdot = glm::dot(curr_normal_vec, end_normal_vec);
 		if (abs(1.0f - vdot) > 0.000001) return false;
@@ -583,7 +582,7 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 	return false;
 }
 
-void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, int* curr_direc_ptr, int* curr_face_cnt_ptr, int* curr_face_ver_cnt_ptr)
+bool Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, int* curr_direc_ptr, int* curr_face_cnt_ptr, int* curr_face_ver_cnt_ptr)
 {
 	float* curr_face = *curr_face_ptr;
 	int curr_face_cnt = *curr_face_cnt_ptr;
@@ -598,12 +597,13 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 	glm::vec3 next_normal(0.0f, 0.0f, 0.0f);
 
 	int curr_direc = *curr_direc_ptr;
-	int next_direc = 0;
+	int next_direc = -1;
 	float vdot;
 
 	// brute force to find a suitable face in shape
-	for (int i = 0; i < next_face_cnt; i++)
+	for (int i = 0; i < next_face_cnt; i++, next_face += 3 * next_face_ver_cnt)
 	{
+		if (acg_object_[next_idx]->GetDisableFace(i)) continue;
 		next_normal = acg_object_[next_idx]->GetNormalVec(i);
 		vdot = glm::dot(curr_normal, next_normal);
 		if (abs(1.0f - vdot) < 0.0001)
@@ -611,8 +611,9 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 			next_direc = acg_object_[next_idx]->WGetFaceDrcFlag(i);
 			break;
 		}
-		next_face += 3 * next_face_ver_cnt;
 	}
+
+	if (next_direc == -1) return false;
 
 	//-- Change next data to curr data for loop 
 	*curr_direc_ptr = next_direc;
@@ -632,7 +633,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 	if (next_direc == 0)
 	{
 		path_coord.push_back(inv_vpvp * glm::vec4(FindCenterPos(next_face, next_face_ver_cnt), 1.0f));
-		return;
+		return true;
 	}
 	if (curr_direc == 0)
 	{
@@ -640,7 +641,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 		vector<glm::vec3> over_line = FindOverlappingLine(curr_face_ver_cnt, curr_face, next_face_ver_cnt, next_face);
 		// Midpoint of line
 		path_coord.push_back(inv_vpvp * glm::vec4((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2, 1.0f));
-		return;
+		return true;
 	}
 
 	if (curr_direc == 1)
@@ -661,7 +662,6 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 		vector<glm::vec3> over_line = FindOverlappingLine(curr_face_ver_cnt, curr_face, next_face_ver_cnt, next_face);
 		// Midpoint of overlapping line
 		path_coord.push_back(inv_vpvp * glm::vec4((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2, 1.0f));
-		return;
 	}
 	else
 	{
@@ -711,6 +711,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 		*curr_face_cnt_ptr = next_face_cnt;
 		*curr_face_ptr = next_face;
 	}
+	return true;
 }
 
 std::vector<glm::vec3> Level::FindOverlappingLine(int curr_face_ver_cnt, float* curr_face, int next_face_ver_cnt, float* next_face)
@@ -819,18 +820,45 @@ std::vector<glm::vec3> Level::FindOverlappingLine(int curr_face_ver_cnt, float* 
 	return ret;
 }
 
-glm::vec3 Level::FindCenterPos(float* points, int ver_cnt)
+void Level::CheckDisableFace()
 {
-	glm::vec3 center_pos(0.0f, 0.0f, 0.0f);
-
-	for (int i = 0; i < ver_cnt; i++)
+	for (int i = 0; i < acg_cnt_; i++)
 	{
-		center_pos.x += points[i * 3];
-		center_pos.y += points[i * 3 + 1];
-		center_pos.z += points[i * 3 + 2];
+		for (int j = i + 1; j < acg_cnt_; j++)
+		{
+			if (edge[i][j] == 0)continue;
+			CmpTwoObj(i, j);
+		}
 	}
-	center_pos.x /= ver_cnt;
-	center_pos.y /= ver_cnt;
-	center_pos.z /= ver_cnt;
-	return center_pos;
+}
+
+void Level::CmpTwoObj(int fobj_idx, int sobj_idx)
+{
+	float* fobj_face = acg_object_[fobj_idx]->GetCurrFaceVer();
+	int fobj_face_cnt = acg_object_[fobj_idx]->GetFaceCnt();
+	int fobj_face_ver_cnt = acg_object_[fobj_idx]->GetFaceVerCnt();
+	float* sobj_face = acg_object_[sobj_idx]->GetCurrFaceVer();
+	int sobj_face_cnt = acg_object_[sobj_idx]->GetFaceCnt();
+	int sobj_face_ver_cnt = acg_object_[sobj_idx]->GetFaceVerCnt();
+
+	for (int i = 0; i < fobj_face_cnt; i++, fobj_face += 3 * fobj_face_ver_cnt)
+	{
+		glm::vec3 fobj_nrm = acg_object_[fobj_idx]->GetNormalVec(i);
+		glm::vec3 fobj_center = FindCenterPos(fobj_face, fobj_face_ver_cnt);
+
+		sobj_face = acg_object_[sobj_idx]->GetCurrFaceVer();
+		for (int j = 0; j < sobj_face_cnt; j++, sobj_face += 3 * sobj_face_ver_cnt)
+		{
+			glm::vec3 sobj_nrm = acg_object_[sobj_idx]->GetNormalVec(j);
+			float vdot = glm::dot(fobj_nrm, sobj_nrm);
+			if (abs(-1.0f - vdot) > 0.001) continue;
+
+			glm::vec3 sobj_center = FindCenterPos(sobj_face, sobj_face_ver_cnt);
+			if (glm::length(fobj_center - sobj_center) > 0.001) continue;
+
+			acg_object_[fobj_idx]->SetDisableFace(i, true);
+			acg_object_[sobj_idx]->SetDisableFace(j, true);
+			break;
+		}
+	}
 }

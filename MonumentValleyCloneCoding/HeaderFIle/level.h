@@ -53,6 +53,9 @@ private:
 	glm::vec3			dist_vec;
 	glm::vec3			wd_aligned_pos;
 	Line				line;
+
+	//one time flag
+	bool				one_flag = false;
 public:
 	bool** edge;
 
@@ -68,9 +71,10 @@ public:
 	glm::vec3				AlignPos(float* face, int direction, glm::vec2 point, int ver_cnt);
 	std::vector<int>		FindPath(int start, int end, int size, bool** edge);
 	bool					PathIdxToCoord(glm::vec3 start, glm::vec3 vp_end, vector<int> path_idx);
-	void					FindCoord(float** curr_face, int next, glm::vec3 start, int* curr_direc_ptr, int* curr_face_cnt_ptr, int* curr_face_ver_cnt_ptr);
+	bool					FindCoord(float** curr_face, int next, glm::vec3 start, int* curr_direc_ptr, int* curr_face_cnt_ptr, int* curr_face_ver_cnt_ptr);
 	std::vector<glm::vec3>	FindOverlappingLine(int curr_face_cnt, float* curr_face, int next_face_cnt, float* next_face);
-	glm::vec3				FindCenterPos(float* points, int ver_cnt);
+	void					CheckDisableFace();
+	void					CmpTwoObj(int fobj_idx, int sobj_idx);
 };
 
 #endif

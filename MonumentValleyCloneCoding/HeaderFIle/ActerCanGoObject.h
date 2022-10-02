@@ -21,14 +21,17 @@ protected:
 	//this shape do not rotate
 	bool			isfixed_ = true;
 	bool			issaved_ = false;
+	bool*			disable_face_ = 0;
 public:
 	ActerCanGoObject(ShapeType shape_type, bool can_be_located_);
 	~ActerCanGoObject();
 	virtual int			GetFaceVerCnt() = 0;
 	virtual int			GetFaceCnt() = 0;
-	virtual int			WGetFaceDrcFlag(int) = 0;
+	virtual int			WGetFaceDrcFlag(int) = 0;	
 
 	void				SetIsFixed(bool isfixed);
+	void				SetDisableFace(int idx, bool val);
+	bool				GetDisableFace(int idx);
 };
 
 class Cube :public ActerCanGoObject, public MoveDrc
@@ -109,7 +112,7 @@ public:
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
 	int					GetFaceCnt();
-	
+
 	// wrapper
 	int					WGetFaceDrcFlag(int);
 };
