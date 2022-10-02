@@ -66,9 +66,11 @@ Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt)
 	acg_object_[10]->SetCanBeLocated(true);
 	acg_object_[10]->SetIsFixed(false);
 
+	acg_object_[11] = new Cuboid();
+	acg_object_[11]->SetCanBeLocated(true);
+
 	ornaments_[0] = new Acter();
 	ornaments_[1] = new Rotary_Knob();
-	ornaments_[2] = new Slope();
 
 	edge = new bool* [acg_cnt_];
 	for (int i = 0; i < acg_cnt_; i++)
@@ -77,9 +79,9 @@ Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt)
 		memset(edge[i], 0, sizeof(bool) * acg_cnt_);
 	}
 
-	edge[0][1] = 1;
 	edge[0][8] = 1;
-	edge[1][0] = 1;
+	edge[0][11] = 1;
+	edge[1][11] = 1;
 	edge[2][3] = 1;
 	edge[3][2] = 1;
 	edge[3][4] = 1;
@@ -97,6 +99,8 @@ Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt)
 	edge[9][10] = 1;
 	edge[10][7] = 1;
 	edge[10][9] = 1;
+	edge[11][0] = 1;
+	edge[11][1] = 1;
 }
 
 void Level::Draw(glm::mat4 worldModel)
@@ -237,7 +241,7 @@ void Level::Draw(glm::mat4 worldModel)
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
 	acg_object_[10]->SaveModelData(model2);
-	acg_object_[10]->Draw(model2);;
+	acg_object_[10]->Draw(model2);
 
 	// draw cuboid
 	model = worldModel;
@@ -246,18 +250,19 @@ void Level::Draw(glm::mat4 worldModel)
 	acg_object_[0]->SaveModelData(model);
 	acg_object_[0]->Draw(model);
 
+	// draw cuboid
+	model = worldModel;
+	model = glm::translate(model, glm::vec3(0.0f, 1.8f, -0.5f));
+	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
+	acg_object_[11]->SaveModelData(model);
+	acg_object_[11]->Draw(model);
+
 	// draw goal
 	model = worldModel;
-	model = glm::translate(model, glm::vec3(0.0f, 2.3f, -1.1f));
+	model = glm::translate(model, glm::vec3(0.0f, 1.9f, -0.9f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	acg_object_[1]->SaveModelData(model);
 	acg_object_[1]->Draw(model);
-
-	// draw slope
-	model = worldModel;
-	model = glm::translate(model, glm::vec3(0.0f, 2.0f, -0.2f));
-	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	ornaments_[2]->Draw(model);
 }
 
 void Level::FindPathCoord(double xpos, double ypos)
@@ -312,15 +317,11 @@ void Level::FindPathCoord(double xpos, double ypos)
 
 	// find idx path and convert to coord path
 	vector<int> path_idx = FindPath(start_shape_idx, end_shape_idx, acg_cnt_, Level::edge);
-	//if (path_idx.size() == 0)
-	//	return ;
 
 	if (!PathIdxToCoord(vp_acter_pos, vp_aligned_pos, path_idx)) return;
-	//wd_aligned_pos = inv_vpvp * glm::vec4(vp_aligned_pos, 1.0f);
 	acter_move_flag = true;
 	path_coord_idx = 1;
 	dist_vec = glm::normalize(path_coord[1] - path_coord[0]);
-	//dist_vec = glm::normalize(wd_aligned_pos - wd_acter_pos);
 }
 
 Level::~Level()
@@ -524,6 +525,7 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 
 		curr_direc_vec = glm::vec3(curr_face[3] - curr_face[0], curr_face[4] - curr_face[1], curr_face[5] - curr_face[2]);
 		curr_ortho_vec = glm::vec3(curr_face[6] - curr_face[3], curr_face[7] - curr_face[4], curr_face[8] - curr_face[5]);
+	
 		if (curr_direc == 2)
 			swap(curr_direc_vec, curr_ortho_vec);
 
@@ -560,7 +562,6 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 		}
 		else
 		{
-			float aa = LinearEquation(curr_direc_vec, vp_aligned_pos, 1, recent_pos.x);
 			if (abs(recent_pos.y - LinearEquation(curr_direc_vec, vp_aligned_pos, 1, recent_pos.x)) > 0.01)
 			{
 				//direc, ortho ���� ���ϱ�
@@ -685,9 +686,11 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 				/ (curr_direc_vec.y * next_direc_vec.x - curr_direc_vec.x * next_direc_vec.y);
 			inter_pos.y = LinearEquation(next_direc_vec, next_center_pos, 1, inter_pos.x);
 		}
+
 		if (OnFace(inter_pos, curr_face, curr_face_ver_cnt))
 		{
-			inter_pos.z = PlaneEquation(vpvp_mat * glm::vec4(curr_normal, 0.0f), curr_center_pos, inter_pos);
+			inter_pos.z = PlaneEquation(glm::cross(glm::vec3(curr_face[3] - curr_face[0], curr_face[4] - curr_face[1], curr_face[5] - curr_face[2]),
+				glm::vec3(curr_face[6] - curr_face[0], curr_face[7] - curr_face[1], curr_face[8] - curr_face[2])), curr_center_pos, inter_pos);
 			vector<glm::vec3> over_line = FindOverlappingLine(curr_face_ver_cnt, curr_face, next_face_ver_cnt, next_face);
 
 			path_coord.push_back(inv_vpvp * glm::vec4(inter_pos, 1.0f));
@@ -695,7 +698,8 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 		}
 		else
 		{
-			inter_pos.z = PlaneEquation(vpvp_mat * glm::vec4(next_normal, 0.0f), next_center_pos, inter_pos);
+			inter_pos.z = PlaneEquation(glm::cross(glm::vec3(next_face[3] - next_face[0], next_face[4] - next_face[1], next_face[5] - next_face[2]),
+				glm::vec3(next_face[6] - next_face[0], next_face[7] - next_face[1], next_face[8] - next_face[2])), next_center_pos, inter_pos);
 			path_coord.push_back(inv_vpvp * glm::vec4(inter_pos, 1.0f));
 		}
 		*curr_direc_ptr = next_direc;
@@ -718,13 +722,89 @@ std::vector<glm::vec3> Level::FindOverlappingLine(int curr_face_ver_cnt, float* 
 		{
 			int next_line_sidx = (next_line_fidx + 1) % next_face_ver_cnt;
 
-			if ((abs(curr_face[curr_line_fidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001
-				&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001)
-				|| (abs(curr_face[curr_line_fidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001
-					&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001))
+			//if ((abs(curr_face[curr_line_fidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001
+			//	&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001)
+			//	|| (abs(curr_face[curr_line_fidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001
+			//		&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001))
+			//{
+			//	ret.push_back(glm::vec3(curr_face[curr_line_fidx * 3], curr_face[curr_line_fidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2]));
+			//	ret.push_back(glm::vec3(next_face[next_line_fidx * 3], next_face[next_line_fidx * 3 + 1], next_face[next_line_fidx * 3 + 2]));
+			//	return ret;
+			//}
+
+			glm::vec3 long_fpos(curr_face[curr_line_fidx * 3], curr_face[curr_line_fidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2]);
+			glm::vec3 long_spos(curr_face[curr_line_sidx * 3], curr_face[curr_line_sidx * 3 + 1], curr_face[curr_line_sidx * 3 + 2]);
+			glm::vec3 short_fpos(next_face[next_line_fidx * 3], next_face[next_line_fidx * 3 + 1], next_face[next_line_fidx * 3 + 2]);
+			glm::vec3 short_spos(next_face[next_line_sidx * 3], next_face[next_line_sidx * 3 + 1], next_face[next_line_sidx * 3 + 2]);
+
+			glm::vec2 long_vec(long_fpos - long_spos);
+			glm::vec2 short_vec(short_fpos - short_spos);
+			if (glm::length(long_vec) < glm::length(short_vec))
 			{
-				ret.push_back(glm::vec3(curr_face[curr_line_fidx * 3], curr_face[curr_line_fidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2]));
-				ret.push_back(glm::vec3(next_face[next_line_fidx * 3], next_face[next_line_fidx * 3 + 1], next_face[next_line_fidx * 3 + 2]));
+				swap(long_vec, short_vec);
+				swap(long_fpos, short_fpos);
+				swap(long_spos, short_spos);
+			}
+
+			float vdot = glm::dot(glm::normalize(long_vec), glm::normalize(short_vec));
+			if (!(abs(1.0f - vdot) < 0.0001 || abs(-1.0f - vdot) < 0.0001)) continue;
+			
+			float big_x, big_y;
+			float small_x, small_y;
+			if (long_vec.x == 0)
+			{
+				if (abs(long_fpos.x - short_fpos.x) > 0.0001) continue;
+
+				big_y = long_fpos.y;
+				small_y = long_spos.y;
+				if (big_y < small_y)
+					swap(big_y, small_y);
+				if (small_y <= short_fpos.y && short_fpos.y <= big_y && small_y <= short_spos.y && short_spos.y <= big_y)
+				{
+					ret.push_back(short_fpos);
+					ret.push_back(short_spos);
+					return ret;
+				}
+			}
+			else if (long_vec.y == 0)
+			{
+				if (abs(long_fpos.y - short_fpos.y) > 0.0001) continue;
+
+				big_x = long_fpos.x;
+				small_x = long_spos.x;
+				if (big_x < small_x)
+					swap(big_x, small_x);
+				if (small_x <= short_fpos.x && short_fpos.x <= big_x && small_x <= short_spos.x && short_spos.x <= big_x)
+				{
+					ret.push_back(short_fpos);
+					ret.push_back(short_spos);
+					return ret;
+				}
+			}
+			else
+			{
+				float aa = LinearEquation(long_vec, long_fpos, 1, short_fpos.x);
+				if (abs(short_fpos.y - LinearEquation(long_vec, long_fpos, 1, short_fpos.x)) > 0.001) continue;
+
+				big_y = long_fpos.y;
+				small_y = long_spos.y;
+				if (big_y < small_y)
+					swap(big_y, small_y);
+				big_y += 0.001;
+				small_y -= 0.001;
+				if (!(small_y <= short_fpos.y && short_fpos.y <= big_y && small_y <= short_spos.y && short_spos.y <= big_y)) continue;
+
+				big_x = long_fpos.x;
+				small_x = long_spos.x;
+				if (big_x < small_x)
+					swap(big_x, small_x);
+				big_x += 0.001;
+				small_x -= 0.001;
+
+				if (!(small_x <= short_fpos.x && short_fpos.x <= big_x && small_x <= short_spos.x && short_spos.x <= big_x)) continue;
+
+				ret.push_back(short_fpos);
+				ret.push_back(short_spos);
 				return ret;
 			}
 		}

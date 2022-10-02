@@ -88,7 +88,7 @@ int main()
 
 	Axes axes;
 
-	level = new Level(11, 3);
+	level = new Level(12, 2);
 
 	// light setting
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -100,7 +100,8 @@ int main()
 
 	// configure global opengl state
 	glEnable(GL_DEPTH_TEST);
-
+	Slope s;
+	s.MakeBuffer();
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic
@@ -128,8 +129,9 @@ int main()
 		inv_vpvp = glm::inverse(vpvp_mat);
 
 		// draw_shapes
-		axes.Draw(worldModel); 
-
+		axes.Draw(worldModel);
+		//s.Draw(worldModel);
+		//s.Draw(glm::rotate(worldModel, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f)));
 		glfwSetMouseButtonCallback(window, &Level::mouse_button_callback);
 		glfwSetCursorPosCallback(window, &Level::mouse_cursor_pos_callback);
 		level->Draw(worldModel);

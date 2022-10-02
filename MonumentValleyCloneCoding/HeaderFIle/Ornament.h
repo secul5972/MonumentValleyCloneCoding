@@ -23,18 +23,6 @@ public:
 	void Draw(glm::mat4);
 };
 
-class Slope :public Ornament
-{
-private:
-	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
-public:
-	Slope();
-	void Draw(glm::mat4 model);
-	static void	MakeBuffer();
-	void FreeVertex();
-};
-
-
 class Circle :public Ornament
 {
 private:
