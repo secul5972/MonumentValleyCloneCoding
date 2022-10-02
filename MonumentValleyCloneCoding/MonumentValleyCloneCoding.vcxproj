@@ -163,7 +163,6 @@
     <ClCompile Include="Shape\Cylinder.cpp" />
     <ClCompile Include="Shape\Goal.cpp" />
     <ClCompile Include="Shape\Line.cpp" />
-    <ClCompile Include="Shape\L_Shape.cpp" />
     <ClCompile Include="Shape\Rotary_Knob.cpp" />
     <ClCompile Include="Shape\Shape.cpp" />
     <ClCompile Include="Shape\Slope.cpp" />

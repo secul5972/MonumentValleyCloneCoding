@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-GLuint Slope::tri_VAO, Slope::tri_VBO, Slope::line_VAO, Slope::line_VBO;
+GLuint Slope::tri_VAO_, Slope::tri_VBO_, Slope::line_VAO_, Slope::line_VBO_;
 float* slope_face_ver;
 int slope_face_ver_cnt;
 
@@ -51,12 +51,12 @@ void Slope::MakeBuffer()
 	}
 
 	//triangle
-	glGenBuffers(1, &tri_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO);
+	glGenBuffers(1, &tri_VBO_);
+	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO_);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 216, slope_tri_ver, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &tri_VAO);
-	glBindVertexArray(tri_VAO);
+	glGenVertexArrays(1, &tri_VAO_);
+	glBindVertexArray(tri_VAO_);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -65,12 +65,12 @@ void Slope::MakeBuffer()
 
 
 	//line
-	glGenBuffers(1, &line_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
+	glGenBuffers(1, &line_VBO_);
+	glBindBuffer(GL_ARRAY_BUFFER, line_VBO_);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 48, slope_face_ver, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &line_VAO);
-	glBindVertexArray(line_VAO);
+	glGenVertexArrays(1, &line_VAO_);
+	glBindVertexArray(line_VAO_);
 
 	// position atlinebute
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -96,11 +96,11 @@ void Slope::Draw(glm::mat4 model)
 	def_shader->setMat4("projection", projection);
 	def_shader->setMat4("view", view);
 	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
-	glBindVertexArray(tri_VAO);
+	glBindVertexArray(tri_VAO_);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	def_shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	glBindVertexArray(line_VAO);
+	glBindVertexArray(line_VAO_);
 	glDrawArrays(GL_LINE_STRIP, 0, 4);
 	glDrawArrays(GL_LINE_STRIP, 4, 4);
 	glDrawArrays(GL_LINE_STRIP, 8, 4);

@@ -15,7 +15,7 @@ extern glm::mat4 vpvp_mat, inv_vp, inv_vpvp;
 extern Level* level;
 extern float line_vertices[2][3];
 
-Level::Level(int shape_cnt) : shape_cnt_(shape_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_char_pos(glm::vec3(0.0f, -0.3f, 1.2f))
+Level::Level(int shape_cnt) : shape_cnt_(shape_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_acter_pos(glm::vec3(0.0f, -0.3f, 1.2f))
 {
 	shapes_ = new Shape*[shape_cnt];
 
@@ -70,7 +70,7 @@ Level::Level(int shape_cnt) : shape_cnt_(shape_cnt), vp_aligned_pos(glm::vec3(0.
 	shapes_[11]->SetCanBeLocated(true);
 	shapes_[11]->SetIsFixed(false);
 
-	shapes_[12] = new Character();
+	shapes_[12] = new Acter();
 
 	shapes_[13] = new Rotary_Knob();
 
@@ -142,28 +142,28 @@ void Level::Draw(glm::mat4 worldModel)
 	shapes_[8]->SaveModelData(model2);
 	shapes_[8]->Draw(model2);
 
-	// character
-	if (char_move_flag)
+	// acter
+	if (acter_move_flag)
 	{
-		wd_char_pos += deltaTime * dist_vec;
+		wd_acter_pos += deltaTime * dist_vec;
 		for (int i = 0; i < path_coord.size() - 1; i++)
 		{
 			line.SetLine(path_coord[i], path_coord[i + 1]);
 			line.Draw(worldModel);
 		}
-		if (glm::length(wd_char_pos - path_coord[path_coord_idx]) < 0.01)
+		if (glm::length(wd_acter_pos - path_coord[path_coord_idx]) < 0.01)
 		{
-			wd_char_pos = path_coord[path_coord_idx];
+			wd_acter_pos = path_coord[path_coord_idx];
 			path_coord_idx++;
 			if (path_coord_idx == path_coord.size())
-				char_move_flag = false;
+				acter_move_flag = false;
 			else
 				dist_vec = glm::normalize(path_coord[path_coord_idx] - path_coord[path_coord_idx - 1]);
 		}
 	}
 
 	model = worldModel;
-	model = glm::translate(model, wd_char_pos - glm::vec3(0.0f, -0.4f, 1.2f));
+	model = glm::translate(model, wd_acter_pos - glm::vec3(0.0f, -0.4f, 1.2f));
 	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 	shapes_[12]->Draw(model);
 
@@ -271,10 +271,10 @@ void Level::FindPathCoord(double xpos, double ypos)
 	glm::vec2	mouse_pos(xpos, ypos);
 	float		start_depth = 1;
 	float		end_depth = 1;
-	glm::vec3	vp_char_pos = vpvp_mat * glm::vec4(wd_char_pos, 1.0f);
+	glm::vec3	vp_acter_pos = vpvp_mat * glm::vec4(wd_acter_pos, 1.0f);
 	int			start_shape_idx = -1;
 	int			end_shape_idx = -1;
-	// find the clicked face and face with character
+	// find the clicked face and face with acter
 	for (int i = 0; i < shape_cnt_; i++)
 	{
 		float*	curr_start_face;
@@ -285,8 +285,8 @@ void Level::FindPathCoord(double xpos, double ypos)
 
 		if (shapes_[i]->GetCanBeLocated() == false) continue;
 		
-		// find the face with character in the shape
-		if ((curr_start_face = shapes_[i]->InShape(vp_char_pos, &start_face_direc, &curr_face_idx)))
+		// find the face with acter in the shape
+		if ((curr_start_face = shapes_[i]->InShape(vp_acter_pos, &start_face_direc, &curr_face_idx)))
 		{
 			curr_start_depth = AverDepth(curr_start_face, shapes_[i]->GetFaceVerCnt());
 			if (curr_start_depth > start_depth) continue;
@@ -321,12 +321,12 @@ void Level::FindPathCoord(double xpos, double ypos)
 	//if (path_idx.size() == 0)
 	//	return ;
 
-	if (!PathIdxToCoord(vp_char_pos, vp_aligned_pos, path_idx)) return;
+	if (!PathIdxToCoord(vp_acter_pos, vp_aligned_pos, path_idx)) return;
 	//wd_aligned_pos = inv_vpvp * glm::vec4(vp_aligned_pos, 1.0f);
-	char_move_flag = true;
+	acter_move_flag = true;
 	path_coord_idx = 1;
 	dist_vec = glm::normalize(path_coord[1] - path_coord[0]);
-	//dist_vec = glm::normalize(wd_aligned_pos - wd_char_pos);
+	//dist_vec = glm::normalize(wd_aligned_pos - wd_acter_pos);
 }
 
 Level::~Level()
@@ -344,7 +344,7 @@ void Level::mouse_button_callback(GLFWwindow* window, int button, int action, in
 		left_mouse_button_down = true;
 		glfwGetCursorPos(window, &xpos, &ypos);
 		printf("\nmousepos: %f %f\n", xpos, SCR_HEIGHT - ypos);
-		if (level->char_move_flag == false)
+		if (level->acter_move_flag == false)
 			level->FindPathCoord((float)xpos, (float)(SCR_HEIGHT - ypos));
 		
 	}
@@ -360,7 +360,7 @@ void Level::mouse_button_callback(GLFWwindow* window, int button, int action, in
 
 void Level::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double ypos)
 {
-	if (left_mouse_button_down && level->char_move_flag == false)
+	if (left_mouse_button_down && level->acter_move_flag == false)
 	{
 		//rotate angle of rotary knob
 		float angle = ellipse_area->CheckClickAndFindAngle((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
@@ -622,7 +622,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 	curr_normal_vec = next_normal;
 	//-- Consider all face_direc_vec pairs
 	// Find curr and next_direc_vec;
-	// Direc_vec is direction that the character can move on the face
+	// Direc_vec is direction that the acter can move on the face
 	glm::vec3 curr_direc_vec;
 	glm::vec3 next_direc_vec;
 

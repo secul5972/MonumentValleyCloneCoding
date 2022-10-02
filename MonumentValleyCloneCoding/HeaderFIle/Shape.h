@@ -43,7 +43,7 @@ protected:
 		RORTARY_KNOB,
 		CORN,
 		SPHERE,
-		CHARACTER
+		ACTER
 	};
 
 	static const	string kShapeTypeName[];
@@ -77,19 +77,19 @@ public:
 	void				SetIsFixed(bool isfixed);
 	void				SetIsDirty(bool isdirty);
 	bool				GetCanBeLocated();
-	int					GetShapeType();
-	bool				GetIsFixed();
-	bool				GetIsDirty();
-	
 
-	virtual void		Draw(glm::mat4);
-	virtual void		MakeFaceVertex();
-	virtual void		DelFaceVertex();
+	virtual void		Draw(glm::mat4) = 0;
+
+	// can_be_located = true
 	virtual float*		InShape(glm::vec2, int*, int*);
-	virtual void		SaveModelData(glm::mat4);
 	virtual int			GetFaceVerCnt();
 	virtual int			GetFaceCnt();
 	virtual int			WGetFaceDirFlag(int);
+
+	// isfixed_ == false
+	virtual void		SaveModelData(glm::mat4);
+
+
 	float*				GetCurrFaceVer();
 	float*				GetCurrFaceVer(int);
 	virtual glm::vec3	GetNormalVec(int);
@@ -98,7 +98,7 @@ public:
 class Axes :public Shape
 {
 private:
-	static GLuint line_VAO, line_VBO;
+	static GLuint line_VAO_, line_VBO_;
 public:
 	Axes();
 	void Draw(glm::mat4);
@@ -107,7 +107,7 @@ public:
 class Cube :public Shape, public Movement
 {
 private:
-	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
 	static float*		base_face_vertex_;
 	static float*		base_normal_vec_;
 	static const int	face_ver_size_ = 72;
@@ -130,7 +130,7 @@ public:
 class Cuboid :public Shape, public Movement
 {
 private:
-	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
 	static float*		base_face_vertex_;
 	static float*		base_normal_vec_;
 	static const int	face_ver_size_ = 72;
@@ -154,7 +154,7 @@ public:
 class Goal :public Shape, public Movement
 {
 private:
-	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
 	static float*		base_face_vertex_;
 	static float*		base_normal_vec_;
 	static const int	face_ver_size_ = 72;
@@ -175,32 +175,10 @@ public:
 	glm::vec3	GetNormalVec(int);
 };
 
-class L_shape :public Shape
-{
-private:
-	Cube				cube;
-	static float*		base_face_vertex_;
-	static const int	face_ver_size_ = 168;
-	static const int	face_cnt_ = 14;
-	static const int	face_shape_cnt_[3];
-	static const int	face_ver_cnt_ = 4;
-public:
-	L_shape();
-	~L_shape();
-	void		MakeFaceVertex();
-	void		DelFaceVertex();
-	void		Draw(glm::mat4 model);
-	//float*		InShape(glm::vec2, int*, int*);
-	void		SaveModelData(glm::mat4);
-	int			GetFaceVerCnt();
-	int			GetFaceCnt();
-	float*		GetCurrFaceVer(int);
-};
-
 class Slope :public Shape
 {
 private:
-	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
+	static GLuint tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
 public:
 	Slope();
 	void Draw(glm::mat4 model);
@@ -211,7 +189,7 @@ public:
 class Circle :public Shape
 {
 private:
-	static GLuint tri_VAO, tri_VBO;
+	static GLuint tri_VAO_, tri_VBO_;
 public:
 	Circle();
 	void Draw(glm::mat4 model);
@@ -222,7 +200,7 @@ public:
 class Cylinder :public Shape
 {
 private:
-	static GLuint line_VAO, line_VBO;
+	static GLuint line_VAO_, line_VBO_;
 	Circle circle;
 public:
 	Cylinder();
@@ -243,7 +221,7 @@ public:
 class Corn :public Shape
 {
 private:
-	static GLuint tri_VAO, tri_VBO;
+	static GLuint tri_VAO_, tri_VBO_;
 	Circle circle;
 public:
 	Corn();
@@ -254,7 +232,7 @@ public:
 class Sphere :public Shape
 {
 private:
-	static GLuint tri_VAO, tri_VBO;
+	static GLuint tri_VAO_, tri_VBO_;
 public:
 	Sphere();
 	void Draw(glm::mat4 model);
@@ -262,22 +240,22 @@ public:
 	void FreeVertex();
 };
 
-class Character :public Shape
+class Acter :public Shape
 {
 private:
-	static GLuint tri_VAO, tri_VBO;
+	static GLuint tri_VAO_, tri_VBO_;
 	Corn corn;
 	Cylinder cylinder;
 	Sphere sphere;
 public:
-	Character();
+	Acter();
 	void Draw(glm::mat4 model);
 };
 
 class Line :public Shape
 {
 private:
-	static GLuint line_VAO, line_VBO;
+	static GLuint line_VAO_, line_VBO_;
 public:
 	Line();
 	void Draw(glm::mat4);

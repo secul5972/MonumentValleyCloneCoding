@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-GLuint Axes::line_VAO, Axes::line_VBO;
+GLuint Axes::line_VAO_, Axes::line_VBO_;
 
 GLfloat axes_vertices[6][3] = {
 	{ 0.0f, 0.0f, 0.0f }, { 1.0f, 0.0f, 0.0f }, { 0.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f },
@@ -10,15 +10,15 @@ GLfloat axes_color[3][3] = { { 1.0f, 0.0f, 0.0f }, { 0.0f, 1.0f, 0.0f }, { 0.0f,
 
 Axes::Axes() : Shape(AXES, false, true)
 {
-	glGenBuffers(1, &line_VBO);
+	glGenBuffers(1, &line_VBO_);
 
-	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
+	glBindBuffer(GL_ARRAY_BUFFER, line_VBO_);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(axes_vertices), &axes_vertices[0][0], GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &line_VAO);
-	glBindVertexArray(line_VAO);
+	glGenVertexArrays(1, &line_VAO_);
+	glBindVertexArray(line_VAO_);
 
-	glBindBuffer(GL_ARRAY_BUFFER, line_VAO);
+	glBindBuffer(GL_ARRAY_BUFFER, line_VAO_);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glEnableVertexAttribArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -36,7 +36,7 @@ void Axes::Draw(glm::mat4 model)
 	def_shader->setMat4("view", view);
 	def_shader->setMat4("model", shapeModel);
 
-	glBindVertexArray(line_VAO);
+	glBindVertexArray(line_VAO_);
 	def_shader->setVec3("objectColor", axes_color[0][0], axes_color[0][1], axes_color[0][2]);
 	glDrawArrays(GL_LINES, 0, 2);
 	def_shader->setVec3("objectColor", axes_color[1][0], axes_color[1][1], axes_color[1][2]);

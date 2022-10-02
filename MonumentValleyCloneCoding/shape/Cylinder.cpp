@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-GLuint Cylinder::line_VAO, Cylinder::line_VBO;
+GLuint Cylinder::line_VAO_, Cylinder::line_VBO_;
 
 extern float* circle_ver;
 extern int circle_ver_cnt;
@@ -28,12 +28,12 @@ void Cylinder::MakeBuffer()
 		cylinder_line_ver[i * 12 + 11] = circle_ver[(i + 1) * 6 + 5];
 	}
 
-	glGenBuffers(1, &line_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
+	glGenBuffers(1, &line_VBO_);
+	glBindBuffer(GL_ARRAY_BUFFER, line_VBO_);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * (circle_ver_cnt - 1) * 6 * 2, cylinder_line_ver, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &line_VAO);
-	glBindVertexArray(line_VAO);
+	glGenVertexArrays(1, &line_VAO_);
+	glBindVertexArray(line_VAO_);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -62,7 +62,7 @@ void Cylinder::Draw(glm::mat4 model)
 	def_shader->setMat4("view", view);
 	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
 
-	glBindVertexArray(line_VAO);
+	glBindVertexArray(line_VAO_);
 	glDrawArrays(GL_LINES, 0, (circle_ver_cnt - 1) * 2);
 	def_shader->unuse();
 }

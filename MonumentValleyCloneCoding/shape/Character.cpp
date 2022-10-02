@@ -1,8 +1,8 @@
 #include "../headerFile/Shape.h"
 
-Character::Character() : Shape(CHARACTER, false, true) {}
+Acter::Acter() : Shape(ACTER, false, true) {}
 
-void Character::Draw(glm::mat4 model)
+void Acter::Draw(glm::mat4 model)
 {
 	glm::mat4 shapeModel;
 

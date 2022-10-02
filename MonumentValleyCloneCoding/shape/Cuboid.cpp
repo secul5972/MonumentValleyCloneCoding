@@ -1,6 +1,6 @@
 #include "../headerFile/Shape.h"
 
-GLuint Cuboid::tri_VAO, Cuboid::tri_VBO, Cuboid::line_VAO, Cuboid::line_VBO;
+GLuint Cuboid::tri_VAO_, Cuboid::tri_VBO_, Cuboid::line_VAO_, Cuboid::line_VBO_;
 float* Cuboid::base_face_vertex_;
 float* Cuboid::base_normal_vec_;
 glm::mat4 Cuboid::pre_model_;
@@ -61,12 +61,12 @@ void Cuboid::MakeBuffer()
 
 
 	//triangle
-	glGenBuffers(1, &tri_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO);
+	glGenBuffers(1, &tri_VBO_);
+	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO_);
 	glBufferData(GL_ARRAY_BUFFER, cube_tri_ver_cnt * sizeof(float), cuboid_tri_ver, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &tri_VAO);
-	glBindVertexArray(tri_VAO);
+	glGenVertexArrays(1, &tri_VAO_);
+	glBindVertexArray(tri_VAO_);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -74,12 +74,12 @@ void Cuboid::MakeBuffer()
 	glEnableVertexAttribArray(1);
 
 	//line
-	glGenBuffers(1, &line_VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
+	glGenBuffers(1, &line_VBO_);
+	glBindBuffer(GL_ARRAY_BUFFER, line_VBO_);
 	glBufferData(GL_ARRAY_BUFFER, cube_line_ver_cnt * sizeof(float), cuboid_line_ver, GL_STATIC_DRAW);
 
-	glGenVertexArrays(1, &line_VAO);
-	glBindVertexArray(line_VAO);
+	glGenVertexArrays(1, &line_VAO_);
+	glBindVertexArray(line_VAO_);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(0);
@@ -101,11 +101,11 @@ void Cuboid::Draw(glm::mat4 model)
 	def_shader->setMat4("projection", projection);
 	def_shader->setMat4("view", view);
 	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
-	glBindVertexArray(tri_VAO);
+	glBindVertexArray(tri_VAO_);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 
 	def_shader->setVec3("objectColor", glm::vec3(1.0f, 1.0f, 1.0f));
-	glBindVertexArray(line_VAO);
+	glBindVertexArray(line_VAO_);
 	glDrawArrays(GL_LINE_STRIP, 0, 4);
 	glDrawArrays(GL_LINE_STRIP, 4, 4);
 	glDrawArrays(GL_LINE_STRIP, 8, 4);

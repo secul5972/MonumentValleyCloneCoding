@@ -27,10 +27,10 @@ private:
 	int					shape_cnt_;
 	int					moving_shape_cnt_;
 	
-	//data for character moving
+	//data for acter moving
 	glm::vec3			vp_aligned_pos;
-	glm::vec3			wd_char_pos;
-	bool				char_move_flag = false;
+	glm::vec3			wd_acter_pos;
+	bool				acter_move_flag = false;
 	vector<glm::vec3>	path_coord;
 	int					path_coord_idx = 0;
 
