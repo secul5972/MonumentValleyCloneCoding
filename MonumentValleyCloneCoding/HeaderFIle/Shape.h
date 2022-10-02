@@ -83,7 +83,6 @@ public:
 	
 
 	virtual void		Draw(glm::mat4);
-	virtual void		MakeBuffer();
 	virtual void		MakeFaceVertex();
 	virtual void		DelFaceVertex();
 	virtual float*		InShape(glm::vec2, int*, int*);
@@ -105,7 +104,7 @@ public:
 	void Draw(glm::mat4);
 };
 
-class Cube :public Shape, public Face, public Movement
+class Cube :public Shape, public Movement
 {
 private:
 	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -118,7 +117,7 @@ public:
 	Cube();
 	~Cube();
 	void		Draw(glm::mat4);
-	void		MakeBuffer();
+	static void	MakeBuffer();
 	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
@@ -128,7 +127,7 @@ public:
 	glm::vec3	GetNormalVec(int);
 };
 
-class Cuboid :public Shape, public Face, public Movement
+class Cuboid :public Shape, public Movement
 {
 private:
 	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -142,7 +141,7 @@ public:
 	Cuboid();
 	~Cuboid();
 	void		Draw(glm::mat4);
-	void		MakeBuffer();
+	static void	MakeBuffer();
 	float*		InShape(glm::vec2, int*, int*);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
@@ -152,7 +151,7 @@ public:
 	glm::vec3	GetNormalVec(int);
 };
 
-class Goal :public Shape, public Face, public Movement
+class Goal :public Shape, public Movement
 {
 private:
 	static GLuint		tri_VAO, tri_VBO, line_VAO, line_VBO;
@@ -166,7 +165,7 @@ public:
 	Goal();
 	~Goal();
 	void		Draw(glm::mat4 model);
-	void		MakeBuffer();
+	static void	MakeBuffer();
 	float*		InShape(glm::vec2, int*, int *);
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
@@ -176,7 +175,7 @@ public:
 	glm::vec3	GetNormalVec(int);
 };
 
-class L_shape :public Shape, public Face, public Movement
+class L_shape :public Shape
 {
 private:
 	Cube				cube;
@@ -195,8 +194,6 @@ public:
 	void		SaveModelData(glm::mat4);
 	int			GetFaceVerCnt();
 	int			GetFaceCnt();
-	void		MakeFaceDirFlag();
-	int			WGetFaceDirFlag(int);
 	float*		GetCurrFaceVer(int);
 };
 
@@ -207,7 +204,7 @@ private:
 public:
 	Slope();
 	void Draw(glm::mat4 model);
-	void MakeBuffer();
+	static void	MakeBuffer();
 	void FreeVertex();
 };
 
@@ -218,7 +215,7 @@ private:
 public:
 	Circle();
 	void Draw(glm::mat4 model);
-	void MakeBuffer();
+	static void	MakeBuffer();
 	void FreeVertex();
 };
 
@@ -230,7 +227,7 @@ private:
 public:
 	Cylinder();
 	void Draw(glm::mat4 model);
-	void MakeBuffer();
+	static void	MakeBuffer();
 };
 
 class Rotary_Knob :public Shape
@@ -251,7 +248,7 @@ private:
 public:
 	Corn();
 	void Draw(glm::mat4 model);
-	void MakeBuffer();
+	static void	MakeBuffer();
 };
  
 class Sphere :public Shape
@@ -261,7 +258,7 @@ private:
 public:
 	Sphere();
 	void Draw(glm::mat4 model);
-	void MakeBuffer();
+	static void	MakeBuffer();
 	void FreeVertex();
 };
 

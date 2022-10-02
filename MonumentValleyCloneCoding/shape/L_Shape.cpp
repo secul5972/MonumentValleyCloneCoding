@@ -3,10 +3,9 @@
 float* L_shape::base_face_vertex_;
 const int	L_shape::face_shape_cnt_[3] = { 5, 4, 5 };
 
-L_shape::L_shape() : Shape(L_SHAPE, true, true), Movement(face_cnt_)
+L_shape::L_shape() : Shape(L_SHAPE, true, true)
 {
 	curr_face_vertex_ = new float[face_ver_size_];
-	MakeFaceDirFlag();
 }
 
 L_shape::~L_shape()
@@ -154,42 +153,8 @@ int L_shape::GetFaceCnt()
 	return face_cnt_;
 }
 
-void L_shape::MakeFaceDirFlag()
-{	
-	// bottom
-	face_dir_flag_[0] = 1;
-	// right
-	face_dir_flag_[1] = 1;
-	// front
-	face_dir_flag_[2] = 0;
-	// up
-	face_dir_flag_[3] = 1;
-	// left
-	face_dir_flag_[4] = 1;
-	// back
-	face_dir_flag_[5] = 0;
-	// bottom
-	face_dir_flag_[6] = 0;
-	// right
-	face_dir_flag_[7] = 0;
-	// up
-	face_dir_flag_[8] = 0;
-	// back
-	face_dir_flag_[9] = 0;
-	// bottom
-	face_dir_flag_[10] = 1;
-	// right
-	face_dir_flag_[11] = 1;
-	// up
-	face_dir_flag_[12] = 1;
-	// left
-	face_dir_flag_[13] = 1;
-}
 
-int L_shape::WGetFaceDirFlag(int idx)
-{
-	return GetFaceDirFlag(idx);
-}
+
 
 float* L_shape::GetCurrFaceVer(int idx)
 {

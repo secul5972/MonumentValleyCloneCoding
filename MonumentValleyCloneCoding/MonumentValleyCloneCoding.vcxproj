@@ -173,8 +173,8 @@
   <ItemGroup>
     <None Include="shader\default.frag" />
     <None Include="shader\default.vert" />
-    <None Include="shader\test.frag" />
-    <None Include="shader\test.vert" />
+    <None Include="shader\line.frag" />
+    <None Include="shader\line.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headerFile\AdditionalMathFunction.h" />
@@ -184,8 +184,6 @@
     <ClInclude Include="headerFile\Math.h" />
     <ClInclude Include="headerFile\Movement.h" />
     <ClInclude Include="headerFile\Shape.h" />
-    <ClInclude Include="headerFile\mesh.h" />
-    <ClInclude Include="headerFile\model.h" />
     <ClInclude Include="headerFile\Shader.h" />
     <ClInclude Include="headerFile\ClickArea.h" />
   </ItemGroup>

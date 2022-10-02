@@ -1,15 +1,18 @@
 #ifndef LEVEL_H
 #define LEVEL_H
 
-#include "Shader.h"
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <vector>
+#include <algorithm>
+#include <queue>
 
+#include "Shader.h"
 #include "Shape.h"
+#include "Math.h"
 #include "ClickArea.h"
 
 extern GLFWwindow* window;

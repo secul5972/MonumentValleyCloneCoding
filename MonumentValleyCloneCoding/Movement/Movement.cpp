@@ -10,7 +10,7 @@ Movement::~Movement()
 	delete[] face_dir_flag_;
 }
 
-void	Movement::MakeFaceDirFlag() { cout << "error\n"; }
+void	Movement::MakeFaceDirFlag() { cout << "Virtual function\n"; }
 
 int		Movement::GetFaceDirFlag(int idx)
 {

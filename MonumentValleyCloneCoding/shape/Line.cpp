@@ -6,7 +6,7 @@ GLfloat line_vertices[2][3] = {
 	{0.0f, 0.0f, 0.0f}, {1.0f, 0.0f, 0.0f}
 };
 
-extern Shader* test_shader;
+extern Shader* line_shader;
 Line::Line() : Shape(DEFAULT, false, true)
 {
 	glGenBuffers(1, &line_VBO);
@@ -26,16 +26,16 @@ Line::Line() : Shape(DEFAULT, false, true)
 
 void Line::Draw(glm::mat4 model)
 {
-	test_shader->use();
-	test_shader->setMat4("view", view);
-	test_shader->setMat4("projection", projection);
+	line_shader->use();
+	line_shader->setMat4("view", view);
+	line_shader->setMat4("projection", projection);
 	glBindBuffer(GL_ARRAY_BUFFER, line_VBO);
 	glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(line_vertices), &line_vertices[0][0]);
 	glBindVertexArray(line_VAO);
 	def_shader->setVec3("objectColor", 1.0f, 1.0f, 1.0f);
 	glDrawArrays(GL_LINES, 0, 2);
 	glBindVertexArray(0);
-	test_shader->unuse();
+	line_shader->unuse();
 }
 
 void Line::SetLine(glm::vec3 start, glm::vec3 end)

@@ -17,7 +17,7 @@ protected:
 public:
 	Movement(int cnt);
 	~Movement();
-	virtual void	MakeFaceDirFlag();
+	virtual void	MakeFaceDirFlag() = 0;
 	int				GetFaceDirFlag(int);
 };
 

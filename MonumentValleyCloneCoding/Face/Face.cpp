@@ -1,6 +1,7 @@
 #include "../headerFile/Face.h"
 
-bool OnFace(glm::vec2 point, float* face, GLuint face_vertex_cnt)
+// Check if a point is on a face
+bool OnFace(glm::vec2 point, float* face, int face_vertex_cnt)
 {
 	glm::vec3 vecA(face[0], face[1], 0.0f);
 	glm::vec3 vecB(face[3], face[4], 0.0f);
@@ -11,7 +12,6 @@ bool OnFace(glm::vec2 point, float* face, GLuint face_vertex_cnt)
 	if (normal.z < 0)
 		return 0;
 
-	//점이 평면 내부인지 검사
 	if (!InPolygon(point, face, face_vertex_cnt))
 		return 0;
 
@@ -19,7 +19,7 @@ bool OnFace(glm::vec2 point, float* face, GLuint face_vertex_cnt)
 }
 
 
-bool InPolygon(glm::vec2 point, float* face, GLuint face_vertex_cnt) {
+bool InPolygon(glm::vec2 point, float* face, int face_vertex_cnt) {
 
 	bool in_poly = false;
 	glm::vec2 prev_poly(face[(face_vertex_cnt - 1) * 3], face[(face_vertex_cnt - 1) * 3 + 1]);
