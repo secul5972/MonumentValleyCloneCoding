@@ -1,10 +1,12 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/Ornament.h"
 
 GLuint Slope::tri_VAO_, Slope::tri_VBO_, Slope::line_VAO_, Slope::line_VBO_;
 float* slope_face_ver;
 int slope_face_ver_cnt;
 
-Slope::Slope() : Shape(SLOPE, true, true) {};
+Slope::Slope() : Ornament(SLOPE, true) {}
+
+Goal::~Goal() {}
 
 void Slope::MakeBuffer()
 {

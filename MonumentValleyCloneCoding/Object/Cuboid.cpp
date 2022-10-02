@@ -1,15 +1,15 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/ActerCanGoObject.h"
 
 GLuint Cuboid::tri_VAO_, Cuboid::tri_VBO_, Cuboid::line_VAO_, Cuboid::line_VBO_;
 float* Cuboid::base_face_vertex_;
 float* Cuboid::base_normal_vec_;
 glm::mat4 Cuboid::pre_model_;
 
-Cuboid::Cuboid() : Shape(CUBOID, true, true), Movement(face_cnt_)
+Cuboid::Cuboid() : ActerCanGoObject(CUBOID, true), MoveDrc(kFaceCnt)
 {
-	curr_face_vertex_ = new float[face_ver_size_];
-	curr_normal_vec_ = new float[normal_vec_size_];
-	MakeFaceDirFlag();
+	curr_face_vertex_ = new float[kFaceVerSize];
+	curr_normal_vec_ = new float[kNrmVecSize];
+	MakeFaceDrcFlag();
 };
 
 Cuboid::~Cuboid()
@@ -118,12 +118,12 @@ float* Cuboid::InShape(glm::vec2 point, int* dir, int* idx)
 	float* face = 0;
 	int curr_dir = -1;
 
-	for (int i = 0; i < face_cnt_; i++)
+	for (int i = 0; i < kFaceCnt; i++)
 	{
-		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
+		if (OnFace(point, curr_face_vertex_ + i * kFaceVerCnt * 3, kFaceVerCnt))
 		{
-			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
-			curr_dir = GetFaceDirFlag(i);
+			face = curr_face_vertex_ + i * kFaceVerCnt * 3;
+			curr_dir = GetFaceDrcFlag(i);
 			*idx = i;
 			break;
 		}
@@ -146,7 +146,7 @@ void Cuboid::SaveModelData(glm::mat4 model)
 	glm::vec3 prev, curr;
 	glm::mat4 matrix = vpvp_mat * model_;
 
-	for (int i = 0; i < face_ver_size_ / 3; i++)
+	for (int i = 0; i < kFaceVerSize / 3; i++)
 	{
 		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
 		curr = matrix * glm::vec4(prev, 1.0f);
@@ -155,7 +155,7 @@ void Cuboid::SaveModelData(glm::mat4 model)
 		curr_face_vertex_[i * 3 + 2] = curr.z;
 	}
 
-	for (int i = 0; i < face_cnt_; i++)
+	for (int i = 0; i < kFaceCnt; i++)
 	{
 		prev = glm::vec3(base_normal_vec_[i * 3], base_normal_vec_[i * 3 + 1], base_normal_vec_[i * 3 + 2]);
 		curr = model * glm::vec4(prev, 0.0f);
@@ -171,30 +171,25 @@ void Cuboid::SaveModelData(glm::mat4 model)
 
 int Cuboid::GetFaceVerCnt()
 {
-	return face_ver_cnt_;
+	return kFaceVerCnt;
 }
 
 int Cuboid::GetFaceCnt()
 {
-	return face_cnt_;
+	return kFaceCnt;
 }
 
-void Cuboid::MakeFaceDirFlag()
+void Cuboid::MakeFaceDrcFlag()
 {
-	face_dir_flag_[0] = 0;
-	face_dir_flag_[1] = 1;
-	face_dir_flag_[2] = 1;
-	face_dir_flag_[3] = 0;
-	face_dir_flag_[4] = 1;
-	face_dir_flag_[5] = 1;
+	face_drc_flag_[0] = 0;
+	face_drc_flag_[1] = 1;
+	face_drc_flag_[2] = 1;
+	face_drc_flag_[3] = 0;
+	face_drc_flag_[4] = 1;
+	face_drc_flag_[5] = 1;
 }
 
-int Cuboid::WGetFaceDirFlag(int idx)
+int Cuboid::WGetFaceDrcFlag(int idx)
 {
-	return GetFaceDirFlag(idx);
-}
-
-glm::vec3 Cuboid::GetNormalVec(int idx)
-{
-	return glm::vec3(curr_normal_vec_[idx * 3], curr_normal_vec_[idx * 3 + 1], curr_normal_vec_[idx * 3 + 2]);
+	return GetFaceDrcFlag(idx);
 }

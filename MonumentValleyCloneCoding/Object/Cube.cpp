@@ -1,4 +1,4 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/ActerCanGoObject.h"
 
 float cube_tri_ver[] = {
 	-0.1f, -0.1f, -0.1f,  0.0f,  0.0f, -1.0f,
@@ -114,19 +114,19 @@ float cube_normal_vec[] = {
 	 0.0f,  0.0f,  1.0f
 };
 
-int cube_tri_ver_cnt = 216;
-int cube_line_ver_cnt = 48;
+const int cube_tri_ver_cnt = 216;
+const int cube_line_ver_cnt = 48;
 
 GLuint Cube::tri_VAO_, Cube::tri_VBO_, Cube::line_VAO_, Cube::line_VBO_;
 
 float* Cube::base_face_vertex_;
 float* Cube::base_normal_vec_;
 
-Cube::Cube() : Shape(CUBE, true, true), Movement(face_cnt_)
+Cube::Cube() : ActerCanGoObject(CUBE, true), MoveDrc(kFaceCnt)
 {
-	curr_face_vertex_ = new float[face_ver_size_];
-	curr_normal_vec_ = new float[normal_vec_size_];
-	MakeFaceDirFlag();
+	curr_face_vertex_ = new float[kFaceVerSize];
+	curr_normal_vec_ = new float[kNrmVecSize];
+	MakeFaceDrcFlag();
 };
 
 Cube::~Cube()
@@ -193,12 +193,12 @@ float* Cube::InShape(glm::vec2 point, int* dir, int* idx)
 	float* face = 0;
 	int curr_dir = -1;
 
-	for (int i = 0; i < face_cnt_; i++)
+	for (int i = 0; i < kFaceCnt; i++)
 	{
-		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
+		if (OnFace(point, curr_face_vertex_ + i * kFaceVerCnt * 3, kFaceVerCnt))
 		{
-			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
-			curr_dir = GetFaceDirFlag(i);
+			face = curr_face_vertex_ + i * kFaceVerCnt * 3;
+			curr_dir = GetFaceDrcFlag(i);
 			*idx = i;
 			break;
 		}
@@ -221,7 +221,7 @@ void Cube::SaveModelData(glm::mat4 model)
 	glm::vec3 prev, curr;
 	glm::mat4 matrix = vpvp_mat * model_;
 	
-	for (int i = 0; i < face_ver_size_ / 3; i++)
+	for (int i = 0; i < kFaceVerSize / 3; i++)
 	{
 		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
 		curr = matrix * glm::vec4(prev, 1.0f);
@@ -230,7 +230,7 @@ void Cube::SaveModelData(glm::mat4 model)
 		curr_face_vertex_[i * 3 + 2] = curr.z;
 	}
 
-	for (int i = 0; i < face_cnt_; i++)
+	for (int i = 0; i < kFaceCnt; i++)
 	{
 		prev = glm::vec3(base_normal_vec_[i * 3], base_normal_vec_[i * 3 + 1], base_normal_vec_[i * 3 + 2]);
 		curr = model * glm::vec4(prev, 0.0f);
@@ -247,26 +247,21 @@ void Cube::SaveModelData(glm::mat4 model)
 
 int Cube::GetFaceVerCnt()
 {
-	return face_ver_cnt_;
+	return kFaceVerCnt;
 }
 
 int Cube::GetFaceCnt()
 {
-	return face_cnt_;
+	return kFaceCnt;
 }
 
-void Cube::MakeFaceDirFlag()
+void Cube::MakeFaceDrcFlag()
 {
-	for (int i = 0; i < face_cnt_; i++)
-		face_dir_flag_[i] = 0;
+	for (int i = 0; i < kFaceCnt; i++)
+		face_drc_flag_[i] = 0;
 }
 
-int Cube::WGetFaceDirFlag(int idx)
+int Cube::WGetFaceDrcFlag(int idx)
 {
-	return GetFaceDirFlag(idx);
-}
-
-glm::vec3 Cube::GetNormalVec(int idx)
-{
-	return glm::vec3(curr_normal_vec_[idx * 3], curr_normal_vec_[idx * 3 + 1], curr_normal_vec_[idx * 3 + 2]);
+	return GetFaceDrcFlag(idx);
 }

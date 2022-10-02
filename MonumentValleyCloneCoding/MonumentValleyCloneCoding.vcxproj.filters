@@ -6,22 +6,25 @@
     <ClCompile Include="level\level.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
-    <ClCompile Include="Shape\Axes.cpp" />
-    <ClCompile Include="Shape\Character.cpp" />
-    <ClCompile Include="Shape\Corn.cpp" />
-    <ClCompile Include="Shape\Cube.cpp" />
-    <ClCompile Include="Shape\Cylinder.cpp" />
-    <ClCompile Include="Shape\Goal.cpp" />
-    <ClCompile Include="Shape\Rotary_Knob.cpp" />
-    <ClCompile Include="Shape\Slope.cpp" />
-    <ClCompile Include="Shape\Circle.cpp" />
-    <ClCompile Include="Shape\Sphere.cpp" />
-    <ClCompile Include="Shape\Shape.cpp" />
     <ClCompile Include="Face\Face.cpp" />
-    <ClCompile Include="Movement\Movement.cpp" />
-    <ClCompile Include="Shape\Cuboid.cpp" />
-    <ClCompile Include="Shape\Line.cpp" />
+    <ClCompile Include="MoveDrc\MoveDrc.cpp" />
     <ClCompile Include="Math\Math.cpp" />
+    <ClCompile Include="Object\ActerCanGoObject.cpp" />
+    <ClCompile Include="Object\Axes.cpp" />
+    <ClCompile Include="Object\Character.cpp" />
+    <ClCompile Include="Object\Circle.cpp" />
+    <ClCompile Include="Object\Corn.cpp" />
+    <ClCompile Include="Object\Cube.cpp" />
+    <ClCompile Include="Object\Cuboid.cpp" />
+    <ClCompile Include="Object\Cylinder.cpp" />
+    <ClCompile Include="Object\Goal.cpp" />
+    <ClCompile Include="Object\Line.cpp" />
+    <ClCompile Include="Object\Ornament.cpp" />
+    <ClCompile Include="Object\Rotary_Knob.cpp" />
+    <ClCompile Include="Object\Shape.cpp" />
+    <ClCompile Include="Object\Slope.cpp" />
+    <ClCompile Include="Object\Sphere.cpp" />
+    <ClCompile Include="Object\CanBeLocated.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="headerFile\AdditionalMathFunction.h" />
@@ -31,8 +34,12 @@
     <ClInclude Include="headerFile\Shader.h" />
     <ClInclude Include="headerFile\ClickArea.h" />
     <ClInclude Include="headerFile\Face.h" />
-    <ClInclude Include="headerFile\Movement.h" />
+    <ClInclude Include="headerFile\MoveDrc.h" />
     <ClInclude Include="headerFile\Math.h" />
+    <ClInclude Include="headerFile\Rotatable.h" />
+    <ClInclude Include="headerFile\Ornament.h" />
+    <ClInclude Include="headerFile\CanBeLocated.h" />
+    <ClInclude Include="headerFile\ActerCanGoObject.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader\default.frag" />

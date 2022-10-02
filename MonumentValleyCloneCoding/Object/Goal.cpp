@@ -1,4 +1,4 @@
-#include "../headerFile/Shape.h"
+#include "../headerFile/ActerCanGoObject.h"
 
 GLuint Goal::tri_VAO_, Goal::tri_VBO_, Goal::line_VAO_, Goal::line_VBO_;
 float* Goal::base_face_vertex_;
@@ -7,15 +7,17 @@ glm::mat4 Goal::pre_model_;
 
 extern float cube_face_ver[];
 
-Goal::Goal() : Shape(GOAL, true, true), Movement(face_cnt_)
+Goal::Goal() : ActerCanGoObject(GOAL, true), MoveDrc(kFaceCnt)
 {
-	curr_face_vertex_ = new float[face_ver_size_];
-	MakeFaceDirFlag();
+	curr_face_vertex_ = new float[kFaceVerSize];
+	curr_normal_vec_ = new float[kNrmVecSize];
+	MakeFaceDrcFlag();
 }
 
 Goal::~Goal()
 {
 	delete[] curr_face_vertex_;
+	delete[] curr_normal_vec_;
 }
 
 void Goal::MakeBuffer()
@@ -117,12 +119,12 @@ float* Goal::InShape(glm::vec2 point, int* dir, int* idx)
 	float* face = 0;
 	int curr_dir = -1;
 
-	for (int i = 0; i < face_cnt_; i++)
+	for (int i = 0; i < kFaceCnt; i++)
 	{
-		if (OnFace(point, curr_face_vertex_ + i * face_ver_cnt_ * 3, face_ver_cnt_))
+		if (OnFace(point, curr_face_vertex_ + i * kFaceVerCnt * 3, kFaceVerCnt))
 		{
-			face = curr_face_vertex_ + i * face_ver_cnt_ * 3;
-			curr_dir = GetFaceDirFlag(i);
+			face = curr_face_vertex_ + i * kFaceVerCnt * 3;
+			curr_dir = GetFaceDrcFlag(i);
 			*idx = i;
 			break;
 		}
@@ -145,7 +147,7 @@ void Goal::SaveModelData(glm::mat4 model)
 	glm::vec3 prev, curr;
 	glm::mat4 matrix = viewport * projection * view * model_;
 
-	for (int i = 0; i < face_ver_size_ / 3; i++)
+	for (int i = 0; i < kFaceVerSize / 3; i++)
 	{
 		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
 		curr = matrix * glm::vec4(prev, 1.0f);
@@ -162,28 +164,23 @@ void Goal::SaveModelData(glm::mat4 model)
 
 int Goal::GetFaceVerCnt()
 {
-	return face_ver_cnt_;
+	return kFaceVerCnt;
 }
 
 int Goal::GetFaceCnt()
 {
-	return face_cnt_;
+	return kFaceCnt;
 }
 
-void Goal::MakeFaceDirFlag()
+void Goal::MakeFaceDrcFlag()
 {
-	for (int i = 0; i < face_cnt_; i++)
+	for (int i = 0; i < kFaceCnt; i++)
 	{
-		face_dir_flag_[i] = 0;
+		face_drc_flag_[i] = 0;
 	}
 }
 
-int Goal::WGetFaceDirFlag(int idx)
+int Goal::WGetFaceDrcFlag(int idx)
 {
-	return GetFaceDirFlag(idx);
-}
-
-glm::vec3 Goal::GetNormalVec(int idx)
-{
-	return glm::vec3(curr_normal_vec_[idx * 3], curr_normal_vec_[idx * 3 + 1], curr_normal_vec_[idx * 3 + 2]);
+	return GetFaceDrcFlag(idx);
 }

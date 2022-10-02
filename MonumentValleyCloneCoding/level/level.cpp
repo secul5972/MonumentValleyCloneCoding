@@ -1,4 +1,4 @@
-#include "../headerFile/Level.h"
+ï»¿#include "../headerFile/Level.h"
 
 float rotateStartTime = 0;
 float rotateEndTime = -1;
@@ -15,77 +15,75 @@ extern glm::mat4 vpvp_mat, inv_vp, inv_vpvp;
 extern Level* level;
 extern float line_vertices[2][3];
 
-Level::Level(int shape_cnt) : shape_cnt_(shape_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_acter_pos(glm::vec3(0.0f, -0.3f, 1.2f))
+Level::Level(int acg_cnt, int orna_cnt) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_acter_pos(glm::vec3(0.0f, -0.3f, 1.2f))
 {
-	shapes_ = new Shape*[shape_cnt];
-
-	moving_shape_cnt_ = 12;
+	acg_object_ = new ActerCanGoObject * [acg_cnt_];
+	ornaments_ = new Ornament * [orna_cnt_];
 
 	ellipse_area = new EllipseArea;
 	prev_mouse_pos_in_model.x = -1;
 	prev_mouse_pos_in_model.y = -1;
 
-	shapes_[0] = new Cuboid();
-	shapes_[0]->SetCanBeLocated(true);
+	acg_object_[0] = new Cuboid();
+	acg_object_[0]->SetCanBeLocated(true);
 
-	shapes_[1] = new Slope();
-	shapes_[1]->SetCanBeLocated(true);
+	acg_object_[1] = new Goal();
+	acg_object_[1]->SetCanBeLocated(true);
 
-	shapes_[2] = new Goal();
-	shapes_[2]->SetCanBeLocated(true);
+	acg_object_[2] = new Cuboid();
+	acg_object_[2]->SetCanBeLocated(true);
+	acg_object_[2]->SetIsFixed(false);
 
-	shapes_[3] = new Cuboid();
-	shapes_[3]->SetCanBeLocated(true);
-	shapes_[3]->SetIsFixed(false);
+	acg_object_[3] = new Cube();
+	acg_object_[3]->SetCanBeLocated(true);
+	acg_object_[3]->SetIsFixed(false);
 
-	shapes_[4] = new Cube();
-	shapes_[4]->SetCanBeLocated(true);
-	shapes_[4]->SetIsFixed(false);
+	acg_object_[4] = new Cuboid();
+	acg_object_[4]->SetCanBeLocated(true);
+	acg_object_[4]->SetIsFixed(false);
 
-	shapes_[5] = new Cuboid();
-	shapes_[5]->SetCanBeLocated(true);
-	shapes_[5]->SetIsFixed(false);
+	acg_object_[5] = new Cuboid();
+	acg_object_[5]->SetCanBeLocated(true);
+	acg_object_[5]->SetIsFixed(false);
 
-	shapes_[6] = new Cuboid();
-	shapes_[6]->SetCanBeLocated(true);
-	shapes_[6]->SetIsFixed(false);
+	acg_object_[6] = new Cube();
+	acg_object_[6]->SetCanBeLocated(true);
+	acg_object_[6]->SetIsFixed(false);
 
-	shapes_[7] = new Cube();
-	shapes_[7]->SetCanBeLocated(true);
-	shapes_[7]->SetIsFixed(false);
+	acg_object_[7] = new Cuboid();
+	acg_object_[7]->SetCanBeLocated(true);
+	acg_object_[7]->SetIsFixed(false);
 
-	shapes_[8] = new Cuboid();
-	shapes_[8]->SetCanBeLocated(true);
-	shapes_[8]->SetIsFixed(false);
+	acg_object_[8] = new Cuboid();
+	acg_object_[8]->SetCanBeLocated(true);
+	acg_object_[8]->SetIsFixed(false);
 
-	shapes_[9] = new Cuboid();
-	shapes_[9]->SetCanBeLocated(true);
-	shapes_[9]->SetIsFixed(false);
+	acg_object_[9] = new Cube();
+	acg_object_[9]->SetCanBeLocated(true);
+	acg_object_[9]->SetIsFixed(false);
 
-	shapes_[10] = new Cube();
-	shapes_[10]->SetCanBeLocated(true);
-	shapes_[10]->SetIsFixed(false);
+	acg_object_[10] = new Cuboid();
+	acg_object_[10]->SetCanBeLocated(true);
+	acg_object_[10]->SetIsFixed(false);
 
-	shapes_[11] = new Cuboid();
-	shapes_[11]->SetCanBeLocated(true);
-	shapes_[11]->SetIsFixed(false);
+	ornaments_[0] = new Acter();
 
-	shapes_[12] = new Acter();
+	ornaments_[1] = new Rotary_Knob();
 
-	shapes_[13] = new Rotary_Knob();
+	ornaments_[2] = new Slope();
 
-	edge = new bool*[moving_shape_cnt_];
-	for (int i = 0; i < moving_shape_cnt_; i++)
+	edge = new bool* [acg_cnt_];
+	for (int i = 0; i < acg_cnt_; i++)
 	{
-		edge[i] = new bool[moving_shape_cnt_];
-		memset(edge[i], 0, sizeof(bool) * moving_shape_cnt_);
+		edge[i] = new bool[acg_cnt_];
+		memset(edge[i], 0, sizeof(bool) * acg_cnt_);
 	}
 
-	edge[0][1] = 1;
+	edge[0][2] = 1;
 	edge[0][9] = 1;
-	edge[1][0] = 1;
-	edge[1][2] = 1;
-	edge[2][1] = 1;
+	edge[2][0] = 1;
+	edge[2][3] = 1;
+	edge[3][2] = 1;
 	edge[3][4] = 1;
 	edge[4][3] = 1;
 	edge[4][5] = 1;
@@ -94,15 +92,13 @@ Level::Level(int shape_cnt) : shape_cnt_(shape_cnt), vp_aligned_pos(glm::vec3(0.
 	edge[6][5] = 1;
 	edge[6][7] = 1;
 	edge[7][6] = 1;
-	edge[7][8] = 1;
-	edge[8][7] = 1;
-	edge[8][11] = 1;
-	edge[9][0] = 1;
-	edge[9][10] = 1;
-	edge[10][9] = 1;
-	edge[10][11] = 1;
-	edge[11][8] = 1;
-	edge[11][10] = 1;
+	edge[7][10] = 1;
+	edge[8][0] = 1;
+	edge[8][10] = 1;
+	edge[9][9] = 1;
+	edge[9][11] = 1;
+	edge[10][8] = 1;
+	edge[10][10] = 1;
 }
 
 void Level::Draw(glm::mat4 worldModel)
@@ -114,16 +110,16 @@ void Level::Draw(glm::mat4 worldModel)
 	model = worldModel;
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-	shapes_[3]->SaveModelData(model2);
-	shapes_[3]->Draw(model2);
+	acg_object_[3]->SaveModelData(model2);
+	acg_object_[3]->Draw(model2);
 
-	shapes_[4]->SaveModelData(model);
-	shapes_[4]->Draw(model);
+	acg_object_[4]->SaveModelData(model);
+	acg_object_[4]->Draw(model);
 
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes_[5]->SaveModelData(model2);
-	shapes_[5]->Draw(model2);
+	acg_object_[5]->SaveModelData(model2);
+	acg_object_[5]->Draw(model2);
 
 	// draw l_shape
 	model = worldModel;
@@ -131,16 +127,16 @@ void Level::Draw(glm::mat4 worldModel)
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-	shapes_[6]->SaveModelData(model2);
-	shapes_[6]->Draw(model2);
+	acg_object_[6]->SaveModelData(model2);
+	acg_object_[6]->Draw(model2);
 
-	shapes_[7]->SaveModelData(model);
-	shapes_[7]->Draw(model);
+	acg_object_[7]->SaveModelData(model);
+	acg_object_[7]->Draw(model);
 
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes_[8]->SaveModelData(model2);
-	shapes_[8]->Draw(model2);
+	acg_object_[8]->SaveModelData(model2);
+	acg_object_[8]->Draw(model2);
 
 	// acter
 	if (acter_move_flag)
@@ -165,7 +161,7 @@ void Level::Draw(glm::mat4 worldModel)
 	model = worldModel;
 	model = glm::translate(model, wd_acter_pos - glm::vec3(0.0f, -0.4f, 1.2f));
 	model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
-	shapes_[12]->Draw(model);
+	acg_object_[12]->Draw(model);
 
 	// adjust angle
 	float tmp_angle = (float)fmod(l_shape_angle, 90);
@@ -185,9 +181,9 @@ void Level::Draw(glm::mat4 worldModel)
 			l_shape_angle += deltaTime * 60;
 		else
 			l_shape_angle -= deltaTime * 60;
-		level->shapes_[9]->SetIsDirty(true);
-		level->shapes_[10]->SetIsDirty(true);
-		level->shapes_[11]->SetIsDirty(true);
+		level->acg_object_[9]->SetIsDirty(true);
+		level->acg_object_[10]->SetIsDirty(true);
+		level->acg_object_[11]->SetIsDirty(true);
 	}
 
 	// update edge
@@ -218,7 +214,7 @@ void Level::Draw(glm::mat4 worldModel)
 	model2 = worldModel;
 	model2 = glm::translate(model2, glm::vec3(1.9f, 1.8f, 0.0f));
 	model2 = glm::rotate(model2, glm::radians(float(l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
-	shapes_[13]->Draw(model2);
+	acg_object_[13]->Draw(model2);
 
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(2.15f, 1.8f, 0.0f));
@@ -234,36 +230,36 @@ void Level::Draw(glm::mat4 worldModel)
 	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-	shapes_[9]->SaveModelData(model2);
-	shapes_[9]->Draw(model2);
+	acg_object_[9]->SaveModelData(model2);
+	acg_object_[9]->Draw(model2);
 
-	shapes_[10]->SaveModelData(model);
-	shapes_[10]->Draw(model);
+	acg_object_[10]->SaveModelData(model);
+	acg_object_[10]->Draw(model);
 
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes_[11]->SaveModelData(model2);
-	shapes_[11]->Draw(model2);;
+	acg_object_[11]->SaveModelData(model2);
+	acg_object_[11]->Draw(model2);;
 
 	// draw cuboid
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.25f, 1.0f, 1.0f));
-	shapes_[0]->SaveModelData(model);
-	shapes_[0]->Draw(model);
+	acg_object_[0]->SaveModelData(model);
+	acg_object_[0]->Draw(model);
 
 	// draw slope
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.0f, -0.2f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes_[1]->Draw(model);
+	acg_object_[1]->Draw(model);
 
 	// draw goal
 	model = worldModel;
 	model = glm::translate(model, glm::vec3(0.0f, 2.3f, -1.1f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	shapes_[2]->SaveModelData(model);
-	shapes_[2]->Draw(model);
+	acg_object_[2]->SaveModelData(model);
+	acg_object_[2]->Draw(model);
 }
 
 void Level::FindPathCoord(double xpos, double ypos)
@@ -275,38 +271,38 @@ void Level::FindPathCoord(double xpos, double ypos)
 	int			start_shape_idx = -1;
 	int			end_shape_idx = -1;
 	// find the clicked face and face with acter
-	for (int i = 0; i < shape_cnt_; i++)
+	for (int i = 0; i < acg_cnt_; i++)
 	{
-		float*	curr_start_face;
+		float* curr_start_face;
 		float	curr_start_depth;
-		float*	curr_end_face;
+		float* curr_end_face;
 		float	curr_end_depth;
 		int		curr_face_idx;
 
-		if (shapes_[i]->GetCanBeLocated() == false) continue;
-		
+		if (acg_object_[i]->GetCanBeLocated() == false) continue;
+
 		// find the face with acter in the shape
-		if ((curr_start_face = shapes_[i]->InShape(vp_acter_pos, &start_face_direc, &curr_face_idx)))
+		if ((curr_start_face = acg_object_[i]->InShape(vp_acter_pos, &start_face_direc, &curr_face_idx)))
 		{
-			curr_start_depth = AverDepth(curr_start_face, shapes_[i]->GetFaceVerCnt());
+			curr_start_depth = AverDepth(curr_start_face, acg_object_[i]->GetFaceVerCnt());
 			if (curr_start_depth > start_depth) continue;
 			start_face = curr_start_face;
 			start_depth = curr_start_depth;
 			start_shape_idx = i;
-			start_face_cnt = shapes_[i]->GetFaceCnt();
-			start_face_ver_cnt = shapes_[i]->GetFaceVerCnt();
-			start_normal_vec = shapes_[i]->GetNormalVec(curr_face_idx);
+			start_face_cnt = acg_object_[i]->GetFaceCnt();
+			start_face_ver_cnt = acg_object_[i]->GetFaceVerCnt();
+			start_normal_vec = acg_object_[i]->GetNormalVec(curr_face_idx);
 		}
 
 		// find the clicked face in the shape
-		if ((curr_end_face = shapes_[i]->InShape(mouse_pos, &end_face_direc, &curr_face_idx)))
+		if ((curr_end_face = acg_object_[i]->InShape(mouse_pos, &end_face_direc, &curr_face_idx)))
 		{
-			curr_end_depth = AverDepth(curr_end_face, shapes_[i]->GetFaceVerCnt());
+			curr_end_depth = AverDepth(curr_end_face, acg_object_[i]->GetFaceVerCnt());
 			if (curr_end_depth > end_depth) continue;
 			end_face = curr_end_face;
 			end_depth = curr_end_depth;
 			end_shape_idx = i;
-			end_normal_vec = shapes_[i]->GetNormalVec(curr_face_idx);
+			end_normal_vec = acg_object_[i]->GetNormalVec(curr_face_idx);
 		}
 	}
 
@@ -314,10 +310,10 @@ void Level::FindPathCoord(double xpos, double ypos)
 	if (start_shape_idx == -1 || end_shape_idx == -1) return;
 
 	// align mouse_pos
-	vp_aligned_pos = AlignPos(end_face, end_face_direc, mouse_pos, shapes_[start_shape_idx]->GetFaceVerCnt());
-	
+	vp_aligned_pos = AlignPos(end_face, end_face_direc, mouse_pos, acg_object_[start_shape_idx]->GetFaceVerCnt());
+
 	// find idx path and convert to coord path
-	vector<int> path_idx = FindPath(start_shape_idx, end_shape_idx, moving_shape_cnt_, Level::edge);
+	vector<int> path_idx = FindPath(start_shape_idx, end_shape_idx, acg_cnt_, Level::edge);
 	//if (path_idx.size() == 0)
 	//	return ;
 
@@ -346,7 +342,7 @@ void Level::mouse_button_callback(GLFWwindow* window, int button, int action, in
 		printf("\nmousepos: %f %f\n", xpos, SCR_HEIGHT - ypos);
 		if (level->acter_move_flag == false)
 			level->FindPathCoord((float)xpos, (float)(SCR_HEIGHT - ypos));
-		
+
 	}
 	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
 	{
@@ -366,10 +362,10 @@ void Level::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double yp
 		float angle = ellipse_area->CheckClickAndFindAngle((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
 		if (abs(angle) < 0.000001) return;
 		l_shape_angle += angle;
-		l_shape_angle = (float)fmod(l_shape_angle + 360, (double)360); 
-		level->shapes_[9]->SetIsDirty(true);
-		level->shapes_[10]->SetIsDirty(true);
-		level->shapes_[11]->SetIsDirty(true);
+		l_shape_angle = (float)fmod(l_shape_angle + 360, (double)360);
+		level->acg_object_[9]->SetIsDirty(true);
+		level->acg_object_[10]->SetIsDirty(true);
+		level->acg_object_[11]->SetIsDirty(true);
 	}
 }
 
@@ -377,7 +373,7 @@ void Level::PrintFace(float* face, int ver_cnt)
 {
 	for (int i = 0; i < ver_cnt; i++)
 	{
-		printf("point%d: (%f, %f, %f)\n",i , face[i * 3], face[i * 3 + 1], face[i * 3 + 2]);
+		printf("point%d: (%f, %f, %f)\n", i, face[i * 3], face[i * 3 + 1], face[i * 3 + 2]);
 	}
 }
 
@@ -509,7 +505,7 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 
 	path_coord.clear();
 	path_coord.push_back(inv_vpvp * glm::vec4(vp_start, 1.0f));
-	
+
 	if (size != 1 || size == 1 && curr_direc != 0)
 	{
 		glm::vec3 curr = vp_start;
@@ -519,7 +515,7 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 		float vdot = glm::dot(curr_normal_vec, end_normal_vec);
 		if (abs(1.0f - vdot) > 0.000001) return false;
 
-		//curr_direc_vec¿Í aligned pos¸¦ Áö³ª´Â Á÷¼±À§¿¡ last pos°¡ ³õ¿© ÀÖ´Ù.
+		//curr_direc_vecï¿½ï¿½ aligned posï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ last posï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½.
 		glm::vec3 recent_pos = vpvp_mat * glm::vec4(path_coord[path_coord.size() - 1], 1.0f);
 		glm::vec3 curr_direc_vec;
 		glm::vec3 curr_ortho_vec;
@@ -537,7 +533,7 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 		{
 			if (recent_pos.x != vp_end.x)
 			{
-				// curr_direc_vec.x == 0 && curr_ortho_vec.x == 0 ºÒ°¡´É
+				// curr_direc_vec.x == 0 && curr_ortho_vec.x == 0 ï¿½Ò°ï¿½ï¿½ï¿½
 				additional_pos.x = vp_end.x;
 				if (curr_ortho_vec.y == 0)
 				{
@@ -557,7 +553,7 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 		{
 			if (recent_pos.y != vp_end.y)
 			{
-				//curr_direc_vec.x == 0 && curr_direc_vec.y == 0 ÀÌ¹Ì Ã³¸®ÇÔ
+				//curr_direc_vec.x == 0 && curr_direc_vec.y == 0 ï¿½Ì¹ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½
 				additional_pos.y = vp_end.y;
 				additional_pos.x = LinearEquation(curr_ortho_vec, recent_pos, 0, additional_pos.y);
 				additional_pos.z = PlaneEquation(vpvp_mat * glm::vec4(curr_normal_vec, 0.0f), vp_end, additional_pos);
@@ -569,12 +565,12 @@ bool Level::PathIdxToCoord(glm::vec3 vp_start, glm::vec3 vp_end, vector<int> pat
 			float aa = LinearEquation(curr_direc_vec, vp_aligned_pos, 1, recent_pos.x);
 			if (abs(recent_pos.y - LinearEquation(curr_direc_vec, vp_aligned_pos, 1, recent_pos.x)) > 0.01)
 			{
-				//direc, ortho ±³Á¡ ±¸ÇÏ±â
+				//direc, ortho ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï±ï¿½
 				additional_pos.x = (curr_ortho_vec.x * curr_direc_vec.x * (recent_pos.y - vp_end.y) + curr_direc_vec.y * curr_ortho_vec.x * vp_end.x - curr_ortho_vec.y * curr_direc_vec.x * recent_pos.x)
 					/ (curr_ortho_vec.x * curr_direc_vec.y - curr_direc_vec.x * curr_ortho_vec.y);
-					additional_pos.y = LinearEquation(curr_ortho_vec, recent_pos, 1, additional_pos.x);
-					additional_pos.z = PlaneEquation(glm::cross(curr_direc_vec, curr_ortho_vec), vp_end, additional_pos);
-					path_coord.push_back(inv_vpvp * glm::vec4(additional_pos, 1.0f));
+				additional_pos.y = LinearEquation(curr_ortho_vec, recent_pos, 1, additional_pos.x);
+				additional_pos.z = PlaneEquation(glm::cross(curr_direc_vec, curr_ortho_vec), vp_end, additional_pos);
+				path_coord.push_back(inv_vpvp * glm::vec4(additional_pos, 1.0f));
 			}
 		}
 		path_coord.push_back(inv_vpvp * glm::vec4(vp_end, 1.0f));
@@ -588,9 +584,9 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 	float* curr_face = *curr_face_ptr;
 	int curr_face_cnt = *curr_face_cnt_ptr;
 	int curr_face_ver_cnt = *curr_face_ver_cnt_ptr;
-	float* next_face = shapes_[next_idx]->GetCurrFaceVer();
-	int next_face_cnt = shapes_[next_idx]->GetFaceCnt();
-	int next_face_ver_cnt = shapes_[next_idx]->GetFaceVerCnt();
+	float* next_face = acg_object_[next_idx]->GetCurrFaceVer();
+	int next_face_cnt = acg_object_[next_idx]->GetFaceCnt();
+	int next_face_ver_cnt = acg_object_[next_idx]->GetFaceVerCnt();
 
 	//-- Find next_face having same curr_normal
 	glm::mat4 inv_mat = glm::inverse(viewport * projection * view);
@@ -604,12 +600,12 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 	// brute force to find a suitable face in shape
 	for (int i = 0; i < next_face_cnt; i++)
 	{
-		next_normal = shapes_[next_idx]->GetNormalVec(i);
+		next_normal = acg_object_[next_idx]->GetNormalVec(i);
 		vdot = glm::dot(curr_normal, next_normal);
 		if (abs(1.0f - vdot) < 0.0001)
 		{
-			next_direc = shapes_[next_idx]->WGetFaceDirFlag(i);
-			break; 
+			next_direc = acg_object_[next_idx]->WGetFaceDirFlag(i);
+			break;
 		}
 		next_face += 3 * next_face_ver_cnt;
 	}
@@ -661,7 +657,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 		vector<glm::vec3> over_line = FindOverlappingLine(curr_face_ver_cnt, curr_face, next_face_ver_cnt, next_face);
 		// Midpoint of overlapping line
 		path_coord.push_back(inv_vpvp * glm::vec4((over_line[0].x + over_line[1].x) / 2, (over_line[0].y + over_line[1].y) / 2, (over_line[0].z + over_line[1].z) / 2, 1.0f));
-		return; 
+		return;
 	}
 	else
 	{
@@ -682,7 +678,7 @@ void Level::FindCoord(float** curr_face_ptr, int next_idx, glm::vec3 curr_pos, i
 		else if (abs(curr_direc_vec.y) < 0.0001)
 		{
 			inter_pos.y = curr_center_pos.y;
-			// if (abs(next_direc_vec.y) < 0.0001) À§¿¡¼­ Ã³¸®µÊ
+			// if (abs(next_direc_vec.y) < 0.0001) ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ï¿½ï¿½
 			inter_pos.x = LinearEquation(next_direc_vec, next_center_pos, 0, inter_pos.y);
 		}
 		else
@@ -727,7 +723,7 @@ std::vector<glm::vec3> Level::FindOverlappingLine(int curr_face_ver_cnt, float* 
 			if ((abs(curr_face[curr_line_fidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001
 				&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001)
 				|| (abs(curr_face[curr_line_fidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001
-				&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001))
+					&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001))
 			{
 				ret.push_back(glm::vec3(curr_face[curr_line_fidx * 3], curr_face[curr_line_fidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2]));
 				ret.push_back(glm::vec3(next_face[next_line_fidx * 3], next_face[next_line_fidx * 3 + 1], next_face[next_line_fidx * 3 + 2]));
@@ -740,7 +736,7 @@ std::vector<glm::vec3> Level::FindOverlappingLine(int curr_face_ver_cnt, float* 
 	return ret;
 }
 
-glm::vec3 Level::FindCenterPos(float *points, int ver_cnt)
+glm::vec3 Level::FindCenterPos(float* points, int ver_cnt)
 {
 	glm::vec3 center_pos(0.0f, 0.0f, 0.0f);
 

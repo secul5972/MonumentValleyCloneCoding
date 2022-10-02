@@ -14,6 +14,8 @@
 #include "Shape.h"
 #include "Math.h"
 #include "ClickArea.h"
+#include "ActerCanGoObject.h"
+#include "Ornament.h"
 
 extern GLFWwindow* window;
 extern bool left_mouse_button_down;
@@ -23,10 +25,11 @@ extern float deltaTime;
 class Level
 {
 private:
-	Shape**				shapes_;
-	int					shape_cnt_;
-	int					moving_shape_cnt_;
-	
+	ActerCanGoObject** acg_object_;
+	Ornament** ornaments_;
+	int					acg_cnt_;
+	int					orna_cnt_;
+
 	//data for acter moving
 	glm::vec3			vp_aligned_pos;
 	glm::vec3			wd_acter_pos;
@@ -34,13 +37,13 @@ private:
 	vector<glm::vec3>	path_coord;
 	int					path_coord_idx = 0;
 
-	float*				start_face = 0;
+	float* start_face = 0;
 	int					start_face_direc = 0;
 	glm::vec3			start_normal_vec;
 	int					start_face_cnt = 0;
 	int					start_face_ver_cnt = 0;
 
-	float*				end_face = 0;
+	float* end_face = 0;
 	int					end_face_direc = 0;
 	glm::vec3			end_normal_vec;
 
@@ -48,9 +51,9 @@ private:
 	glm::vec3			wd_aligned_pos;
 	Line				line;
 public:
-	bool**		edge;
+	bool** edge;
 
-	Level(int shape_cnt);
+	Level(int acg_cnt, int actg_cnt);
 	~Level();
 	void					Draw(glm::mat4 worldModel);
 	void					FindPathCoord(double xpos, double ypos);
