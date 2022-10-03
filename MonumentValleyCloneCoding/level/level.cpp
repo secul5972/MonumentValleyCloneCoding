@@ -33,6 +33,7 @@ Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cn
 	acg_object_[1]->SetCanBeLocated(true);
 	acg_object_[1]->SetIsFixed(false);
 
+	// L_Shape
 	acg_object_[2] = new Cuboid();
 	acg_object_[2]->SetCanBeLocated(true);
 	acg_object_[2]->SetIsFixed(false);
@@ -45,6 +46,7 @@ Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cn
 	acg_object_[4]->SetCanBeLocated(true);
 	acg_object_[4]->SetIsFixed(false);
 
+	// L_Shape
 	acg_object_[5] = new Cuboid();
 	acg_object_[5]->SetCanBeLocated(true);
 	acg_object_[5]->SetIsFixed(false);
@@ -57,6 +59,7 @@ Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cn
 	acg_object_[7]->SetCanBeLocated(true);
 	acg_object_[7]->SetIsFixed(false);
 
+	// Rotating L_Shape
 	acg_object_[8] = new Cuboid();
 	acg_object_[8]->SetCanBeLocated(true);
 	acg_object_[8]->SetIsFixed(false);
@@ -68,6 +71,10 @@ Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cn
 	acg_object_[10] = new Cuboid();
 	acg_object_[10]->SetCanBeLocated(true);
 	acg_object_[10]->SetIsFixed(false);
+
+	obj_can_rotate.push_back(8);
+	obj_can_rotate.push_back(9);
+	obj_can_rotate.push_back(10);
 
 	acg_object_[11] = new Cuboid();
 	acg_object_[11]->SetCanBeLocated(true);
@@ -271,7 +278,7 @@ void Level::Draw()
 
 	if (one_flag == false)
 	{
-		CheckDisableFace();
+		ChkDisableFace();
 		one_flag = true;
 	}
 }
@@ -282,56 +289,59 @@ void Level::FindPathCoord(double xpos, double ypos)
 	float		start_depth = 1;
 	float		end_depth = 1;
 	glm::vec3	vp_acter_pos = vpvp_mat * glm::vec4(wd_acter_pos, 1.0f);
-	int			start_shape_idx = -1;
-	int			end_shape_idx = -1;
+	int			start_obj_idx = -1;
+	int			end_obj_idx = -1;
 	// find the clicked face and face with acter
 	for (int i = 0; i < acg_cnt_; i++)
 	{
-		float* curr_start_face;
+		float*	curr_start_face;
 		float	curr_start_depth;
-		float* curr_end_face;
+		float*	curr_end_face;
 		float	curr_end_depth;
 		int		curr_face_idx;
 
 		if (acg_object_[i]->GetCanBeLocated() == false) continue;
 
-		// find the face with acter in the shape
-		if ((curr_start_face = acg_object_[i]->InShape(vp_acter_pos, &start_face_direc, &curr_face_idx)))
+		// find the face with acter in the obj
+		if ((curr_start_face = acg_object_[i]->InObj(vp_acter_pos, &start_face_direc, &curr_face_idx)))
 		{
 			curr_start_depth = AverDepth(curr_start_face, acg_object_[i]->GetFaceVerCnt());
-			if (curr_start_depth > start_depth) continue;
-			start_face = curr_start_face;
-			start_depth = curr_start_depth;
-			start_shape_idx = i;
-			start_face_cnt = acg_object_[i]->GetFaceCnt();
-			start_face_ver_cnt = acg_object_[i]->GetFaceVerCnt();
-			start_normal_vec = acg_object_[i]->GetNormalVec(curr_face_idx);
+			if (curr_start_depth < start_depth)
+			{
+				start_face = curr_start_face;
+				start_depth = curr_start_depth;
+				start_obj_idx = i;
+				start_face_cnt = acg_object_[i]->GetFaceCnt();
+				start_face_ver_cnt = acg_object_[i]->GetFaceVerCnt();
+				start_normal_vec = acg_object_[i]->GetNormalVec(curr_face_idx);
+			}
 		}
 
-		// find the clicked face in the shape
-		if ((curr_end_face = acg_object_[i]->InShape(mouse_pos, &end_face_direc, &curr_face_idx)))
+		// find the clicked face in the obj
+		if ((curr_end_face = acg_object_[i]->InObj(mouse_pos, &end_face_direc, &curr_face_idx)))
 		{
 			curr_end_depth = AverDepth(curr_end_face, acg_object_[i]->GetFaceVerCnt());
 			if (curr_end_depth > end_depth) continue;
 			end_face = curr_end_face;
 			end_depth = curr_end_depth;
-			end_shape_idx = i;
+			end_obj_idx = i;
 			end_normal_vec = acg_object_[i]->GetNormalVec(curr_face_idx);
 		}
 	}
 
 	// there is no face with chararcter or clicked face
-	if (start_shape_idx == -1 || end_shape_idx == -1) return;
+	if (start_obj_idx == -1 || end_obj_idx == -1) return;
 
 	// align mouse_pos
-	vp_aligned_pos = AlignPos(end_face, end_face_direc, mouse_pos, acg_object_[start_shape_idx]->GetFaceVerCnt());
+	vp_aligned_pos = AlignPos(end_face, end_face_direc, mouse_pos, acg_object_[start_obj_idx]->GetFaceVerCnt());
 
 	// find idx path and convert to coord path
-	vector<int> path_idx = FindPath(start_shape_idx, end_shape_idx, acg_cnt_, Level::edge);
-
+	vector<int> path_idx = FindPath(start_obj_idx, end_obj_idx, acg_cnt_, Level::edge);
+	if (path_idx.size() == 0)return;
 	if (!PathIdxToCoord(vp_acter_pos, vp_aligned_pos, path_idx)) return;
 	acter_move_flag = true;
 	path_coord_idx = 1;
+	obj_on_acter = end_obj_idx;
 	dist_vec = glm::normalize(path_coord[1] - path_coord[0]);
 }
 
@@ -369,8 +379,9 @@ void Level::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double yp
 	if (left_mouse_button_down && level->acter_move_flag == false)
 	{
 		//rotate angle of rotary knob
+		if (level->ChkActorOnObj(level->obj_can_rotate) == false) return;
 		float angle = ellipse_area->CheckClickAndFindAngle((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
-		if (abs(angle) < 0.000001) return;
+		if (abs(angle) < 0.001) return;
 		l_shape_angle += angle;
 		l_shape_angle = (float)fmod(l_shape_angle + 360, (double)360);
 		level->acg_object_[8]->SetIsDirty(true);
@@ -456,6 +467,7 @@ std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 	std::queue<int>	qu;
 	int*			visited;
 	int				curr;
+	bool			find_flag = false;
 
 	visited = new int[size];
 	std::fill(visited, visited + size, -1);
@@ -473,13 +485,24 @@ std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 			if (visited[i] != -1)continue;
 			if (edge[curr][i] == 0)continue;
 			visited[i] = curr;
-			if (i == end) break;
+			if (i == end)
+			{
+				find_flag = true;
+				break;
+			}
 			qu.push(i);
 		}
+		if (find_flag)
+			break;
 	}
-	
 
 	std::vector<int> ret;
+
+	if (find_flag == false)
+	{
+		delete[] visited;
+		return ret;
+	}
 
 	curr = end;
 	while (curr != start)
@@ -820,7 +843,7 @@ std::vector<glm::vec3> Level::FindOverlappingLine(int curr_face_ver_cnt, float* 
 	return ret;
 }
 
-void Level::CheckDisableFace()
+void Level::ChkDisableFace()
 {
 	for (int i = 0; i < acg_cnt_; i++)
 	{
@@ -861,4 +884,15 @@ void Level::CmpTwoObj(int fobj_idx, int sobj_idx)
 			break;
 		}
 	}
+}
+
+bool Level::ChkActorOnObj(vector<int> obj_idx)
+{
+	int size = obj_idx.size();
+	for (int i = 0; i < size; i++)
+	{
+		if (obj_idx[i] == obj_on_acter)
+			return false;
+	}
+	return true;
 }

@@ -13,7 +13,7 @@ protected:
 
 public:
 	// can_be_located = true
-	virtual float*		InShape(glm::vec2, int*, int*) = 0;
+	virtual float*		InObj(glm::vec2, int*, int*) = 0;
 	virtual int			GetFaceVerCnt() = 0;
 	virtual int			GetFaceCnt() = 0;
 

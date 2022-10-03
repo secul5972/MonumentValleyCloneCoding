@@ -51,7 +51,7 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4);
-	float*				InShape(glm::vec2, int*, int*);
+	float*				InObj(glm::vec2, int*, int*);
 	void				SaveModelData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
@@ -79,7 +79,7 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4);
-	float*				InShape(glm::vec2, int*, int*);
+	float*				InObj(glm::vec2, int*, int*);
 	void				SaveModelData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
@@ -107,7 +107,7 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4 model);
-	float*				InShape(glm::vec2, int*, int*);
+	float*				InObj(glm::vec2, int*, int*);
 	void				SaveModelData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
