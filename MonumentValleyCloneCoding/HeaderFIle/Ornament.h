@@ -32,8 +32,8 @@ private:
 public:
 	Circle();
 	void Draw(glm::mat4 model);
-	static void	MakeBuffer();
-	void FreeVertex();
+	static void	MakeVertex();
+	static void FreeVertex();
 };
 
 class Cylinder :public Ornament
@@ -75,8 +75,8 @@ private:
 public:
 	Sphere();
 	void Draw(glm::mat4 model);
-	static void	MakeBuffer();
-	void FreeVertex();
+	static void	MakeVertex();
+	static void FreeVertex();
 };
 
 class Acter :public Ornament

@@ -23,7 +23,6 @@ void Corn::MakeBuffer()
 		corn_ver[i * 6 + 5] = tmp.z;
 	}
 	corn_ver[0] = 0.2f;
-	//circle_ver[0] = 0.2f;
 
 	glGenBuffers(1, &tri_VBO_);
 	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO_);
@@ -36,8 +35,6 @@ void Corn::MakeBuffer()
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
-
-	//circle_ver[0] = 0.0f;
 }
 
 void Corn::Draw(glm::mat4 model)

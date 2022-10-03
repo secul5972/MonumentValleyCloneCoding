@@ -3,12 +3,12 @@
 
 #include <glm/glm.hpp>
 
-class CanBeLocated
+class CanBeLocated 
 {
 protected:
 	//current face vertex position
-	float*				curr_face_vertex_ = 0;
-	float*				curr_normal_vec_ = 0;
+	float*				curr_face_ver_ = 0;
+	float*				curr_nrm_vec_ = 0;
 	const int			kNrmVecSize = 18;
 
 public:

@@ -8,7 +8,7 @@ int circle_cnt;
 
 Sphere::Sphere() : Ornament(SPHERE, false) {};
 
-void Sphere::MakeBuffer()
+void Sphere::MakeVertex()
 {
 	sphere_ver = new float[180 * 360 * 6];
 

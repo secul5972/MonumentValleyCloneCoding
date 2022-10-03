@@ -6,7 +6,7 @@ int circle_ver_cnt;
 
 Circle::Circle() : Ornament(CIRCLE, false) {};
 
-void Circle::MakeBuffer()
+void Circle::MakeVertex()
 {
 	circle_ver = new float[362 * 6];
 

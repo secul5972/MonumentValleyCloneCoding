@@ -1,16 +1,16 @@
 #include "../headerFile/ActerCanGoObject.h"
 
 GLuint Goal::tri_VAO_, Goal::tri_VBO_, Goal::line_VAO_, Goal::line_VBO_;
-float* Goal::base_face_vertex_;
-float* Goal::base_normal_vec_;
+float* Goal::base_face_ver_;
+float* Goal::base_nrm_vec_;
 glm::mat4 Goal::pre_model_;
 
 extern float cube_face_ver[];
 
 Goal::Goal() : ActerCanGoObject(GOAL, true), MoveDrc(kFaceCnt)
 {
-	curr_face_vertex_ = new float[kFaceVerSize];
-	curr_normal_vec_ = new float[kNrmVecSize];
+	curr_face_ver_ = new float[kFaceVerSize];
+	curr_nrm_vec_ = new float[kNrmVecSize];
 	disable_face_ = new bool[kFaceCnt];
 	fill(disable_face_, disable_face_ + kFaceCnt, false);
 	MakeFaceDrcFlag();
@@ -18,8 +18,8 @@ Goal::Goal() : ActerCanGoObject(GOAL, true), MoveDrc(kFaceCnt)
 
 Goal::~Goal()
 {
-	delete[] curr_face_vertex_;
-	delete[] curr_normal_vec_;
+	delete[] curr_face_ver_;
+	delete[] curr_nrm_vec_;
 	delete[] disable_face_;
 }
 
@@ -92,8 +92,8 @@ void Goal::MakeBuffer()
 
 	delete[] goal_tri_ver;
 	delete[] goal_line_ver;
-	base_face_vertex_ = cube_face_ver;
-	base_normal_vec_ = cube_normal_vec;
+	base_face_ver_ = cube_face_ver;
+	base_nrm_vec_ = cube_normal_vec;
 }
 
 void Goal::Draw(glm::mat4 model)
@@ -125,9 +125,9 @@ float* Goal::MouseInObj(glm::vec2 point, int* dir, int* idx)
 
 	for (int i = 0; i < kFaceCnt; i++)
 	{
-		if (OnFace(point, curr_face_vertex_ + i * kFaceVerCnt * 3, kFaceVerCnt))
+		if (OnFace(point, curr_face_ver_ + i * kFaceVerCnt * 3, kFaceVerCnt))
 		{
-			face = curr_face_vertex_ + i * kFaceVerCnt * 3;
+			face = curr_face_ver_ + i * kFaceVerCnt * 3;
 			curr_dir = GetFaceDrcFlag(i);
 			*idx = i;
 			break;
@@ -153,20 +153,20 @@ void Goal::UpdateObjData(glm::mat4 model)
 
 	for (int i = 0; i < kFaceVerSize / 3; i++)
 	{
-		prev = glm::vec3(base_face_vertex_[i * 3], base_face_vertex_[i * 3 + 1], base_face_vertex_[i * 3 + 2]);
+		prev = glm::vec3(base_face_ver_[i * 3], base_face_ver_[i * 3 + 1], base_face_ver_[i * 3 + 2]);
 		curr = matrix * glm::vec4(prev, 1.0f);
-		curr_face_vertex_[i * 3] = curr.x;
-		curr_face_vertex_[i * 3 + 1] = curr.y;
-		curr_face_vertex_[i * 3 + 2] = curr.z;
+		curr_face_ver_[i * 3] = curr.x;
+		curr_face_ver_[i * 3 + 1] = curr.y;
+		curr_face_ver_[i * 3 + 2] = curr.z;
 	}
 
 	for (int i = 0; i < kFaceCnt; i++)
 	{
-		prev = glm::vec3(base_normal_vec_[i * 3], base_normal_vec_[i * 3 + 1], base_normal_vec_[i * 3 + 2]);
+		prev = glm::vec3(base_nrm_vec_[i * 3], base_nrm_vec_[i * 3 + 1], base_nrm_vec_[i * 3 + 2]);
 		curr = model * glm::vec4(prev, 0.0f);
-		curr_normal_vec_[i * 3] = float(curr.x > 0 ? int(curr.x + 0.5) : int(curr.x - 0.5));
-		curr_normal_vec_[i * 3 + 1] = float(curr.y > 0 ? int(curr.y + 0.5) : int(curr.y - 0.5));
-		curr_normal_vec_[i * 3 + 2] = float(curr.z > 0 ? int(curr.z + 0.5) : int(curr.z - 0.5));
+		curr_nrm_vec_[i * 3] = float(curr.x > 0 ? int(curr.x + 0.5) : int(curr.x - 0.5));
+		curr_nrm_vec_[i * 3 + 1] = float(curr.y > 0 ? int(curr.y + 0.5) : int(curr.y - 0.5));
+		curr_nrm_vec_[i * 3 + 2] = float(curr.z > 0 ? int(curr.z + 0.5) : int(curr.z - 0.5));
 	}
 
 	if (isfixed_)

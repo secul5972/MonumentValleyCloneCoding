@@ -38,8 +38,8 @@ class Cube :public ActerCanGoObject, public MoveDrc
 {
 private:
 	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
-	static float*		base_face_vertex_;
-	static float*		base_normal_vec_;
+	static float*		base_face_ver_;
+	static float*		base_nrm_vec_;
 	static const int	kFaceVerSize = 72;
 	static const int	kFaceCnt = 6;
 	static const int	kFaceVerCnt = 4;
@@ -65,8 +65,8 @@ class Cuboid :public ActerCanGoObject, public MoveDrc
 {
 private:
 	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
-	static float*		base_face_vertex_;
-	static float*		base_normal_vec_;
+	static float*		base_face_ver_;
+	static float*		base_nrm_vec_;
 	static const int	kFaceVerSize = 72;
 	static const int	kFaceCnt = 6;
 	static const int	kFaceVerCnt = 4;
@@ -93,8 +93,8 @@ class Goal :public ActerCanGoObject, public MoveDrc
 {
 private:
 	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
-	static float*		base_face_vertex_;
-	static float*		base_normal_vec_;
+	static float*		base_face_ver_;
+	static float*		base_nrm_vec_;
 	static const int	kFaceVerSize = 72;
 	static const int	kFaceCnt = 6;
 	static const int	kFaceVerCnt = 4;

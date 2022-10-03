@@ -17,7 +17,7 @@
 
 void processInput(GLFWwindow* window);
 void MakeViewportMatrix();
-void PrepareShapeBuffer();
+void PrepareObjBuffer();
 
 // settings
 const GLuint SCR_WIDTH = 1200;
@@ -84,7 +84,7 @@ int main()
 	//-- Prepare
 	// viewport matrix
 	MakeViewportMatrix();
-	PrepareShapeBuffer();
+	PrepareObjBuffer();
 
 	Axes axes;
 
@@ -141,6 +141,7 @@ int main()
 	delete def_shader;
 	delete line_shader;
 
+	Circle::FreeVertex();
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	glfwTerminate();
 	return 0;
@@ -164,13 +165,20 @@ void MakeViewportMatrix()
 	viewport[3][2] = 0.5f;
 }
 
-void PrepareShapeBuffer()
+void PrepareObjBuffer()
 {
 	Cube::MakeBuffer();
 	Cuboid::MakeBuffer();
 	Goal::MakeBuffer();
-	Circle::MakeBuffer();
+
+	Circle::MakeVertex();
 	Cylinder::MakeBuffer();
 	Corn::MakeBuffer();
-	Sphere::MakeBuffer();
+	Sphere::MakeVertex();
+}
+
+void RemoveObjBuffer()
+{
+	Circle::FreeVertex();
+	Sphere::FreeVertex();
 }
