@@ -3,7 +3,6 @@
 
 #include "headerFile/Shader.h"
 #include "headerFile/camera.h"
-#include "headerFile/model.h"
 #include "headerFile/Shape.h"
 #include "headerFile/Level.h"
 #include "headerFile/ClickArea.h"
@@ -16,9 +15,9 @@
 
 #include <iostream>
 
-void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void processInput(GLFWwindow* window);
 void MakeViewportMatrix();
+void PrepareShapeBuffer();
 
 // settings
 const GLuint SCR_WIDTH = 1200;
@@ -35,15 +34,19 @@ float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
 // matrix
-glm::mat4 viewport, projection, view, worldModel;
-
+glm::mat4 viewport, projection, view;
+glm::mat4 vpvp_mat;
+glm::mat4 inv_vp, inv_vpvp;
 // light
 glm::vec3 lightPos, lightColor;
 
 // shader
-Shader *def_shader;
+Shader* def_shader;
+Shader* line_shader;
 
 bool left_mouse_button_down = false;
+
+Level* level;
 
 int main()
 {
@@ -52,10 +55,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-#ifdef __APPLE__
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-#endif
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 	// glfw window creation
 	window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "MonumentVallyCloneCoding", NULL, NULL);
@@ -66,7 +66,6 @@ int main()
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	// tell GLFW to capture our mouse
 	// glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
@@ -78,39 +77,22 @@ int main()
 		return -1;
 	}
 
-	// tell stb_image.h to flip loaded texture's on the y-axis (before loading model).
-	stbi_set_flip_vertically_on_load(true);
-
 	// build and compile shaders
 	def_shader = new Shader("shader/default.vert", "shader/default.frag");
+	line_shader = new Shader("shader/line.vert", "shader/line.frag");
 
+	//-- Prepare
 	// viewport matrix
 	MakeViewportMatrix();
+	PrepareShapeBuffer();
 
-	// prepare_shapes
 	Axes axes;
-	Cube cube;
-	Goal goal;
-	Cuboid b;
-	Slope slope;
-	Circle circle;
-	L_shape d;
 
-	Cylinder cylinder;
-	Rotary_Knob rotary_knob;
-	Corn corn;
-	Character character;
-	Sphere sphere;
+	// base translate
+	glm::mat4 world_model = glm::mat4(1.0f);
+	world_model = glm::translate(world_model, glm::vec3(0.0f, -0.4f, 1.2f));
 
-	Level1 l;
-
-	cube.MakeBuffer();
-	goal.MakeBuffer();
-	slope.MakeBuffer();
-	circle.MakeBuffer();
-	cylinder.MakeBuffer();
-	corn.MakeBuffer();
-	sphere.MakeBuffer();
+	level = new Level(12, 2, world_model);
 
 	// light setting
 	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
@@ -126,7 +108,7 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic
-		float currentFrame = static_cast<float>(glfwGetTime());
+		float currentFrame = float(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
@@ -141,46 +123,31 @@ int main()
 		projection = glm::ortho(-2.0f,2.0f, -2.0f, 2.0f, 0.0f, 100.0f);
 		view = camera.GetViewMatrix();
 
-		// base translate
-		worldModel = glm::mat4(1.0f);
-		worldModel = glm::translate(worldModel, glm::vec3(0.0f, -0.4f, 1.2f));
+		vpvp_mat = viewport * projection * view;
+		inv_vp = glm::inverse(viewport);
+		inv_vpvp = glm::inverse(vpvp_mat);
 
 		// draw_shapes
-		axes.draw(worldModel);
-		//cube.draw(worldModel);
-		//goal.draw(worldModel);
-		//slope.draw(worldModel);
-		//circle.draw(worldModel);
-		//e.draw(defaultShader, worldModel);
-		//f.draw(defaultShader, worldModel);
-		//g.draw(defaultShader, worldModel);
-		l.draw(worldModel);
-		//h.draw(defaultShader, worldModel);
-		//m.draw(defaultShader, worldModel);
-		//n.draw(defaultShader, worldModel);
-		//o.draw(defaultShader, worldModel);
-		
+		axes.Draw(world_model);
+		glfwSetMouseButtonCallback(window, &Level::mouse_button_callback);
+		glfwSetCursorPosCallback(window, &Level::mouse_cursor_pos_callback);
+		level->Draw();
+
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	if (def_shader)
-		delete def_shader;
+	delete def_shader;
+	delete line_shader;
 
-	goal.FreeVertex();
-	slope.FreeVertex();
-	circle.FreeVertex();
-	sphere.FreeVertex();
+	//slope.FreeVertex();
+	//circle.FreeVertex();
+	//sphere.FreeVertex();
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	glfwTerminate();
 	return 0;
-}
-
-void framebuffer_size_callback(GLFWwindow* window, int width, int height)
-{
-	glViewport(0, 0, width, height);
 }
 
 void processInput(GLFWwindow* window)
@@ -199,4 +166,15 @@ void MakeViewportMatrix()
 	viewport[3][1] = SCR_HEIGHT / 2;
 	viewport[2][2] = 0.5f;
 	viewport[3][2] = 0.5f;
+}
+
+void PrepareShapeBuffer()
+{
+	Cube::MakeBuffer();
+	Cuboid::MakeBuffer();
+	Goal::MakeBuffer();
+	Circle::MakeBuffer();
+	Cylinder::MakeBuffer();
+	Corn::MakeBuffer();
+	Sphere::MakeBuffer();
 }

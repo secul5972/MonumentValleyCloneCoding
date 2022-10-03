@@ -1,106 +1,50 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="소스 파일">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
-    <Filter Include="리소스 파일">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="clickArea\EllipseArea.cpp" />
+    <ClCompile Include="glad.c" />
+    <ClCompile Include="level\level.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp" />
+    <ClCompile Include="Face\Face.cpp" />
+    <ClCompile Include="MoveDrc\MoveDrc.cpp" />
+    <ClCompile Include="Math\Math.cpp" />
+    <ClCompile Include="Object\ActerCanGoObject.cpp" />
+    <ClCompile Include="Object\Axes.cpp" />
+    <ClCompile Include="Object\Acter.cpp" />
+    <ClCompile Include="Object\Circle.cpp" />
+    <ClCompile Include="Object\Corn.cpp" />
+    <ClCompile Include="Object\Cube.cpp" />
+    <ClCompile Include="Object\Cuboid.cpp" />
+    <ClCompile Include="Object\Cylinder.cpp" />
+    <ClCompile Include="Object\Goal.cpp" />
+    <ClCompile Include="Object\Line.cpp" />
+    <ClCompile Include="Object\Ornament.cpp" />
+    <ClCompile Include="Object\Rotary_Knob.cpp" />
+    <ClCompile Include="Object\Shape.cpp" />
+    <ClCompile Include="Object\Sphere.cpp" />
+    <ClCompile Include="Object\CanBeLocated.cpp" />
+    <ClCompile Include="Object\Rotatable.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Cube.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\axes.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Cuboid.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Goal.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\L_Shape.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Slope.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="level\level1.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Circle.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="AdditionalMathFunction\AdditionalMathFunction.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Cylinder.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Rotary_Knob.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="glad.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="clickArea\EllipseArea.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Corn.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Character.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="shape\Sphere.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
+    <ClInclude Include="headerFile\AdditionalMathFunction.h" />
+    <ClInclude Include="headerFile\camera.h" />
+    <ClInclude Include="headerFile\Level.h" />
+    <ClInclude Include="headerFile\Shape.h" />
+    <ClInclude Include="headerFile\Shader.h" />
+    <ClInclude Include="headerFile\ClickArea.h" />
+    <ClInclude Include="headerFile\Face.h" />
+    <ClInclude Include="headerFile\MoveDrc.h" />
+    <ClInclude Include="headerFile\Math.h" />
+    <ClInclude Include="headerFile\Rotatable.h" />
+    <ClInclude Include="headerFile\Ornament.h" />
+    <ClInclude Include="headerFile\CanBeLocated.h" />
+    <ClInclude Include="headerFile\ActerCanGoObject.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="shader\default.frag">
-      <Filter>리소스 파일</Filter>
-    </None>
-    <None Include="shader\default.vert">
-      <Filter>리소스 파일</Filter>
-    </None>
-    <None Include="shader\test.vert" />
-    <None Include="shader\test.frag" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="headerFile\camera.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="headerFile\Shape.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="headerFile\mesh.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="headerFile\model.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="headerFile\Shader.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="headerFile\Level.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="headerFile\ClickArea.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="headerFile\AdditionalMathFunction.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
+    <None Include="shader\default.frag" />
+    <None Include="shader\default.vert" />
+    <None Include="shader\line.frag" />
+    <None Include="shader\line.vert" />
   </ItemGroup>
 </Project>

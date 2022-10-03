@@ -17,7 +17,7 @@ bool EllipseArea::CheckClickInArea(float xpos, float ypos, glm::mat4 model)
 	return (0);
 }
 
-float EllipseArea::CheckClickAndRotateInArea(float xpos, float ypos, glm::mat4 model)
+float EllipseArea::CheckClickAndFindAngle(float xpos, float ypos, glm::mat4 model)
 {
 	glm::mat4 affine = viewport * projection * view * model;
 	glm::vec3 modelpos;

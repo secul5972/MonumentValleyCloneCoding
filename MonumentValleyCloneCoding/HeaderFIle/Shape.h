@@ -1,7 +1,11 @@
 #ifndef SHAPE_H
 #define SHAPE_H
 
+//vec3.xy();
+#define GLM_FORCE_SWIZZLE
+
 #include "Shader.h"
+#include "Face.h"
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -11,142 +15,56 @@
 #include <iostream>
 using namespace std;
 
-extern glm::mat4 projection, view;
-extern float cube_tri_ver[];
-extern float cube_side_ver[];
-extern Shader* def_shader;
+extern glm::mat4	viewport, projection, view;
+extern glm::mat4	vpvp_mat;
+
+enum ShapeType {
+	DEFAULT,
+	AXES,
+	CUBE,
+	CUBOID,
+	GOAL,
+	L_SHAPE,
+	SLOPE,
+	CIRCLE,
+	CYLINDER,
+	RORTARY_KNOB,
+	CORN,
+	SPHERE,
+	ACTER
+};
+
+const string kShapeTypeName[] = {
+	"DEFAULT",
+	"AXES",
+	"CUBE",
+	"CUBOID",
+	"GOAL",
+	"L_SHAPE",
+	"SLOPE",
+	"CIRCLE",
+	"CYLINDER",
+	"RORTARY_KNOB",
+	"CORN",
+	"SPHERE",
+	"ACTER"
+};
 
 class Shape
 {
-public:
-	virtual void draw(glm::mat4 model) = 0;
-};
+protected:
 
-class Axes :Shape
-{
-private:
-	static GLuint line_VAO, line_VBO;
+	//shape Type
+	ShapeType		type_;
+	//player can be located on shape
+	bool			can_be_located_;
 public:
-	Axes();
-	void draw(glm::mat4 model);
-};
+	Shape();
+	Shape(ShapeType, bool);
 
-class Cube :Shape
-{
-private:
-	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
-public:
-	Cube();
-	void draw(glm::mat4 model);
-	void MakeBuffer();
-};
-
-class Cuboid :Shape
-{
-private:
-	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
-public:
-	Cuboid();
-	void draw(glm::mat4 model);
-};
-
-class Goal :Shape
-{
-private:
-	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
-public:
-	Goal();
-	void draw(glm::mat4 model);
-	void MakeBuffer();
-	void FreeVertex();
-};
-
-class L_shape :Shape
-{
-private:
-	Cube cube;
-	Cuboid cuboid;
-public:
-	L_shape();
-	void draw(glm::mat4 model);
-};
-
-class Slope :Shape
-{
-private:
-	static GLuint tri_VAO, tri_VBO, line_VAO, line_VBO;
-public:
-	Slope();
-	void draw(glm::mat4 model);
-	void MakeBuffer();
-	void FreeVertex();
-};
-
-class Circle :Shape
-{
-private:
-	static GLuint tri_VAO, tri_VBO;
-public:
-	Circle();
-	void draw(glm::mat4 model);
-	void MakeBuffer();
-	void FreeVertex();
-};
-
-class Cylinder :Shape
-{
-private:
-	static GLuint line_VAO, line_VBO;
-	Circle circle;
-public:
-	Cylinder();
-	void draw(glm::mat4 model);
-	void MakeBuffer();
-	//void FreeVertex();
-};
-
-class Rotary_Knob :Shape
-{
-private:
-	Cylinder cylinder;
-	Cube cube;
-public:
-	Rotary_Knob();
-	void draw(glm::mat4 model);
-};
-
-class Corn :Shape
-{
-private:
-	static GLuint tri_VAO, tri_VBO;
-	Circle circle;
-public:
-	Corn();
-	void draw(glm::mat4 model);
-	void MakeBuffer();
-};
- 
-class Sphere :Shape
-{
-private:
-	static GLuint tri_VAO, tri_VBO;
-public:
-	Sphere();
-	void draw(glm::mat4 model);
-	void MakeBuffer();
-	void FreeVertex();
-};
-
-class Character :Shape
-{
-private:
-	static GLuint tri_VAO, tri_VBO;
-	Corn corn;
-	Cylinder cylinder;
-	Sphere sphere;
-public:
-	Character();
-	void draw(glm::mat4 model);
+	void				SetCanBeLocated(bool can_be_located);
+	bool				GetCanBeLocated();
+	virtual void		Draw(glm::mat4) = 0;
 };
 
 #endif
