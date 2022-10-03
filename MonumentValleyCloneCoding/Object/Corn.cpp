@@ -9,11 +9,25 @@ Corn::Corn() : Ornament(CORN, false) {};
 
 void Corn::MakeBuffer()
 {
-	circle_ver[0] = 0.2f;
+	float* corn_ver = new float[circle_ver_cnt * 6];
+
+	for (int i = 0; i < circle_ver_cnt; i++)
+	{
+		corn_ver[i * 6] = circle_ver[i * 6];
+		corn_ver[i * 6 + 1] = circle_ver[i * 6 + 1];
+		corn_ver[i * 6 + 2] = circle_ver[i * 6 + 2];
+
+		glm::vec3 tmp = glm::normalize(glm::vec3(0.04f, 0.8 * circle_ver[i * 6 + 1], 0.8 * circle_ver[i * 6 + 2]));
+		corn_ver[i * 6 + 3] = tmp.x;
+		corn_ver[i * 6 + 4] = tmp.y;
+		corn_ver[i * 6 + 5] = tmp.z;
+	}
+	corn_ver[0] = 0.2f;
+	//circle_ver[0] = 0.2f;
 
 	glGenBuffers(1, &tri_VBO_);
 	glBindBuffer(GL_ARRAY_BUFFER, tri_VBO_);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * circle_ver_cnt * 6, circle_ver, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(float) * circle_ver_cnt * 6, corn_ver, GL_STATIC_DRAW);
 
 	glGenVertexArrays(1, &tri_VAO_);
 	glBindVertexArray(tri_VAO_);
@@ -23,7 +37,7 @@ void Corn::MakeBuffer()
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
 	glEnableVertexAttribArray(1);
 
-	circle_ver[0] = 0.0f;
+	//circle_ver[0] = 0.0f;
 }
 
 void Corn::Draw(glm::mat4 model)
@@ -37,7 +51,7 @@ void Corn::Draw(glm::mat4 model)
 	def_shader->setMat4("model", shapeModel);
 	def_shader->setMat4("projection", projection);
 	def_shader->setMat4("view", view);
-	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	def_shader->setVec3("objectColor", obj_color_);
 
 	glBindVertexArray(tri_VAO_);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, circle_ver_cnt);

@@ -16,7 +16,7 @@ public:
 	void			SetIsDirty(bool isdirty);
 
 	// isfixed_ == false
-	virtual void	SaveModelData(glm::mat4) = 0;
+	virtual void	UpdateObjData(glm::mat4) = 0;
 };
 
 #endif

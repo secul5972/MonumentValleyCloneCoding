@@ -13,7 +13,7 @@ void Circle::MakeBuffer()
 	circle_ver[0] = 0.0f;
 	circle_ver[1] = 0.0f;
 	circle_ver[2] = 0.0f;
-	circle_ver[3] = 0.0f;
+	circle_ver[3] = 1.0f;
 	circle_ver[4] = 0.0f;
 	circle_ver[5] = 0.0f;
 
@@ -22,7 +22,7 @@ void Circle::MakeBuffer()
 		circle_ver[i * 6] = 0.0f;
 		circle_ver[i * 6 + 1] = 0.1f * sin(glm::radians(float(i - 1)));
 		circle_ver[i * 6 + 2] = 0.1f * cos(glm::radians(float(i - 1)));
-		circle_ver[i * 6 + 3] = 0.0f;
+		circle_ver[i * 6 + 3] = 1.0f;
 		circle_ver[i * 6 + 4] = 0.0f;
 		circle_ver[i * 6 + 5] = 0.0f;
 	}
@@ -57,7 +57,7 @@ void Circle::Draw(glm::mat4 model)
 	def_shader->setMat4("model", shapeModel);
 	def_shader->setMat4("projection", projection);
 	def_shader->setMat4("view", view);
-	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	def_shader->setVec3("objectColor", obj_color_);
 	glBindVertexArray(tri_VAO_);
 	glDrawArrays(GL_TRIANGLE_FAN, 0, circle_ver_cnt);
 

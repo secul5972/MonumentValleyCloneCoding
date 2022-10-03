@@ -61,7 +61,7 @@ void Sphere::Draw(glm::mat4 model)
 	def_shader->setMat4("model", shapeModel);
 	def_shader->setMat4("projection", projection);
 	def_shader->setMat4("view", view);
-	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	def_shader->setVec3("objectColor", obj_color_);
 	glBindVertexArray(tri_VAO_);
 	for (int i = 0; i < circle_cnt; i++)
 		glDrawArrays(GL_LINE_STRIP, i * 360, sphere_ver_cnt / circle_cnt);

@@ -8,7 +8,7 @@
 
 class Ornament :public Shape
 {
-private:
+protected:
 	glm::vec3		obj_color_;
 public:
 	Ornament(ShapeType shape_type, bool can_be_located_);

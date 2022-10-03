@@ -38,7 +38,7 @@ glm::mat4 viewport, projection, view;
 glm::mat4 vpvp_mat;
 glm::mat4 inv_vp, inv_vpvp;
 // light
-glm::vec3 lightPos, lightColor;
+glm::vec3 light_pos, light_color;
 
 // shader
 Shader* def_shader;
@@ -95,11 +95,11 @@ int main()
 	level = new Level(12, 2, world_model);
 
 	// light setting
-	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
-	lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	light_pos = glm::vec3(0.0f, 10.0f, 0.0f);
+	light_color = glm::vec3(1.0f, 1.0f, 1.0f);
 	def_shader->use();
-	def_shader->setVec3("lightPos", lightPos);
-	def_shader->setVec3("lightColor", lightColor);
+	def_shader->setVec3("lightPos", light_pos);
+	def_shader->setVec3("lightColor", light_color);
 	def_shader->unuse();
 
 	// configure global opengl state
@@ -140,10 +140,6 @@ int main()
 
 	delete def_shader;
 	delete line_shader;
-
-	//slope.FreeVertex();
-	//circle.FreeVertex();
-	//sphere.FreeVertex();
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	glfwTerminate();

@@ -118,7 +118,7 @@ void Goal::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Goal::InObj(glm::vec2 point, int* dir, int* idx)
+float* Goal::MouseInObj(glm::vec2 point, int* dir, int* idx)
 {
 	float* face = 0;
 	int curr_dir = -1;
@@ -142,7 +142,7 @@ float* Goal::InObj(glm::vec2 point, int* dir, int* idx)
 	return face;
 }
 
-void Goal::SaveModelData(glm::mat4 model)
+void Goal::UpdateObjData(glm::mat4 model)
 {
 	if (isfixed_ && issaved_) return;
 	if (!isfixed_ && !isdirty_) return;

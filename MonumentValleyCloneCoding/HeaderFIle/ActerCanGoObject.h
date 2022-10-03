@@ -26,8 +26,6 @@ protected:
 public:
 	ActerCanGoObject(ShapeType shape_type, bool can_be_located_);
 	~ActerCanGoObject();
-	virtual int			GetFaceVerCnt() = 0;
-	virtual int			GetFaceCnt() = 0;
 	virtual int			WGetFaceDrcFlag(int) = 0;	
 
 	void				SetIsFixed(bool isfixed);
@@ -53,8 +51,8 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4);
-	float*				InObj(glm::vec2, int*, int*);
-	void				SaveModelData(glm::mat4);
+	float*				MouseInObj(glm::vec2, int*, int*);
+	void				UpdateObjData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
 	int					GetFaceCnt();
@@ -81,8 +79,8 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4);
-	float*				InObj(glm::vec2, int*, int*);
-	void				SaveModelData(glm::mat4);
+	float*				MouseInObj(glm::vec2, int*, int*);
+	void				UpdateObjData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
 	int					GetFaceCnt();
@@ -109,8 +107,8 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4 model);
-	float*				InObj(glm::vec2, int*, int*);
-	void				SaveModelData(glm::mat4);
+	float*				MouseInObj(glm::vec2, int*, int*);
+	void				UpdateObjData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
 	int					GetFaceCnt();

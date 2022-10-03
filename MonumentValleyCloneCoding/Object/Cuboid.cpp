@@ -116,7 +116,7 @@ void Cuboid::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Cuboid::InObj(glm::vec2 point, int* dir, int* idx)
+float* Cuboid::MouseInObj(glm::vec2 point, int* dir, int* idx)
 {
 	float* face = 0;
 	int curr_dir = -1;
@@ -140,7 +140,7 @@ float* Cuboid::InObj(glm::vec2 point, int* dir, int* idx)
 	return face;
 }
 
-void Cuboid::SaveModelData(glm::mat4 model)
+void Cuboid::UpdateObjData(glm::mat4 model)
 {
 	if (isfixed_ && issaved_) return;
 	if (!isfixed_ && !isdirty_) return;
