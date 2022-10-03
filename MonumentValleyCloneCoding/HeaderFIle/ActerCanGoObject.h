@@ -22,6 +22,7 @@ protected:
 	bool			isfixed_ = true;
 	bool			issaved_ = false;
 	bool*			disable_face_ = 0;
+	glm::vec3		obj_color_;
 public:
 	ActerCanGoObject(ShapeType shape_type, bool can_be_located_);
 	~ActerCanGoObject();
@@ -32,6 +33,7 @@ public:
 	void				SetIsFixed(bool isfixed);
 	void				SetDisableFace(int idx, bool val);
 	bool				GetDisableFace(int idx);
+	void				SetObjColor(glm::vec3);
 };
 
 class Cube :public ActerCanGoObject, public MoveDrc

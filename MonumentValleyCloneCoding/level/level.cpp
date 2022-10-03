@@ -80,6 +80,11 @@ Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cn
 	acg_object_[11]->SetCanBeLocated(true);
 	acg_object_[11]->SetIsFixed(false);
 
+	for (int i = 0; i < acg_cnt_; i++)
+	{
+		acg_object_[i]->SetObjColor(glm::vec3(0.8f, 0.64f, 0.64f));
+	}
+
 	ornaments_[0] = new Acter();
 	ornaments_[1] = new Rotary_Knob();
 
@@ -157,7 +162,11 @@ void Level::Draw()
 		wd_acter_pos += 0.013f * dist_vec;
 		for (int i = 0; i < path_coord.size() - 1; i++)
 		{
-			line.SetLine(path_coord[i], path_coord[i + 1]);
+			glm::vec3 fpos = projection * view * glm::vec4(path_coord[i], 1.0f);
+			glm::vec3 spos = projection * view * glm::vec4(path_coord[i + 1], 1.0f);
+			fpos.z = -1.0f;
+			spos.z = -1.0f;
+			line.SetLine(fpos, spos);
 			line.Draw(world_model_);
 		}
 		if (glm::length(wd_acter_pos - path_coord[path_coord_idx]) < 0.01)

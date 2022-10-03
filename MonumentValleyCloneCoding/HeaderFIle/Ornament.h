@@ -9,9 +9,11 @@
 class Ornament :public Shape
 {
 private:
+	glm::vec3		obj_color_;
 public:
 	Ornament(ShapeType shape_type, bool can_be_located_);
 	~Ornament();
+	void				SetObjColor(glm::vec3);
 };
 
 class Axes :public Ornament
