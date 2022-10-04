@@ -17,7 +17,8 @@
 
 void processInput(GLFWwindow* window);
 void MakeViewportMatrix();
-void PrepareShapeBuffer();
+void PrepareObjBuffer();
+void RemoveObjBuffer();
 
 // settings
 const GLuint SCR_WIDTH = 1200;
@@ -38,7 +39,7 @@ glm::mat4 viewport, projection, view;
 glm::mat4 vpvp_mat;
 glm::mat4 inv_vp, inv_vpvp;
 // light
-glm::vec3 lightPos, lightColor;
+glm::vec3 light_pos, light_color;
 
 // shader
 Shader* def_shader;
@@ -84,7 +85,7 @@ int main()
 	//-- Prepare
 	// viewport matrix
 	MakeViewportMatrix();
-	PrepareShapeBuffer();
+	PrepareObjBuffer();
 
 	Axes axes;
 
@@ -95,11 +96,11 @@ int main()
 	level = new Level(12, 2, world_model);
 
 	// light setting
-	lightPos = glm::vec3(0.0f, 10.0f, 0.0f);
-	lightColor = glm::vec3(1.0f, 1.0f, 1.0f);
+	light_pos = glm::vec3(0.0f, 10.0f, 0.0f);
+	light_color = glm::vec3(1.0f, 1.0f, 1.0f);
 	def_shader->use();
-	def_shader->setVec3("lightPos", lightPos);
-	def_shader->setVec3("lightColor", lightColor);
+	def_shader->setVec3("lightPos", light_pos);
+	def_shader->setVec3("lightColor", light_color);
 	def_shader->unuse();
 
 	// configure global opengl state
@@ -127,8 +128,9 @@ int main()
 		inv_vp = glm::inverse(viewport);
 		inv_vpvp = glm::inverse(vpvp_mat);
 
-		// draw_shapes
-		axes.Draw(world_model);
+		//-- draw_shapes
+		// axes for debug
+		//axes.Draw(world_model);
 		glfwSetMouseButtonCallback(window, &Level::mouse_button_callback);
 		glfwSetCursorPosCallback(window, &Level::mouse_cursor_pos_callback);
 		level->Draw();
@@ -141,10 +143,7 @@ int main()
 	delete def_shader;
 	delete line_shader;
 
-	//slope.FreeVertex();
-	//circle.FreeVertex();
-	//sphere.FreeVertex();
-
+	RemoveObjBuffer();
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	glfwTerminate();
 	return 0;
@@ -168,13 +167,20 @@ void MakeViewportMatrix()
 	viewport[3][2] = 0.5f;
 }
 
-void PrepareShapeBuffer()
+void PrepareObjBuffer()
 {
 	Cube::MakeBuffer();
 	Cuboid::MakeBuffer();
 	Goal::MakeBuffer();
-	Circle::MakeBuffer();
+
+	Circle::MakeVertex();
 	Cylinder::MakeBuffer();
 	Corn::MakeBuffer();
-	Sphere::MakeBuffer();
+	Sphere::MakeVertex();
+}
+
+void RemoveObjBuffer()
+{
+	Circle::FreeVertex();
+	Sphere::FreeVertex();
 }

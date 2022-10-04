@@ -22,24 +22,24 @@ protected:
 	bool			isfixed_ = true;
 	bool			issaved_ = false;
 	bool*			disable_face_ = 0;
+	glm::vec3		obj_color_;
 public:
 	ActerCanGoObject(ShapeType shape_type, bool can_be_located_);
 	~ActerCanGoObject();
-	virtual int			GetFaceVerCnt() = 0;
-	virtual int			GetFaceCnt() = 0;
 	virtual int			WGetFaceDrcFlag(int) = 0;	
 
 	void				SetIsFixed(bool isfixed);
 	void				SetDisableFace(int idx, bool val);
 	bool				GetDisableFace(int idx);
+	void				SetObjColor(glm::vec3);
 };
 
 class Cube :public ActerCanGoObject, public MoveDrc
 {
 private:
 	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
-	static float*		base_face_vertex_;
-	static float*		base_normal_vec_;
+	static float*		base_face_ver_;
+	static float*		base_nrm_vec_;
 	static const int	kFaceVerSize = 72;
 	static const int	kFaceCnt = 6;
 	static const int	kFaceVerCnt = 4;
@@ -51,8 +51,8 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4);
-	float*				InObj(glm::vec2, int*, int*);
-	void				SaveModelData(glm::mat4);
+	float*				IsInObj(glm::vec2, int*, int*);
+	void				UpdateObjData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
 	int					GetFaceCnt();
@@ -65,8 +65,8 @@ class Cuboid :public ActerCanGoObject, public MoveDrc
 {
 private:
 	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
-	static float*		base_face_vertex_;
-	static float*		base_normal_vec_;
+	static float*		base_face_ver_;
+	static float*		base_nrm_vec_;
 	static const int	kFaceVerSize = 72;
 	static const int	kFaceCnt = 6;
 	static const int	kFaceVerCnt = 4;
@@ -79,8 +79,8 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4);
-	float*				InObj(glm::vec2, int*, int*);
-	void				SaveModelData(glm::mat4);
+	float*				IsInObj(glm::vec2, int*, int*);
+	void				UpdateObjData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
 	int					GetFaceCnt();
@@ -93,8 +93,8 @@ class Goal :public ActerCanGoObject, public MoveDrc
 {
 private:
 	static GLuint		tri_VAO_, tri_VBO_, line_VAO_, line_VBO_;
-	static float*		base_face_vertex_;
-	static float*		base_normal_vec_;
+	static float*		base_face_ver_;
+	static float*		base_nrm_vec_;
 	static const int	kFaceVerSize = 72;
 	static const int	kFaceCnt = 6;
 	static const int	kFaceVerCnt = 4;
@@ -107,8 +107,8 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4 model);
-	float*				InObj(glm::vec2, int*, int*);
-	void				SaveModelData(glm::mat4);
+	float*				IsInObj(glm::vec2, int*, int*);
+	void				UpdateObjData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
 	int					GetFaceCnt();

@@ -8,10 +8,12 @@
 
 class Ornament :public Shape
 {
-private:
+protected:
+	glm::vec3		obj_color_;
 public:
 	Ornament(ShapeType shape_type, bool can_be_located_);
 	~Ornament();
+	void				SetObjColor(glm::vec3);
 };
 
 class Axes :public Ornament
@@ -30,8 +32,8 @@ private:
 public:
 	Circle();
 	void Draw(glm::mat4 model);
-	static void	MakeBuffer();
-	void FreeVertex();
+	static void	MakeVertex();
+	static void FreeVertex();
 };
 
 class Cylinder :public Ornament
@@ -73,8 +75,8 @@ private:
 public:
 	Sphere();
 	void Draw(glm::mat4 model);
-	static void	MakeBuffer();
-	void FreeVertex();
+	static void	MakeVertex();
+	static void FreeVertex();
 };
 
 class Acter :public Ornament

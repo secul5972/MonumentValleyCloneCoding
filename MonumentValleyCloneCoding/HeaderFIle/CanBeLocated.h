@@ -3,17 +3,17 @@
 
 #include <glm/glm.hpp>
 
-class CanBeLocated
+class CanBeLocated 
 {
 protected:
 	//current face vertex position
-	float*				curr_face_vertex_ = 0;
-	float*				curr_normal_vec_ = 0;
+	float*				curr_face_ver_ = 0;
+	float*				curr_nrm_vec_ = 0;
 	const int			kNrmVecSize = 18;
 
 public:
 	// can_be_located = true
-	virtual float*		InObj(glm::vec2, int*, int*) = 0;
+	virtual float*		IsInObj(glm::vec2, int*, int*) = 0;
 	virtual int			GetFaceVerCnt() = 0;
 	virtual int			GetFaceCnt() = 0;
 

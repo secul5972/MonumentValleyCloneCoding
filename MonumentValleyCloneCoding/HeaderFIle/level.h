@@ -57,8 +57,6 @@ private:
 	glm::vec3			wd_aligned_pos;
 	Line				line;
 
-	//one time flag
-	bool				one_flag = false;
 public:
 	vector<int>			obj_can_rotate;
 	bool**				edge;

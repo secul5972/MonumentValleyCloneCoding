@@ -3,7 +3,7 @@
 float rotateStartTime = 0;
 float rotateEndTime = -1;
 float rotateCurrTime = 0;
-float l_shape_angle = 0;
+float rotate_obj_angle = 0;
 
 EllipseArea* ellipse_area;
 glm::mat4 ellipse_area_model;
@@ -80,6 +80,11 @@ Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cn
 	acg_object_[11]->SetCanBeLocated(true);
 	acg_object_[11]->SetIsFixed(false);
 
+	for (int i = 0; i < acg_cnt_; i++)
+	{
+		acg_object_[i]->SetObjColor(glm::vec3(0.8f, 0.64f, 0.64f));
+	}
+
 	ornaments_[0] = new Acter();
 	ornaments_[1] = new Rotary_Knob();
 
@@ -123,15 +128,15 @@ void Level::Draw()
 	model = world_model_;
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-	acg_object_[2]->SaveModelData(model2);
+	acg_object_[2]->UpdateObjData(model2);
 	acg_object_[2]->Draw(model2);
 
-	acg_object_[3]->SaveModelData(model);
+	acg_object_[3]->UpdateObjData(model);
 	acg_object_[3]->Draw(model);
 
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[4]->SaveModelData(model2);
+	acg_object_[4]->UpdateObjData(model2);
 	acg_object_[4]->Draw(model2);
 
 	// draw l_shape
@@ -140,24 +145,28 @@ void Level::Draw()
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-	acg_object_[5]->SaveModelData(model2);
+	acg_object_[5]->UpdateObjData(model2);
 	acg_object_[5]->Draw(model2);
 
-	acg_object_[6]->SaveModelData(model);
+	acg_object_[6]->UpdateObjData(model);
 	acg_object_[6]->Draw(model);
 
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[7]->SaveModelData(model2);
+	acg_object_[7]->UpdateObjData(model2);
 	acg_object_[7]->Draw(model2);
 
-	// acter
+	// acter moving
 	if (acter_move_flag)
 	{
 		wd_acter_pos += 0.013f * dist_vec;
 		for (int i = 0; i < path_coord.size() - 1; i++)
 		{
-			line.SetLine(path_coord[i], path_coord[i + 1]);
+			glm::vec3 fpos = projection * view * glm::vec4(path_coord[i], 1.0f);
+			glm::vec3 spos = projection * view * glm::vec4(path_coord[i + 1], 1.0f);
+			fpos.z = -1.0f;
+			spos.z = -1.0f;
+			line.SetLine(fpos, spos);
 			line.Draw(world_model_);
 		}
 		if (glm::length(wd_acter_pos - path_coord[path_coord_idx]) < 0.01)
@@ -177,44 +186,44 @@ void Level::Draw()
 	ornaments_[0]->Draw(model);
 
 	// adjust angle
-	float tmp_angle = (float)fmod(l_shape_angle, 90);
+	float tmp_angle = (float)fmod(rotate_obj_angle, 90);
 	if (!l_shape_moving_flag && adjust_angle_flag)
 	{
 		if (tmp_angle < 0.5)
 		{
-			l_shape_angle = float(int(l_shape_angle / 90) * 90);
+			rotate_obj_angle = float(int(rotate_obj_angle / 90) * 90);
 			adjust_angle_flag = false;
 		}
 		else if (tmp_angle > 90 - 0.5)
 		{
-			l_shape_angle = float((int(l_shape_angle / 90) + 1) % 4 * 90);
+			rotate_obj_angle = float((int(rotate_obj_angle / 90) + 1) % 4 * 90);
 			adjust_angle_flag = false;
 		}
 		else if (tmp_angle > 45.0f)
-			l_shape_angle += deltaTime * 60;
+			rotate_obj_angle += deltaTime * 60;
 		else
-			l_shape_angle -= deltaTime * 60;
+			rotate_obj_angle -= deltaTime * 60;
 		acg_object_[8]->SetIsDirty(true);
 		acg_object_[9]->SetIsDirty(true);
 		acg_object_[10]->SetIsDirty(true);
 	}
 
 	// update edge
-	if (l_shape_angle == 270)
+	if (rotate_obj_angle == 270)
 	{
 		edge[7][10] = 0;
 		edge[10][7] = 0;
 		edge[2][10] = 1;
 		edge[10][2] = 1;
 	}
-	else if (l_shape_angle == 0)
+	else if (rotate_obj_angle == 0)
 	{
 		edge[7][10] = 1;
 		edge[10][7] = 1;
 		edge[2][10] = 0;
 		edge[10][2] = 0;
 	}
-	else if (l_shape_angle == 90 || l_shape_angle == 180)
+	else if (rotate_obj_angle == 90 || rotate_obj_angle == 180)
 	{
 		edge[7][10] = 0;
 		edge[10][7] = 0;
@@ -226,7 +235,7 @@ void Level::Draw()
 	model = world_model_;
 	model2 = world_model_;
 	model2 = glm::translate(model2, glm::vec3(1.9f, 1.8f, 0.0f));
-	model2 = glm::rotate(model2, glm::radians(float(l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
+	model2 = glm::rotate(model2, glm::radians(float(rotate_obj_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	ornaments_[1]->Draw(model2);
 
 	model = world_model_;
@@ -235,52 +244,48 @@ void Level::Draw()
 	ellipse_area_model = model;
 
 	glm::mat4 opt_world_model_ = world_model_;
-	if (225 < l_shape_angle && l_shape_angle < 315)
+	if (225 < rotate_obj_angle && rotate_obj_angle < 315)
 		opt_world_model_ = glm::translate(world_model_, glm::vec3(-1.8f, -1.8f, -1.8f));
 
 	// draw l_shape
 	model = opt_world_model_;
 	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
-	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(float(-90 + rotate_obj_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
-	acg_object_[8]->SaveModelData(model2);
+	acg_object_[8]->UpdateObjData(model2);
 	acg_object_[8]->Draw(model2);
 
-	acg_object_[9]->SaveModelData(model);
+	acg_object_[9]->UpdateObjData(model);
 	acg_object_[9]->Draw(model);
 
 	model2 = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.5f));
 	model2 = glm::rotate(model2, glm::radians((float)90), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[10]->SaveModelData(model2);
+	acg_object_[10]->UpdateObjData(model2);
 	acg_object_[10]->Draw(model2);
 
 	// draw cuboid
 	model = opt_world_model_;
 	model = glm::translate(model, glm::vec3(0.4f, 1.8f, 0.0f));
 	model = glm::scale(model, glm::vec3(1.25f, 1.0f, 1.0f));
-	acg_object_[0]->SaveModelData(model);
+	acg_object_[0]->UpdateObjData(model);
 	acg_object_[0]->Draw(model);
 
 	// draw cuboid
 	model = opt_world_model_;
 	model = glm::translate(model, glm::vec3(0.0f, 1.8f, -0.5f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[11]->SaveModelData(model);
+	acg_object_[11]->UpdateObjData(model);
 	acg_object_[11]->Draw(model);
 
 	// draw goal
 	model = opt_world_model_;
 	model = glm::translate(model, glm::vec3(0.0f, 1.9f, -0.9f));
 	model = glm::rotate(model, glm::radians(float(90)), glm::vec3(0.0f, 1.0f, 0.0f));
-	acg_object_[1]->SaveModelData(model);
+	acg_object_[1]->UpdateObjData(model);
 	acg_object_[1]->Draw(model);
 
-	if (one_flag == false)
-	{
-		ChkDisableFace();
-		one_flag = true;
-	}
+	ChkDisableFace();
 }
 
 void Level::FindPathCoord(double xpos, double ypos)
@@ -303,7 +308,7 @@ void Level::FindPathCoord(double xpos, double ypos)
 		if (acg_object_[i]->GetCanBeLocated() == false) continue;
 
 		// find the face with acter in the obj
-		if ((curr_start_face = acg_object_[i]->InObj(vp_acter_pos, &start_face_direc, &curr_face_idx)))
+		if ((curr_start_face = acg_object_[i]->IsInObj(vp_acter_pos, &start_face_direc, &curr_face_idx)))
 		{
 			curr_start_depth = AverDepth(curr_start_face, acg_object_[i]->GetFaceVerCnt());
 			if (curr_start_depth < start_depth)
@@ -318,7 +323,7 @@ void Level::FindPathCoord(double xpos, double ypos)
 		}
 
 		// find the clicked face in the obj
-		if ((curr_end_face = acg_object_[i]->InObj(mouse_pos, &end_face_direc, &curr_face_idx)))
+		if ((curr_end_face = acg_object_[i]->IsInObj(mouse_pos, &end_face_direc, &curr_face_idx)))
 		{
 			curr_end_depth = AverDepth(curr_end_face, acg_object_[i]->GetFaceVerCnt());
 			if (curr_end_depth > end_depth) continue;
@@ -359,7 +364,6 @@ void Level::mouse_button_callback(GLFWwindow* window, int button, int action, in
 	{
 		left_mouse_button_down = true;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		printf("\nmousepos: %f %f\n", xpos, SCR_HEIGHT - ypos);
 		if (level->acter_move_flag == false)
 			level->FindPathCoord((float)xpos, (float)(SCR_HEIGHT - ypos));
 
@@ -378,12 +382,16 @@ void Level::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double yp
 {
 	if (left_mouse_button_down && level->acter_move_flag == false)
 	{
-		//rotate angle of rotary knob
+		// Make sure the actor is not on an object
 		if (level->ChkActorOnObj(level->obj_can_rotate) == false) return;
+
+		// Find the angle of rotation
 		float angle = ellipse_area->CheckClickAndFindAngle((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
 		if (abs(angle) < 0.001) return;
-		l_shape_angle += angle;
-		l_shape_angle = (float)fmod(l_shape_angle + 360, (double)360);
+		rotate_obj_angle += angle;
+		rotate_obj_angle = (float)fmod(rotate_obj_angle + 360, (double)360);
+
+		// Need vertex update
 		level->acg_object_[8]->SetIsDirty(true);
 		level->acg_object_[9]->SetIsDirty(true);
 		level->acg_object_[10]->SetIsDirty(true);
@@ -464,16 +472,23 @@ glm::vec3 Level::AlignPos(float* face, int direction, glm::vec2 point, int face_
 // find path using bfs
 std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 {
-	std::queue<int>	qu;
-	int*			visited;
-	int				curr;
-	bool			find_flag = false;
+	std::queue<int>		qu;
+	int*				visited;
+	int					curr;
+	bool				find_flag = false;
+	std::vector<int>	ret;
 
+	if (start == end)
+	{
+		ret.push_back(start);
+		return ret;
+	}
 	visited = new int[size];
 	std::fill(visited, visited + size, -1);
 
 	visited[start] = 0;
 
+	// bfs
 	qu.push(start);
 	while (!qu.empty())
 	{
@@ -496,7 +511,6 @@ std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 			break;
 	}
 
-	std::vector<int> ret;
 
 	if (find_flag == false)
 	{
@@ -504,6 +518,7 @@ std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 		return ret;
 	}
 
+	// save path idx
 	curr = end;
 	while (curr != start)
 	{
@@ -751,15 +766,6 @@ std::vector<glm::vec3> Level::FindOverlappingLine(int curr_face_ver_cnt, float* 
 		{
 			int next_line_sidx = (next_line_fidx + 1) % next_face_ver_cnt;
 
-			//if ((abs(curr_face[curr_line_fidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001
-			//	&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001)
-			//	|| (abs(curr_face[curr_line_fidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001
-			//		&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001))
-			//{
-			//	ret.push_back(glm::vec3(curr_face[curr_line_fidx * 3], curr_face[curr_line_fidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2]));
-			//	ret.push_back(glm::vec3(next_face[next_line_fidx * 3], next_face[next_line_fidx * 3 + 1], next_face[next_line_fidx * 3 + 2]));
-			//	return ret;
-			//}
 
 			glm::vec3 long_fpos(curr_face[curr_line_fidx * 3], curr_face[curr_line_fidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2]);
 			glm::vec3 long_spos(curr_face[curr_line_sidx * 3], curr_face[curr_line_sidx * 3 + 1], curr_face[curr_line_sidx * 3 + 2]);

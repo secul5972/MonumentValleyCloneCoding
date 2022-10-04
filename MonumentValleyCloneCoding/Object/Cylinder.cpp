@@ -13,19 +13,23 @@ void Cylinder::MakeBuffer()
 
 	for (int i = 0; i < circle_ver_cnt - 1; i++)
 	{
+		glm::vec3 tmp;
+
 		cylinder_line_ver[i * 12] = circle_ver[(i + 1) * 6];
 		cylinder_line_ver[i * 12 + 1] = circle_ver[(i + 1) * 6 + 1];
 		cylinder_line_ver[i * 12 + 2] = circle_ver[(i + 1) * 6 + 2];
-		cylinder_line_ver[i * 12 + 3] = circle_ver[(i + 1) * 6 + 3];
-		cylinder_line_ver[i * 12 + 4] = circle_ver[(i + 1) * 6 + 4];
-		cylinder_line_ver[i * 12 + 5] = circle_ver[(i + 1) * 6 + 5];
+		
+		tmp = glm::normalize(glm::vec3(0.0f, circle_ver[(i + 1) * 6 + 1], circle_ver[(i + 1) * 6 + 2]));
+		cylinder_line_ver[i * 12 + 3] = tmp.x;
+		cylinder_line_ver[i * 12 + 4] = tmp.y;
+		cylinder_line_ver[i * 12 + 5] = tmp.z;
 
 		cylinder_line_ver[i * 12 + 6] = circle_ver[(i + 1) * 6] + 0.1f;
 		cylinder_line_ver[i * 12 + 7] = circle_ver[(i + 1) * 6 + 1];
 		cylinder_line_ver[i * 12 + 8] = circle_ver[(i + 1) * 6 + 2];
-		cylinder_line_ver[i * 12 + 9] = circle_ver[(i + 1) * 6 + 3];
-		cylinder_line_ver[i * 12 + 10] = circle_ver[(i + 1) * 6 + 4];
-		cylinder_line_ver[i * 12 + 11] = circle_ver[(i + 1) * 6 + 5];
+		cylinder_line_ver[i * 12 + 9] = tmp.x;
+		cylinder_line_ver[i * 12 + 10] = tmp.y;
+		cylinder_line_ver[i * 12 + 11] = tmp.z;
 	}
 
 	glGenBuffers(1, &line_VBO_);
@@ -48,6 +52,7 @@ void Cylinder::Draw(glm::mat4 model)
 	glm::mat4 shapeModel;
 
 	shapeModel = model;
+	circle.SetObjColor(obj_color_);
 	circle.Draw(shapeModel);
 
 	shapeModel = model;
@@ -60,7 +65,7 @@ void Cylinder::Draw(glm::mat4 model)
 	def_shader->setMat4("model", shapeModel);
 	def_shader->setMat4("projection", projection);
 	def_shader->setMat4("view", view);
-	def_shader->setVec3("objectColor", glm::vec3(1.0f, 0.5f, 0.2f));
+	def_shader->setVec3("objectColor", obj_color_);
 
 	glBindVertexArray(line_VAO_);
 	glDrawArrays(GL_LINES, 0, (circle_ver_cnt - 1) * 2);

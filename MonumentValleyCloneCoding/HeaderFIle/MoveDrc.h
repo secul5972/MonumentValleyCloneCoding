@@ -7,7 +7,7 @@
 class MoveDrc
 {
 protected:
-	// 0 : don't move
+	// 0 : center
 	// 1 : use 0, 1 idx
 	// 2 : use 1, 2 idx
 	int *face_drc_flag_;
