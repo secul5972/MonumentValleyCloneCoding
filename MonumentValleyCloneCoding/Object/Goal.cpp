@@ -118,7 +118,7 @@ void Goal::Draw(glm::mat4 model)
 	def_shader->unuse();
 }
 
-float* Goal::MouseInObj(glm::vec2 point, int* dir, int* idx)
+float* Goal::IsInObj(glm::vec2 point, int* dir, int* idx)
 {
 	float* face = 0;
 	int curr_dir = -1;

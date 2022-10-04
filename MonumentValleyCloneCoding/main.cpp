@@ -18,6 +18,7 @@
 void processInput(GLFWwindow* window);
 void MakeViewportMatrix();
 void PrepareObjBuffer();
+void RemoveObjBuffer();
 
 // settings
 const GLuint SCR_WIDTH = 1200;
@@ -127,8 +128,9 @@ int main()
 		inv_vp = glm::inverse(viewport);
 		inv_vpvp = glm::inverse(vpvp_mat);
 
-		// draw_shapes
-		axes.Draw(world_model);
+		//-- draw_shapes
+		// axes for debug
+		//axes.Draw(world_model);
 		glfwSetMouseButtonCallback(window, &Level::mouse_button_callback);
 		glfwSetCursorPosCallback(window, &Level::mouse_cursor_pos_callback);
 		level->Draw();
@@ -141,7 +143,7 @@ int main()
 	delete def_shader;
 	delete line_shader;
 
-	Circle::FreeVertex();
+	RemoveObjBuffer();
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	glfwTerminate();
 	return 0;

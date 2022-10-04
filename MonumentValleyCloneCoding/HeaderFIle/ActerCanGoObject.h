@@ -51,7 +51,7 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4);
-	float*				MouseInObj(glm::vec2, int*, int*);
+	float*				IsInObj(glm::vec2, int*, int*);
 	void				UpdateObjData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
@@ -79,7 +79,7 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4);
-	float*				MouseInObj(glm::vec2, int*, int*);
+	float*				IsInObj(glm::vec2, int*, int*);
 	void				UpdateObjData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();
@@ -107,7 +107,7 @@ public:
 
 	// virtual
 	void				Draw(glm::mat4 model);
-	float*				MouseInObj(glm::vec2, int*, int*);
+	float*				IsInObj(glm::vec2, int*, int*);
 	void				UpdateObjData(glm::mat4);
 	void				MakeFaceDrcFlag();
 	int					GetFaceVerCnt();

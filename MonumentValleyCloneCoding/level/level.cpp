@@ -3,7 +3,7 @@
 float rotateStartTime = 0;
 float rotateEndTime = -1;
 float rotateCurrTime = 0;
-float l_shape_angle = 0;
+float rotate_obj_angle = 0;
 
 EllipseArea* ellipse_area;
 glm::mat4 ellipse_area_model;
@@ -156,7 +156,7 @@ void Level::Draw()
 	acg_object_[7]->UpdateObjData(model2);
 	acg_object_[7]->Draw(model2);
 
-	// acter
+	// acter moving
 	if (acter_move_flag)
 	{
 		wd_acter_pos += 0.013f * dist_vec;
@@ -186,44 +186,44 @@ void Level::Draw()
 	ornaments_[0]->Draw(model);
 
 	// adjust angle
-	float tmp_angle = (float)fmod(l_shape_angle, 90);
+	float tmp_angle = (float)fmod(rotate_obj_angle, 90);
 	if (!l_shape_moving_flag && adjust_angle_flag)
 	{
 		if (tmp_angle < 0.5)
 		{
-			l_shape_angle = float(int(l_shape_angle / 90) * 90);
+			rotate_obj_angle = float(int(rotate_obj_angle / 90) * 90);
 			adjust_angle_flag = false;
 		}
 		else if (tmp_angle > 90 - 0.5)
 		{
-			l_shape_angle = float((int(l_shape_angle / 90) + 1) % 4 * 90);
+			rotate_obj_angle = float((int(rotate_obj_angle / 90) + 1) % 4 * 90);
 			adjust_angle_flag = false;
 		}
 		else if (tmp_angle > 45.0f)
-			l_shape_angle += deltaTime * 60;
+			rotate_obj_angle += deltaTime * 60;
 		else
-			l_shape_angle -= deltaTime * 60;
+			rotate_obj_angle -= deltaTime * 60;
 		acg_object_[8]->SetIsDirty(true);
 		acg_object_[9]->SetIsDirty(true);
 		acg_object_[10]->SetIsDirty(true);
 	}
 
 	// update edge
-	if (l_shape_angle == 270)
+	if (rotate_obj_angle == 270)
 	{
 		edge[7][10] = 0;
 		edge[10][7] = 0;
 		edge[2][10] = 1;
 		edge[10][2] = 1;
 	}
-	else if (l_shape_angle == 0)
+	else if (rotate_obj_angle == 0)
 	{
 		edge[7][10] = 1;
 		edge[10][7] = 1;
 		edge[2][10] = 0;
 		edge[10][2] = 0;
 	}
-	else if (l_shape_angle == 90 || l_shape_angle == 180)
+	else if (rotate_obj_angle == 90 || rotate_obj_angle == 180)
 	{
 		edge[7][10] = 0;
 		edge[10][7] = 0;
@@ -235,7 +235,7 @@ void Level::Draw()
 	model = world_model_;
 	model2 = world_model_;
 	model2 = glm::translate(model2, glm::vec3(1.9f, 1.8f, 0.0f));
-	model2 = glm::rotate(model2, glm::radians(float(l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
+	model2 = glm::rotate(model2, glm::radians(float(rotate_obj_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	ornaments_[1]->Draw(model2);
 
 	model = world_model_;
@@ -244,13 +244,13 @@ void Level::Draw()
 	ellipse_area_model = model;
 
 	glm::mat4 opt_world_model_ = world_model_;
-	if (225 < l_shape_angle && l_shape_angle < 315)
+	if (225 < rotate_obj_angle && rotate_obj_angle < 315)
 		opt_world_model_ = glm::translate(world_model_, glm::vec3(-1.8f, -1.8f, -1.8f));
 
 	// draw l_shape
 	model = opt_world_model_;
 	model = glm::translate(model, glm::vec3(1.8f, 1.8f, 0.0f));
-	model = glm::rotate(model, glm::radians(float(-90 + l_shape_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
+	model = glm::rotate(model, glm::radians(float(-90 + rotate_obj_angle)), glm::vec3(1.0f, 0.0f, 0.0f));
 	model = glm::rotate(model, glm::radians(float(180)), glm::vec3(0.0f, 1.0f, 0.0f));
 	model2 = glm::translate(model, glm::vec3(0.5f, 0.0f, 0.0f));
 	acg_object_[8]->UpdateObjData(model2);
@@ -285,11 +285,7 @@ void Level::Draw()
 	acg_object_[1]->UpdateObjData(model);
 	acg_object_[1]->Draw(model);
 
-	if (one_flag == false)
-	{
-		ChkDisableFace();
-		one_flag = true;
-	}
+	ChkDisableFace();
 }
 
 void Level::FindPathCoord(double xpos, double ypos)
@@ -312,7 +308,7 @@ void Level::FindPathCoord(double xpos, double ypos)
 		if (acg_object_[i]->GetCanBeLocated() == false) continue;
 
 		// find the face with acter in the obj
-		if ((curr_start_face = acg_object_[i]->MouseInObj(vp_acter_pos, &start_face_direc, &curr_face_idx)))
+		if ((curr_start_face = acg_object_[i]->IsInObj(vp_acter_pos, &start_face_direc, &curr_face_idx)))
 		{
 			curr_start_depth = AverDepth(curr_start_face, acg_object_[i]->GetFaceVerCnt());
 			if (curr_start_depth < start_depth)
@@ -327,7 +323,7 @@ void Level::FindPathCoord(double xpos, double ypos)
 		}
 
 		// find the clicked face in the obj
-		if ((curr_end_face = acg_object_[i]->MouseInObj(mouse_pos, &end_face_direc, &curr_face_idx)))
+		if ((curr_end_face = acg_object_[i]->IsInObj(mouse_pos, &end_face_direc, &curr_face_idx)))
 		{
 			curr_end_depth = AverDepth(curr_end_face, acg_object_[i]->GetFaceVerCnt());
 			if (curr_end_depth > end_depth) continue;
@@ -368,7 +364,6 @@ void Level::mouse_button_callback(GLFWwindow* window, int button, int action, in
 	{
 		left_mouse_button_down = true;
 		glfwGetCursorPos(window, &xpos, &ypos);
-		printf("\nmousepos: %f %f\n", xpos, SCR_HEIGHT - ypos);
 		if (level->acter_move_flag == false)
 			level->FindPathCoord((float)xpos, (float)(SCR_HEIGHT - ypos));
 
@@ -387,12 +382,16 @@ void Level::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double yp
 {
 	if (left_mouse_button_down && level->acter_move_flag == false)
 	{
-		//rotate angle of rotary knob
+		// Make sure the actor is not on an object
 		if (level->ChkActorOnObj(level->obj_can_rotate) == false) return;
+
+		// Find the angle of rotation
 		float angle = ellipse_area->CheckClickAndFindAngle((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
 		if (abs(angle) < 0.001) return;
-		l_shape_angle += angle;
-		l_shape_angle = (float)fmod(l_shape_angle + 360, (double)360);
+		rotate_obj_angle += angle;
+		rotate_obj_angle = (float)fmod(rotate_obj_angle + 360, (double)360);
+
+		// Need vertex update
 		level->acg_object_[8]->SetIsDirty(true);
 		level->acg_object_[9]->SetIsDirty(true);
 		level->acg_object_[10]->SetIsDirty(true);
@@ -489,6 +488,7 @@ std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 
 	visited[start] = 0;
 
+	// bfs
 	qu.push(start);
 	while (!qu.empty())
 	{
@@ -518,6 +518,7 @@ std::vector<int> Level::FindPath(int start, int end, int size, bool** edge)
 		return ret;
 	}
 
+	// save path idx
 	curr = end;
 	while (curr != start)
 	{
@@ -765,15 +766,6 @@ std::vector<glm::vec3> Level::FindOverlappingLine(int curr_face_ver_cnt, float* 
 		{
 			int next_line_sidx = (next_line_fidx + 1) % next_face_ver_cnt;
 
-			//if ((abs(curr_face[curr_line_fidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001
-			//	&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001)
-			//	|| (abs(curr_face[curr_line_fidx * 3] - next_face[next_line_sidx * 3]) < 0.0001 && abs(curr_face[curr_line_fidx * 3 + 1] - next_face[next_line_sidx * 3 + 1]) < 0.0001
-			//		&& abs(curr_face[curr_line_sidx * 3] - next_face[next_line_fidx * 3]) < 0.0001 && abs(curr_face[curr_line_sidx * 3 + 1] - next_face[next_line_fidx * 3 + 1]) < 0.0001))
-			//{
-			//	ret.push_back(glm::vec3(curr_face[curr_line_fidx * 3], curr_face[curr_line_fidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2]));
-			//	ret.push_back(glm::vec3(next_face[next_line_fidx * 3], next_face[next_line_fidx * 3 + 1], next_face[next_line_fidx * 3 + 2]));
-			//	return ret;
-			//}
 
 			glm::vec3 long_fpos(curr_face[curr_line_fidx * 3], curr_face[curr_line_fidx * 3 + 1], curr_face[curr_line_fidx * 3 + 2]);
 			glm::vec3 long_spos(curr_face[curr_line_sidx * 3], curr_face[curr_line_sidx * 3 + 1], curr_face[curr_line_sidx * 3 + 2]);
