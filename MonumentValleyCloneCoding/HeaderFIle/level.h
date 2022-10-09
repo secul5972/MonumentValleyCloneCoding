@@ -29,6 +29,7 @@ class Level
 private:
 	ActerCanGoObject** acg_object_;
 	Ornament** ornaments_;
+	Acter* acter_;
 	int					acg_cnt_;
 	int					orna_cnt_;
 
@@ -38,6 +39,8 @@ private:
 	//data for acter moving
 	glm::vec3			vp_aligned_pos;
 	glm::vec3			wd_acter_pos;
+	glm::vec3			init_acter_direc_vec;
+	
 	int					obj_on_acter = -1;
 	bool				acter_move_flag = false;
 	vector<glm::vec3>	path_coord;

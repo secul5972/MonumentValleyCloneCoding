@@ -15,7 +15,8 @@ extern glm::mat4 vpvp_mat, inv_vp, inv_vpvp;
 extern Level* level;
 extern float line_vertices[2][3];
 
-Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_acter_pos(glm::vec3(0.0f, -0.3f, 1.2f))
+Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_acter_pos(glm::vec3(0.0f, -0.3f, 1.2f)),
+init_acter_direc_vec(glm::vec3(1.0f, 0.0f, 0.0f))
 {
 	world_model_ = world_model;
 	acg_object_ = new ActerCanGoObject * [acg_cnt_];
@@ -117,6 +118,8 @@ Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cn
 	edge[10][9] = 1;
 	edge[11][0] = 1;
 	edge[11][1] = 1;
+
+	acter_ = (Acter*)ornaments_[0];
 }
 
 void Level::Draw()
@@ -176,7 +179,14 @@ void Level::Draw()
 			if (path_coord_idx == path_coord.size())
 				acter_move_flag = false;
 			else
+			{
 				dist_vec = glm::normalize(path_coord[path_coord_idx] - path_coord[path_coord_idx - 1]);
+				float angle = glm::degrees(acos(glm::dot(init_acter_direc_vec.xz(), dist_vec.xz())));
+				if (glm::cross(glm::vec3(init_acter_direc_vec.x, 0, init_acter_direc_vec.y), glm::vec3(dist_vec.x, 0, dist_vec.z)).y < 0)
+					angle *= -1;
+
+				acter_->SetActerRotateAngle(angle);
+			}
 		}
 	}
 
@@ -348,6 +358,12 @@ void Level::FindPathCoord(double xpos, double ypos)
 	path_coord_idx = 1;
 	obj_on_acter = end_obj_idx;
 	dist_vec = glm::normalize(path_coord[1] - path_coord[0]);
+
+	float angle = glm::degrees(acos(glm::dot(init_acter_direc_vec.xz(), dist_vec.xz())));
+	if (glm::cross(glm::vec3(init_acter_direc_vec.x, 0, init_acter_direc_vec.y), glm::vec3(dist_vec.x, 0, dist_vec.z)).y < 0)
+		angle *= -1;
+
+	acter_->SetActerRotateAngle(angle);
 }
 
 Level::~Level()
