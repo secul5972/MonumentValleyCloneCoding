@@ -170,13 +170,13 @@ void Level::Draw()
 	// acter moving
 	if (acter_move_flag)
 	{
-		wd_acter_pos += 0.013f * dist_vec;
+		wd_acter_pos += delta_time * dist_vec;
 		for (int i = 0; i < path_coord.size() - 1; i++)
 		{
 			glm::vec3 fpos = projection * view * glm::vec4(path_coord[i], 1.0f);
 			glm::vec3 spos = projection * view * glm::vec4(path_coord[i + 1], 1.0f);
-			fpos.z = -1.0f;
-			spos.z = -1.0f;
+			fpos.z += -0.001;
+			spos.z += -0.001;
 			line.SetLine(fpos, spos);
 			line.Draw(world_model_);
 		}
@@ -218,9 +218,9 @@ void Level::Draw()
 			adjust_angle_flag = false;
 		}
 		else if (tmp_angle > 45.0f)
-			rotate_obj_angle += deltaTime * 60;
+			rotate_obj_angle += delta_time * 60;
 		else
-			rotate_obj_angle -= deltaTime * 60;
+			rotate_obj_angle -= delta_time * 60;
 		acg_object_[8]->SetIsDirty(true);
 		acg_object_[9]->SetIsDirty(true);
 		acg_object_[10]->SetIsDirty(true);
