@@ -31,8 +31,8 @@ GLFWwindow* window;
 Camera camera(glm::vec3(5.0f, 5.0f, 5.0f), glm::vec3(0.0f, 1.0f, 0.0f), glm::vec3(-1.0f, -1.0f, -1.0f), -90.0f, 0.0f);
 
 // timing
-float deltaTime = 0.0f;
-float lastFrame = 0.0f;
+float delta_time = 0.0f;
+float last_frame = 0.0f;
 
 // matrix
 glm::mat4 viewport, projection, view;
@@ -109,9 +109,9 @@ int main()
 	while (!glfwWindowShouldClose(window))
 	{
 		// per-frame time logic
-		float currentFrame = float(glfwGetTime());
-		deltaTime = currentFrame - lastFrame;
-		lastFrame = currentFrame;
+		float current_frame = float(glfwGetTime());
+		delta_time = current_frame - last_frame;
+		last_frame = current_frame;
 
 		processInput(window);
 

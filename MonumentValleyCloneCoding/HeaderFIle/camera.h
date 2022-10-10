@@ -70,9 +70,9 @@ public:
     }
 
     // processes input received from any keyboard-like input system. Accepts input parameter in the form of camera defined ENUM (to abstract it from windowing systems)
-    void ProcessKeyboard(Camera_Movement direction, float deltaTime)
+    void ProcessKeyboard(Camera_Movement direction, float delta_time)
     {
-        float velocity = MovementSpeed * deltaTime;
+        float velocity = MovementSpeed * delta_time;
         if (direction == FORWARD)
             Position += Front * velocity;
         if (direction == BACKWARD)
