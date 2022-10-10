@@ -86,9 +86,11 @@ private:
 	Corn corn;
 	Cylinder cylinder;
 	Sphere sphere;
+	float acter_rotate_angle_ = 0;
 public:
 	Acter();
 	void Draw(glm::mat4 model);
+	void SetActerRotateAngle(float acter_rotate_angle);
 };
 
 class Line :public Ornament

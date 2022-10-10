@@ -15,7 +15,8 @@ extern glm::mat4 vpvp_mat, inv_vp, inv_vpvp;
 extern Level* level;
 extern float line_vertices[2][3];
 
-Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_acter_pos(glm::vec3(0.0f, -0.3f, 1.2f))
+Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cnt), orna_cnt_(orna_cnt), vp_aligned_pos(glm::vec3(0.0f, 0.0f, 0.0f)), wd_acter_pos(glm::vec3(0.0f, -0.3f, 1.2f)),
+init_acter_direc_vec(glm::vec3(1.0f, 0.0f, 0.0f))
 {
 	world_model_ = world_model;
 	acg_object_ = new ActerCanGoObject * [acg_cnt_];
@@ -72,13 +73,21 @@ Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cn
 	acg_object_[10]->SetCanBeLocated(true);
 	acg_object_[10]->SetIsFixed(false);
 
+	acg_object_[11] = new Cuboid();
+	acg_object_[11]->SetCanBeLocated(true);
+	acg_object_[11]->SetIsFixed(false);
+
 	obj_can_rotate.push_back(8);
 	obj_can_rotate.push_back(9);
 	obj_can_rotate.push_back(10);
 
-	acg_object_[11] = new Cuboid();
-	acg_object_[11]->SetCanBeLocated(true);
-	acg_object_[11]->SetIsFixed(false);
+	obj_opt_mov.push_back(0);
+	obj_opt_mov.push_back(1);
+	obj_opt_mov.push_back(8);
+	obj_opt_mov.push_back(9);
+	obj_opt_mov.push_back(10);
+	obj_opt_mov.push_back(11);
+
 
 	for (int i = 0; i < acg_cnt_; i++)
 	{
@@ -117,6 +126,8 @@ Level::Level(int acg_cnt, int orna_cnt, glm::mat4 world_model) : acg_cnt_(acg_cn
 	edge[10][9] = 1;
 	edge[11][0] = 1;
 	edge[11][1] = 1;
+
+	acter_ = (Acter*)ornaments_[0];
 }
 
 void Level::Draw()
@@ -176,7 +187,14 @@ void Level::Draw()
 			if (path_coord_idx == path_coord.size())
 				acter_move_flag = false;
 			else
+			{
 				dist_vec = glm::normalize(path_coord[path_coord_idx] - path_coord[path_coord_idx - 1]);
+				float angle = glm::degrees(acos(glm::dot(init_acter_direc_vec.xz(), dist_vec.xz())));
+				if (glm::cross(glm::vec3(init_acter_direc_vec.x, 0, init_acter_direc_vec.y), glm::vec3(dist_vec.x, 0, dist_vec.z)).y < 0)
+					angle *= -1;
+
+				acter_->SetActerRotateAngle(angle);
+			}
 		}
 	}
 
@@ -245,7 +263,30 @@ void Level::Draw()
 
 	glm::mat4 opt_world_model_ = world_model_;
 	if (225 < rotate_obj_angle && rotate_obj_angle < 315)
+	{
 		opt_world_model_ = glm::translate(world_model_, glm::vec3(-1.8f, -1.8f, -1.8f));
+		if (opt_obj_move_flag == false)
+		{
+			level->acg_object_[0]->SetIsDirty(true);
+			level->acg_object_[1]->SetIsDirty(true);
+			level->acg_object_[11]->SetIsDirty(true);
+			if (ChkActorOnObj(obj_opt_mov))
+				wd_acter_pos += glm::vec3(-1.8f, -1.8f, -1.8f);
+		}
+		opt_obj_move_flag = true;
+	}
+	else
+	{
+		if (opt_obj_move_flag == true)
+		{
+			level->acg_object_[0]->SetIsDirty(true);
+			level->acg_object_[1]->SetIsDirty(true);
+			level->acg_object_[11]->SetIsDirty(true);
+			if (ChkActorOnObj(obj_opt_mov))
+				wd_acter_pos += glm::vec3(1.8f, 1.8f, 1.8f);
+		}
+		opt_obj_move_flag = false;
+	}
 
 	// draw l_shape
 	model = opt_world_model_;
@@ -348,6 +389,12 @@ void Level::FindPathCoord(double xpos, double ypos)
 	path_coord_idx = 1;
 	obj_on_acter = end_obj_idx;
 	dist_vec = glm::normalize(path_coord[1] - path_coord[0]);
+
+	float angle = glm::degrees(acos(glm::dot(init_acter_direc_vec.xz(), dist_vec.xz())));
+	if (glm::cross(glm::vec3(init_acter_direc_vec.x, 0, init_acter_direc_vec.y), glm::vec3(dist_vec.x, 0, dist_vec.z)).y < 0)
+		angle *= -1;
+
+	acter_->SetActerRotateAngle(angle);
 }
 
 Level::~Level()
@@ -383,7 +430,7 @@ void Level::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double yp
 	if (left_mouse_button_down && level->acter_move_flag == false)
 	{
 		// Make sure the actor is not on an object
-		if (level->ChkActorOnObj(level->obj_can_rotate) == false) return;
+		if (level->ChkActorOnObj(level->obj_can_rotate) == true) return;
 
 		// Find the angle of rotation
 		float angle = ellipse_area->CheckClickAndFindAngle((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
@@ -898,7 +945,7 @@ bool Level::ChkActorOnObj(vector<int> obj_idx)
 	for (int i = 0; i < size; i++)
 	{
 		if (obj_idx[i] == obj_on_acter)
-			return false;
+			return true;
 	}
-	return true;
+	return false;
 }
