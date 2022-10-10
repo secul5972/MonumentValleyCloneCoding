@@ -73,13 +73,21 @@ init_acter_direc_vec(glm::vec3(1.0f, 0.0f, 0.0f))
 	acg_object_[10]->SetCanBeLocated(true);
 	acg_object_[10]->SetIsFixed(false);
 
+	acg_object_[11] = new Cuboid();
+	acg_object_[11]->SetCanBeLocated(true);
+	acg_object_[11]->SetIsFixed(false);
+
 	obj_can_rotate.push_back(8);
 	obj_can_rotate.push_back(9);
 	obj_can_rotate.push_back(10);
 
-	acg_object_[11] = new Cuboid();
-	acg_object_[11]->SetCanBeLocated(true);
-	acg_object_[11]->SetIsFixed(false);
+	obj_opt_mov.push_back(0);
+	obj_opt_mov.push_back(1);
+	obj_opt_mov.push_back(8);
+	obj_opt_mov.push_back(9);
+	obj_opt_mov.push_back(10);
+	obj_opt_mov.push_back(11);
+
 
 	for (int i = 0; i < acg_cnt_; i++)
 	{
@@ -255,7 +263,30 @@ void Level::Draw()
 
 	glm::mat4 opt_world_model_ = world_model_;
 	if (225 < rotate_obj_angle && rotate_obj_angle < 315)
+	{
 		opt_world_model_ = glm::translate(world_model_, glm::vec3(-1.8f, -1.8f, -1.8f));
+		if (opt_obj_move_flag == false)
+		{
+			level->acg_object_[0]->SetIsDirty(true);
+			level->acg_object_[1]->SetIsDirty(true);
+			level->acg_object_[11]->SetIsDirty(true);
+			if (ChkActorOnObj(obj_opt_mov))
+				wd_acter_pos += glm::vec3(-1.8f, -1.8f, -1.8f);
+		}
+		opt_obj_move_flag = true;
+	}
+	else
+	{
+		if (opt_obj_move_flag == true)
+		{
+			level->acg_object_[0]->SetIsDirty(true);
+			level->acg_object_[1]->SetIsDirty(true);
+			level->acg_object_[11]->SetIsDirty(true);
+			if (ChkActorOnObj(obj_opt_mov))
+				wd_acter_pos += glm::vec3(1.8f, 1.8f, 1.8f);
+		}
+		opt_obj_move_flag = false;
+	}
 
 	// draw l_shape
 	model = opt_world_model_;
@@ -399,7 +430,7 @@ void Level::mouse_cursor_pos_callback(GLFWwindow* window, double xpos, double yp
 	if (left_mouse_button_down && level->acter_move_flag == false)
 	{
 		// Make sure the actor is not on an object
-		if (level->ChkActorOnObj(level->obj_can_rotate) == false) return;
+		if (level->ChkActorOnObj(level->obj_can_rotate) == true) return;
 
 		// Find the angle of rotation
 		float angle = ellipse_area->CheckClickAndFindAngle((float)xpos, (float)(SCR_HEIGHT - ypos), ellipse_area_model);
@@ -914,7 +945,7 @@ bool Level::ChkActorOnObj(vector<int> obj_idx)
 	for (int i = 0; i < size; i++)
 	{
 		if (obj_idx[i] == obj_on_acter)
-			return false;
+			return true;
 	}
-	return true;
+	return false;
 }

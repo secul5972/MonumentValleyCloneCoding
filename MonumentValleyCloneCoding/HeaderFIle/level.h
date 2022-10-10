@@ -27,9 +27,9 @@ extern float deltaTime;
 class Level
 {
 private:
-	ActerCanGoObject** acg_object_;
-	Ornament** ornaments_;
-	Acter* acter_;
+	ActerCanGoObject**	acg_object_;
+	Ornament**			ornaments_;
+	Acter*				acter_;
 	int					acg_cnt_;
 	int					orna_cnt_;
 
@@ -46,13 +46,13 @@ private:
 	vector<glm::vec3>	path_coord;
 	int					path_coord_idx = 0;
 
-	float* start_face = 0;
+	float*				start_face = 0;
 	int					start_face_direc = 0;
 	glm::vec3			start_normal_vec;
 	int					start_face_cnt = 0;
 	int					start_face_ver_cnt = 0;
 
-	float* end_face = 0;
+	float*				end_face = 0;
 	int					end_face_direc = 0;
 	glm::vec3			end_normal_vec;
 
@@ -60,8 +60,10 @@ private:
 	glm::vec3			wd_aligned_pos;
 	Line				line;
 
+	bool				opt_obj_move_flag = false;
 public:
 	vector<int>			obj_can_rotate;
+	vector<int>			obj_opt_mov;
 	bool**				edge;
 
 	Level(int acg_cnt, int actg_cnt, glm::mat4 world_model);
