@@ -175,8 +175,8 @@ void Level::Draw()
 		{
 			glm::vec3 fpos = projection * view * glm::vec4(path_coord[i], 1.0f);
 			glm::vec3 spos = projection * view * glm::vec4(path_coord[i + 1], 1.0f);
-			fpos.z += -0.001;
-			spos.z += -0.001;
+			fpos.z += -0.001f;
+			spos.z += -0.001f;
 			line.SetLine(fpos, spos);
 			line.Draw(world_model_);
 		}
@@ -941,7 +941,7 @@ void Level::CmpTwoObj(int fobj_idx, int sobj_idx)
 
 bool Level::ChkActorOnObj(vector<int> obj_idx)
 {
-	int size = obj_idx.size();
+	int size = (int)obj_idx.size();
 	for (int i = 0; i < size; i++)
 	{
 		if (obj_idx[i] == obj_on_acter)
